@@ -1,0 +1,84 @@
+{
+  "skill_name": "xeos-planner",
+  "evals": [
+    {
+      "id": 1,
+      "name": "small-capacity-no-perf",
+      "prompt": "我需要规划一个 XSKY XEOS 对象存储集群，容量需求是 500 TiB，没有特殊的性能要求。请帮我计算需要多少台服务器，用什么纠删码方案。",
+      "expected_output": "应该计算出使用 EC8+2 纠删码，需要的服务器台数，以及最终可用容量和性能指标",
+      "files": [],
+      "assertions": [
+        {
+          "name": "明确给出服务器台数",
+          "description": "输出中应该明确说明需要多少台服务器"
+        },
+        {
+          "name": "明确说明纠删码方案",
+          "description": "输出中应该明确说明使用 EC8+2 或 EC4+2"
+        },
+        {
+          "name": "提供最终可用容量",
+          "description": "输出中应该给出最终的可用容量（TiB 或其他单位）"
+        },
+        {
+          "name": "提供性能预估",
+          "description": "输出中应该包含上传/下载带宽和 OPS 的性能预估"
+        },
+        {
+          "name": "展示计算过程",
+          "description": "输出中应该展示关键的计算步骤，而不是只给出最终结果"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "large-capacity-high-bandwidth",
+      "prompt": "我们公司要部署 XEOS 对象存储，需要 2 PB 的容量（十进制单位），同时要求上传带宽至少 10 GB/s，下载带宽至少 20 GB/s。请给出配置方案。",
+      "expected_output": "应该先转换 PB 到 TiB，计算容量所需台数，然后验证性能是否满足，如果不满足则调整磁盘大小，最后给出完整方案",
+      "files": [],
+      "assertions": [
+        {
+          "name": "正确处理单位转换",
+          "description": "应该将 2 PB（十进制）转换为 TiB，转换过程或结果应该在输出中体现"
+        },
+        {
+          "name": "验证性能需求",
+          "description": "输出中应该明确说明配置是否满足 10 GB/s 上传和 20 GB/s 下载的带宽需求"
+        },
+        {
+          "name": "给出完整配置方案",
+          "description": "输出应包含服务器台数、纠删码方案、磁盘配置"
+        },
+        {
+          "name": "性能预估值合理",
+          "description": "预估的上传带宽应 >= 10 GB/s，下载带宽应 >= 20 GB/s"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "small-capacity-high-ops",
+      "prompt": "帮我算一下 XSKY XEOS 存储，容量要 80 TiB，性能要求是上传 OPS 至少 50000，下载 OPS 至少 150000，上传带宽 2 Gbps，下载带宽 4 Gbps。",
+      "expected_output": "应该计算出满足容量和所有性能指标的方案，可能需要使用较小的磁盘来满足 OPS 需求，最后输出完整配置和性能预估",
+      "files": [],
+      "assertions": [
+        {
+          "name": "满足所有性能指标",
+          "description": "输出的方案应该满足上传 OPS >= 50000、下载 OPS >= 150000、上传带宽 >= 2 Gbps、下载带宽 >= 4 Gbps"
+        },
+        {
+          "name": "考虑磁盘大小调整",
+          "description": "如果默认 16TB 磁盘无法满足性能，应该提到尝试更小的磁盘（12TB/10TB/8TB）"
+        },
+        {
+          "name": "给出最终配置",
+          "description": "输出应包含服务器台数、纠删码方案、磁盘大小和数量"
+        },
+        {
+          "name": "容量满足需求",
+          "description": "最终可用容量应该 >= 80 TiB"
+        }
+      ]
+    }
+  ]
+}
