@@ -81,18 +81,25 @@ node xsky-xeos-planner.js --capacity "500TiB" [--upload-bw "1GB/s"] [--download-
 === XSKY XEOS 对象存储规划方案 ===
 
 配置方案:
-  服务器台数: 5 台
-  纠删码方案: EC8+2
-  磁盘配置: 每台服务器 32 × 16TB HDD
+  服务器台数: 3 台
+  纠删码方案: EC4+2
+
+每台服务器配置:
+  处理器: 2 颗 Intel Xeon 4134
+  内存: 8 根 32GB DDR4
+  系统盘: 2 块 960GB SATA SSD 做 RAID1
+  索引缓存盘: 4 块 1.6TB NVMe SSD（读写均衡型，>= 3 DWPD)
+  网卡: 2 块双口 25Gb 以太网卡
+  数据盘: 32 × 12TB HDD
 
 容量:
-  可用容量: 476.93 TiB
+  可用容量: 565.50 TiB
 
 性能:
-  上传带宽: 4.69 GiB/s
-  下载带宽: 9.38 GiB/s
-  上传 OPS: 16,000 IOPS
-  下载 OPS: 48,000 IOPS
+  上传带宽: 2.95 GB/s
+  下载带宽: 5.90 GB/s
+  上传 OPS: 9,600 IOPS
+  下载 OPS: 28,800 IOPS
 
 性能状态: 所有性能指标满足需求
 ```
