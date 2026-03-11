@@ -28,12 +28,12 @@ description: 规划 XSKY XEOS 对象存储的容量和性能。当用户提到 X
 ### 2. 性能需求（可选）
 
 询问用户是否有性能需求，针对 4MB 大小对象的操作：
-- **上传带宽**：例如 100 Mbps、1 Gbps、100 MB/s、1 GB/s
-- **下载带宽**：例如 200 Mbps、2 Gbps、200 MB/s、2 GB/s
+- **上传带宽**：例如 100 MB/s、1 GB/s、100 MiB/s、1 GiB/s
+- **下载带宽**：例如 200 MB/s、2 GB/s、200 MiB/s、2 GiB/s
 - **上传 OPS**：例如 1000 IOPS（针对 4K 对象）
 - **下载 OPS**：例如 3000 IOPS（针对 4K 对象）
 
-带宽单位支持比特制（Mbps、Gbps）和字节制（MB/s、GB/s）。
+带宽单位支持十进制（MB/s、GB/s）和二进制（MiB/s、GiB/s）。如果用户未提供性能需求，输出时优先使用十进制单位。
 
 ## 使用方法
 
@@ -42,8 +42,8 @@ description: 规划 XSKY XEOS 对象存储的容量和性能。当用户提到 X
 询问用户以下信息：
 1. **容量需求**（必填）：例如 "500TB"、"1.5PiB"
 2. **性能需求**（可选）：
-   - 上传带宽：例如 "1Gbps"、"100MB/s"
-   - 下载带宽：例如 "2Gbps"、"200MB/s"
+   - 上传带宽：例如 "1GB/s"、"100MiB/s"
+   - 下载带宽：例如 "2GB/s"、"200MiB/s"
    - 上传 OPS：例如 "50000"
    - 下载 OPS：例如 "150000"
 
@@ -53,7 +53,7 @@ description: 规划 XSKY XEOS 对象存储的容量和性能。当用户提到 X
 
 ```bash
 cd /Users/wutz/Projects/wutz/infra-skills/skills/xsky-xeos-planner
-node xsky-xeos-planner.js --capacity "500TiB" [--upload-bw "1Gbps"] [--download-bw "2Gbps"] [--upload-ops "50000"] [--download-ops "150000"] --json
+node xsky-xeos-planner.js --capacity "500TiB" [--upload-bw "1GB/s"] [--download-bw "2GB/s"] [--upload-ops "50000"] [--download-ops "150000"] --json
 ```
 
 参数说明：
@@ -86,11 +86,11 @@ node xsky-xeos-planner.js --capacity "500TiB" [--upload-bw "1Gbps"] [--download-
   磁盘配置: 每台服务器 32 × 16TB HDD
 
 容量:
-  可用容量: 476.93 TiB (524.29 TB)
+  可用容量: 476.93 TiB
 
 性能:
-  上传带宽: 4800.00 MiB/s (40.96 Gbps / 5.12 GB/s)
-  下载带宽: 9600.00 MiB/s (81.92 Gbps / 10.24 GB/s)
+  上传带宽: 4.69 GiB/s
+  下载带宽: 9.38 GiB/s
   上传 OPS: 16,000 IOPS
   下载 OPS: 48,000 IOPS
 
@@ -99,7 +99,10 @@ node xsky-xeos-planner.js --capacity "500TiB" [--upload-bw "1Gbps"] [--download-
 
 ## 重要说明
 
+- 脚本支持 8TB、10TB、12TB、16TB、18TB、20TB、22TB、24TB 等多种 HDD 规格
+- 脚本会根据容量需求智能选择最优的磁盘规格，使配置更接近实际需求
 - 脚本会自动选择最优的纠删码方案（EC8+2 或 EC4+2）
+- 输出单位与用户输入单位保持一致（二进制或十进制）
 - 如果性能需求较高，脚本会自动选择更小的磁盘以增加服务器数量
 - EC8+2 需要至少 5 台服务器，EC4+2 需要至少 3 台服务器
 - 如果无法满足性能需求，脚本会返回警告信息
