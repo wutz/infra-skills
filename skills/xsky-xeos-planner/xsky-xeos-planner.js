@@ -293,7 +293,7 @@ if (require.main === module) {
 XSKY XEOS 对象存储规划工具
 
 用法:
-  node xeos-planner.js --capacity <容量> [选项]
+  node xsky-xeos-planner.js --capacity <容量> [选项]
 
 必需参数:
   --capacity <容量>          容量需求，如 "500TB", "1.5PiB"
@@ -306,9 +306,9 @@ XSKY XEOS 对象存储规划工具
   --json                     以 JSON 格式输出
 
 示例:
-  node xeos-planner.js --capacity 500TiB
-  node xeos-planner.js --capacity 2PB --upload-bw 10Gbps --download-bw 20Gbps
-  node xeos-planner.js --capacity 1PiB --upload-ops 50000 --json
+  node xsky-xeos-planner.js --capacity 500TiB
+  node xsky-xeos-planner.js --capacity 2PB --upload-bw 10Gbps --download-bw 20Gbps
+  node xsky-xeos-planner.js --capacity 1PiB --upload-ops 50000 --json
 `);
     process.exit(0);
   }

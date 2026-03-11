@@ -1,5 +1,5 @@
 ---
-name: xeos-planner
+name: xsky-xeos-planner
 description: 规划 XSKY XEOS 对象存储的容量和性能。当用户提到 XSKY、XEOS、对象存储规划、容量规划、性能规划、存储容量计算、纠删码（EC8+2、EC4+2）、XEOS 硬件配置、存储性能评估时使用此 skill。即使用户没有明确说"规划"或"计算"，只要涉及 XEOS 存储容量或性能相关的问题都应该触发此 skill。
 ---
 
@@ -9,10 +9,10 @@ description: 规划 XSKY XEOS 对象存储的容量和性能。当用户提到 X
 
 ## 工作流程
 
-此 skill 使用 JavaScript 脚本 `xeos-planner.js` 进行核心计算，流程如下：
+此 skill 使用 JavaScript 脚本 `xsky-xeos-planner.js` 进行核心计算，流程如下：
 
 1. 收集用户需求（容量和性能）
-2. 调用 `xeos-planner.js` 脚本进行计算
+2. 调用 `xsky-xeos-planner.js` 脚本进行计算
 3. 解析并格式化输出结果
 
 ## 用户输入需求
@@ -49,11 +49,11 @@ description: 规划 XSKY XEOS 对象存储的容量和性能。当用户提到 X
 
 ### 步骤 2：调用计算脚本
 
-使用 Bash 工具调用 `xeos-planner.js` 脚本：
+使用 Bash 工具调用 `xsky-xeos-planner.js` 脚本：
 
 ```bash
-cd /Users/wutz/Projects/wutz/infra-skills/skills/xeos-planner
-node xeos-planner.js --capacity "500TiB" [--upload-bw "1Gbps"] [--download-bw "2Gbps"] [--upload-ops "50000"] [--download-ops "150000"] --json
+cd /Users/wutz/Projects/wutz/infra-skills/skills/xsky-xeos-planner
+node xsky-xeos-planner.js --capacity "500TiB" [--upload-bw "1Gbps"] [--download-bw "2Gbps"] [--upload-ops "50000"] [--download-ops "150000"] --json
 ```
 
 参数说明：
