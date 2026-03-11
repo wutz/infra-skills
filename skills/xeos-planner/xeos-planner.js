@@ -2,7 +2,7 @@
 
 /**
  * XSKY XEOS 对象存储规划计算器
- * 根据容量和性能需求计算服务器配置方案
+ * 根据容量和性能需求计算 XSKY XEOS 服务器配置方案
  */
 
 // 常量配置
@@ -352,7 +352,7 @@ XSKY XEOS 对象存储规划工具
     if (jsonOutput) {
       console.log(JSON.stringify(result, null, 2));
     } else {
-      console.log('\n=== XEOS 对象存储规划方案 ===\n');
+      console.log('\n=== XSKY XEOS 对象存储规划方案 ===\n');
       console.log('配置方案:');
       console.log(`  服务器台数: ${result.configuration.serverCount} 台`);
       console.log(`  纠删码方案: ${result.configuration.ecScheme}`);

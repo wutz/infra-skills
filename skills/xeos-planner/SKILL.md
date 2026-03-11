@@ -78,7 +78,7 @@ node xeos-planner.js --capacity "500TiB" [--upload-bw "1Gbps"] [--download-bw "2
 ## 输出格式示例
 
 ```
-=== XEOS 对象存储规划方案 ===
+=== XSKY XEOS 对象存储规划方案 ===
 
 配置方案:
   服务器台数: 5 台
