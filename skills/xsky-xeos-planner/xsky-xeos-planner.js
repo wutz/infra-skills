@@ -197,27 +197,43 @@ function calculateMinServersForPerf(perfRequirements) {
 
 /**
  * 评估配置优劣（返回分数，越小越好）
+ *
+ * 优先级规则：
+ * 1. 必须满足容量和性能需求（不满足直接淘汰）
+ * 2. 在满足台数需求情况下优先使用 EC8+2（需要 >= 5 台）
+ * 3. 在满足性能情况下优先使用更大的单盘 HDD
+ * 4. 在满足容量情况下优先使用更小的单盘 HDD（容量过配越少越好）
  */
-function scoreConfig(config, capacityTiB) {
+function scoreConfig(config, capacityTiB, hasPerformanceRequirement) {
   // 不满足性能或容量：淘汰
   if (!config.perfCheck.passed || config.actualCapacity < capacityTiB) {
     return Infinity;
   }
 
-  // 满足所有需求：计算容量过配比例（越接近1越好）
+  // 计算容量过配比例（越接近1越好）
   const overProvisionRatio = config.actualCapacity / capacityTiB;
 
-  // 如果节点数 >= 5，EC8+2 优先（磁盘利用率更高：80% vs 66.67%）
-  // EC8+2 的磁盘利用率比 EC4+2 高 20%（0.8 / 0.6667 = 1.2）
-  // 因此给 EC8+2 一个 0.83 的系数（约等于 1/1.2），抵消其容量优势带来的评分劣势
-  const ecBonus = (config.serverCount >= 5 && config.ecScheme === 'EC8+2') ? 0.83 : 1.0;
+  // 优先级1：EC 方案优先级（满足台数要求时 EC8+2 优先）
+  // EC8+2 需要 >= 5 台，EC4+2 需要 >= 3 台
+  let ecPriority;
+  if (config.serverCount >= 5) {
+    // 满足 EC8+2 台数要求：EC8+2 优先
+    ecPriority = config.ecScheme === 'EC8+2' ? 0 : 1;
+  } else {
+    // 不满足 EC8+2 台数要求：只能用 EC4+2
+    ecPriority = config.ecScheme === 'EC4+2' ? 0 : 999;
+  }
 
-  // 主评分：过配比例 * EC方案加成
-  // 次评分：服务器数量（归一化到0-0.1范围，避免影响主评分）
-  const primaryScore = overProvisionRatio * ecBonus;
-  const secondaryScore = config.serverCount * 0.001; // 服务器数量作为微小的次要因素
+  // 优先级2：磁盘大小优先级
+  // - 有性能需求：优先使用更大的磁盘（磁盘越大分数越低）
+  // - 无性能需求：优先使用更小的磁盘（磁盘越小分数越低，即容量过配越少越好）
+  const diskPriority = hasPerformanceRequirement
+    ? -config.diskSize  // 有性能需求：磁盘越大越好（负数使其分数更低）
+    : overProvisionRatio;  // 无性能需求：容量过配越少越好
 
-  return primaryScore + secondaryScore;
+  // 组合评分：EC方案 > 磁盘选择 > 服务器数量
+  // 使用权重确保优先级顺序
+  return ecPriority * 10000 + diskPriority * 100 + config.serverCount * 0.01;
 }
 
 /**
@@ -260,15 +276,11 @@ function planXEOS(requirements) {
   // 生成所有可能的配置
   const configs = [];
 
-  // 如果没有性能需求，优先使用最大磁盘规格
-  const diskSizesToTry = hasPerformanceRequirement
-    ? CONSTANTS.DISK_SIZES  // 有性能需求：尝试所有磁盘规格
-    : [CONSTANTS.DISK_SIZES[0]];  // 无性能需求：只使用最大磁盘规格（24TB）
-
+  // 尝试所有磁盘规格（评分函数会根据是否有性能需求选择最优磁盘）
   for (const ecScheme of ['EC8+2', 'EC4+2']) {
     const minServers = ecScheme === 'EC8+2' ? CONSTANTS.EC8_2_MIN_SERVERS : CONSTANTS.EC4_2_MIN_SERVERS;
 
-    for (const diskSize of diskSizesToTry) {
+    for (const diskSize of CONSTANTS.DISK_SIZES) {
       // 计算服务器数：取容量、性能、最小要求的最大值
       const capacityServers = calculateServersForCapacity(capacityTiB, diskSize, ecScheme);
       const serverCount = Math.max(capacityServers, minServersForPerf, minServers);
@@ -291,13 +303,13 @@ function planXEOS(requirements) {
 
   // 选择最优配置：评分最低的
   const bestConfig = configs.reduce((best, current) => {
-    const currentScore = scoreConfig(current, capacityTiB);
-    const bestScore = scoreConfig(best, capacityTiB);
+    const currentScore = scoreConfig(current, capacityTiB, hasPerformanceRequirement);
+    const bestScore = scoreConfig(best, capacityTiB, hasPerformanceRequirement);
     return currentScore < bestScore ? current : best;
   });
 
   // 检查是否找到有效配置
-  if (scoreConfig(bestConfig, capacityTiB) === Infinity) {
+  if (scoreConfig(bestConfig, capacityTiB, hasPerformanceRequirement) === Infinity) {
     throw new Error('无法找到满足所有需求的配置方案');
   }
 
