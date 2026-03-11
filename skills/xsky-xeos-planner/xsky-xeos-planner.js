@@ -180,29 +180,44 @@ function formatBandwidth(mibps, preferBinary = true) {
 }
 
 /**
- * 智能选择最优 HDD 规格
- * 根据容量需求和服务器数量，选择最接近需求的磁盘规格
+ * 计算满足性能需求的最小服务器数
  */
-function selectOptimalDiskSize(capacityTiB, serverCount, ecScheme) {
-  const efficiency = ecScheme === 'EC8+2' ? CONSTANTS.EC8_2_EFFICIENCY : CONSTANTS.EC4_2_EFFICIENCY;
+function calculateMinServersForPerf(perfRequirements) {
+  if (Object.keys(perfRequirements).length === 0) return 0;
 
-  // 计算理想的单盘容量（TiB）
-  const idealDiskSizeTiB = capacityTiB / serverCount / CONSTANTS.DISKS_PER_SERVER / CONSTANTS.SPACE_OVERHEAD / efficiency;
-  const idealDiskSizeTB = idealDiskSizeTiB / CONSTANTS.TB_TO_TIB;
+  const needs = [
+    perfRequirements.uploadBandwidth ? perfRequirements.uploadBandwidth / CONSTANTS.UPLOAD_BW_PER_DISK : 0,
+    perfRequirements.downloadBandwidth ? perfRequirements.downloadBandwidth / CONSTANTS.DOWNLOAD_BW_PER_DISK : 0,
+    perfRequirements.uploadOps ? perfRequirements.uploadOps / CONSTANTS.UPLOAD_OPS_PER_DISK : 0,
+    perfRequirements.downloadOps ? perfRequirements.downloadOps / CONSTANTS.DOWNLOAD_OPS_PER_DISK : 0
+  ];
 
-  // 找到最接近理想容量的磁盘规格
-  let bestDiskSize = CONSTANTS.DISK_SIZES[0];
-  let minDiff = Math.abs(CONSTANTS.DISK_SIZES[0] - idealDiskSizeTB);
+  return Math.ceil(Math.max(...needs) / CONSTANTS.DISKS_PER_SERVER);
+}
 
-  for (const diskSize of CONSTANTS.DISK_SIZES) {
-    const diff = Math.abs(diskSize - idealDiskSizeTB);
-    if (diff < minDiff) {
-      minDiff = diff;
-      bestDiskSize = diskSize;
-    }
+/**
+ * 评估配置优劣（返回分数，越小越好）
+ */
+function scoreConfig(config, capacityTiB) {
+  // 不满足性能或容量：淘汰
+  if (!config.perfCheck.passed || config.actualCapacity < capacityTiB) {
+    return Infinity;
   }
 
-  return bestDiskSize;
+  // 满足所有需求：计算容量过配比例（越接近1越好）
+  const overProvisionRatio = config.actualCapacity / capacityTiB;
+
+  // 如果节点数 >= 5，EC8+2 优先（磁盘利用率更高：80% vs 66.67%）
+  // EC8+2 的磁盘利用率比 EC4+2 高 20%（0.8 / 0.6667 = 1.2）
+  // 因此给 EC8+2 一个 0.83 的系数（约等于 1/1.2），抵消其容量优势带来的评分劣势
+  const ecBonus = (config.serverCount >= 5 && config.ecScheme === 'EC8+2') ? 0.83 : 1.0;
+
+  // 主评分：过配比例 * EC方案加成
+  // 次评分：服务器数量（归一化到0-0.1范围，避免影响主评分）
+  const primaryScore = overProvisionRatio * ecBonus;
+  const secondaryScore = config.serverCount * 0.001; // 服务器数量作为微小的次要因素
+
+  return primaryScore + secondaryScore;
 }
 
 /**
@@ -212,23 +227,19 @@ function planXEOS(requirements) {
   const capacityInfo = parseCapacity(requirements.capacity);
   const capacityTiB = capacityInfo.tib;
 
-  // 解析性能需求（如果有）
+  // 解析性能需求
   const perfRequirements = {};
-  let bandwidthUnitPreference = null; // 记录用户带宽单位偏好
+  let bandwidthUnitPreference = null;
 
   if (requirements.uploadBandwidth) {
     const bwInfo = parseBandwidth(requirements.uploadBandwidth);
     perfRequirements.uploadBandwidth = bwInfo.mibps;
-    if (!bandwidthUnitPreference) {
-      bandwidthUnitPreference = bwInfo.isBinary;
-    }
+    bandwidthUnitPreference = bandwidthUnitPreference || bwInfo.isBinary;
   }
   if (requirements.downloadBandwidth) {
     const bwInfo = parseBandwidth(requirements.downloadBandwidth);
     perfRequirements.downloadBandwidth = bwInfo.mibps;
-    if (!bandwidthUnitPreference) {
-      bandwidthUnitPreference = bwInfo.isBinary;
-    }
+    bandwidthUnitPreference = bandwidthUnitPreference || bwInfo.isBinary;
   }
   if (requirements.uploadOps) {
     perfRequirements.uploadOps = parseInt(requirements.uploadOps);
@@ -237,117 +248,57 @@ function planXEOS(requirements) {
     perfRequirements.downloadOps = parseInt(requirements.downloadOps);
   }
 
-  // 如果没有性能需求，默认使用十进制单位
+  // 默认使用十进制单位
   if (bandwidthUnitPreference === null) {
     bandwidthUnitPreference = false;
   }
 
-  let bestConfig = null;
+  // 计算性能需求的最小服务器数
+  const minServersForPerf = calculateMinServersForPerf(perfRequirements);
 
-  // 第一轮：使用最大磁盘规格估算服务器数量
-  const largestDisk = CONSTANTS.DISK_SIZES[0];
-  let initialServerCount = calculateServersForCapacity(capacityTiB, largestDisk, 'EC8+2');
-  let ecScheme = 'EC8+2';
+  // 生成所有可能的配置
+  const configs = [];
+  for (const ecScheme of ['EC8+2', 'EC4+2']) {
+    const minServers = ecScheme === 'EC8+2' ? CONSTANTS.EC8_2_MIN_SERVERS : CONSTANTS.EC4_2_MIN_SERVERS;
 
-  // 如果不足 5 台，降级到 EC4+2
-  if (initialServerCount < CONSTANTS.EC8_2_MIN_SERVERS) {
-    initialServerCount = calculateServersForCapacity(capacityTiB, largestDisk, 'EC4+2');
-    ecScheme = 'EC4+2';
+    for (const diskSize of CONSTANTS.DISK_SIZES) {
+      // 计算服务器数：取容量、性能、最小要求的最大值
+      const capacityServers = calculateServersForCapacity(capacityTiB, diskSize, ecScheme);
+      const serverCount = Math.max(capacityServers, minServersForPerf, minServers);
 
-    // EC4+2 最少 3 台
-    if (initialServerCount < CONSTANTS.EC4_2_MIN_SERVERS) {
-      initialServerCount = CONSTANTS.EC4_2_MIN_SERVERS;
+      // 计算实际容量和性能
+      const actualCapacity = calculateActualCapacity(serverCount, diskSize, ecScheme);
+      const performance = calculatePerformance(serverCount);
+      const perfCheck = checkPerformance(performance, perfRequirements);
+
+      configs.push({
+        serverCount,
+        diskSize,
+        ecScheme,
+        actualCapacity,
+        performance,
+        perfCheck
+      });
     }
   }
 
-  // 第二轮：根据初步估算的服务器数量，选择最优磁盘规格
-  const optimalDiskSize = selectOptimalDiskSize(capacityTiB, initialServerCount, ecScheme);
+  // 选择最优配置：评分最低的
+  const bestConfig = configs.reduce((best, current) => {
+    const currentScore = scoreConfig(current, capacityTiB);
+    const bestScore = scoreConfig(best, capacityTiB);
+    return currentScore < bestScore ? current : best;
+  });
 
-  // 第三轮：使用最优磁盘规格重新计算配置
-  for (const diskSize of CONSTANTS.DISK_SIZES) {
-    // 优先尝试最优磁盘规格
-    const priority = diskSize === optimalDiskSize ? 0 : Math.abs(diskSize - optimalDiskSize);
-
-    let serverCount = calculateServersForCapacity(capacityTiB, diskSize, 'EC8+2');
-    let currentEcScheme = 'EC8+2';
-
-    // 如果不足 5 台，降级到 EC4+2
-    if (serverCount < CONSTANTS.EC8_2_MIN_SERVERS) {
-      serverCount = calculateServersForCapacity(capacityTiB, diskSize, 'EC4+2');
-      currentEcScheme = 'EC4+2';
-
-      // EC4+2 最少 3 台
-      if (serverCount < CONSTANTS.EC4_2_MIN_SERVERS) {
-        serverCount = CONSTANTS.EC4_2_MIN_SERVERS;
-      }
-    }
-
-    // 计算性能
-    const performance = calculatePerformance(serverCount);
-    const actualCapacity = calculateActualCapacity(serverCount, diskSize, currentEcScheme);
-
-    // 检查是否满足性能需求
-    const perfCheck = checkPerformance(performance, perfRequirements);
-
-    const config = {
-      serverCount,
-      ecScheme: currentEcScheme,
-      diskSize,
-      actualCapacity,
-      performance,
-      perfCheck,
-      priority,
-      capacityUnitPreference: capacityInfo.isBinary,
-      bandwidthUnitPreference
-    };
-
-    // 如果满足所有需求，保存配置
-    if (perfCheck.passed) {
-      // 优先选择最优磁盘规格，其次选择更大的磁盘（更少的服务器）
-      if (!bestConfig || config.priority < bestConfig.priority ||
-          (config.priority === bestConfig.priority && diskSize > bestConfig.diskSize)) {
-        bestConfig = config;
-      }
-    }
+  // 检查是否找到有效配置
+  if (scoreConfig(bestConfig, capacityTiB) === Infinity) {
+    throw new Error('无法找到满足所有需求的配置方案');
   }
 
-  // 如果没有找到满足性能的配置，返回最优磁盘规格的配置
-  if (!bestConfig) {
-    let serverCount = calculateServersForCapacity(capacityTiB, optimalDiskSize, 'EC8+2');
-    let currentEcScheme = 'EC8+2';
-
-    if (serverCount < CONSTANTS.EC8_2_MIN_SERVERS) {
-      serverCount = calculateServersForCapacity(capacityTiB, optimalDiskSize, 'EC4+2');
-      currentEcScheme = 'EC4+2';
-      if (serverCount < CONSTANTS.EC4_2_MIN_SERVERS) {
-        serverCount = CONSTANTS.EC4_2_MIN_SERVERS;
-      }
-    }
-
-    const performance = calculatePerformance(serverCount);
-    const actualCapacity = calculateActualCapacity(serverCount, optimalDiskSize, currentEcScheme);
-    const perfCheck = checkPerformance(performance, perfRequirements);
-
-    bestConfig = {
-      serverCount,
-      ecScheme: currentEcScheme,
-      diskSize: optimalDiskSize,
-      actualCapacity,
-      performance,
-      perfCheck,
-      capacityUnitPreference: capacityInfo.isBinary,
-      bandwidthUnitPreference,
-      warning: '无法满足所有性能需求，建议增加服务器数量或调整需求'
-    };
-  }
-
-  // 优化纠删码方案：如果使用 EC4+2 但服务器数 >= 5，切换到 EC8+2
-  if (bestConfig.ecScheme === 'EC4+2' && bestConfig.serverCount >= CONSTANTS.EC8_2_MIN_SERVERS) {
-    bestConfig.ecScheme = 'EC8+2';
-    bestConfig.actualCapacity = calculateActualCapacity(bestConfig.serverCount, bestConfig.diskSize, 'EC8+2');
-  }
-
-  return bestConfig;
+  return {
+    ...bestConfig,
+    capacityUnitPreference: capacityInfo.isBinary,
+    bandwidthUnitPreference
+  };
 }
 
 /**
