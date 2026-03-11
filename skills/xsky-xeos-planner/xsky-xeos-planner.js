@@ -255,13 +255,20 @@ function planXEOS(requirements) {
 
   // 计算性能需求的最小服务器数
   const minServersForPerf = calculateMinServersForPerf(perfRequirements);
+  const hasPerformanceRequirement = minServersForPerf > 0;
 
   // 生成所有可能的配置
   const configs = [];
+
+  // 如果没有性能需求，优先使用最大磁盘规格
+  const diskSizesToTry = hasPerformanceRequirement
+    ? CONSTANTS.DISK_SIZES  // 有性能需求：尝试所有磁盘规格
+    : [CONSTANTS.DISK_SIZES[0]];  // 无性能需求：只使用最大磁盘规格（24TB）
+
   for (const ecScheme of ['EC8+2', 'EC4+2']) {
     const minServers = ecScheme === 'EC8+2' ? CONSTANTS.EC8_2_MIN_SERVERS : CONSTANTS.EC4_2_MIN_SERVERS;
 
-    for (const diskSize of CONSTANTS.DISK_SIZES) {
+    for (const diskSize of diskSizesToTry) {
       // 计算服务器数：取容量、性能、最小要求的最大值
       const capacityServers = calculateServersForCapacity(capacityTiB, diskSize, ecScheme);
       const serverCount = Math.max(capacityServers, minServersForPerf, minServers);
