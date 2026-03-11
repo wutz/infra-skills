@@ -225,15 +225,12 @@ function scoreConfig(config, capacityTiB, hasPerformanceRequirement) {
   }
 
   // 优先级2：磁盘大小优先级
-  // - 有性能需求：优先使用更大的磁盘（磁盘越大分数越低）
-  // - 无性能需求：优先使用更小的磁盘（磁盘越小分数越低，即容量过配越少越好）
-  const diskPriority = hasPerformanceRequirement
-    ? -config.diskSize  // 有性能需求：磁盘越大越好（负数使其分数更低）
-    : overProvisionRatio;  // 无性能需求：容量过配越少越好
+  // 无论有无性能需求，都优先使用容量过配最少的磁盘（即最接近实际需求的磁盘）
+  const diskPriority = overProvisionRatio;
 
-  // 组合评分：EC方案 > 磁盘选择 > 服务器数量
+  // 组合评分：EC方案 > 服务器数量 > 磁盘选择
   // 使用权重确保优先级顺序
-  return ecPriority * 10000 + diskPriority * 100 + config.serverCount * 0.01;
+  return ecPriority * 10000 + config.serverCount * 100 + diskPriority * 0.01;
 }
 
 /**
