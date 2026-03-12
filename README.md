@@ -24,12 +24,13 @@
 
 1. 选择 `Browse and install plugins`
 2. 选择 `infra-skills`
+3. 选择 `storage-skills`（或你想安装的技能集）
 3. 选择 `Install now`
 
 或直接安装：
 
 ```
-/plugin install infra-skills
+/plugin install storage-skills@infra-skills
 ```
 
 ### 本地开发测试
