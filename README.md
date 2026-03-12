@@ -6,10 +6,6 @@
 
 本仓库包含面向基础设施场景的 Claude 技能，专注于存储系统的容量和性能规划。每个技能都是独立的目录，包含 `SKILL.md` 定义文件和相关的计算脚本。
 
-### 声明
-
-**这些技能仅供参考和辅助决策使用。** 实际部署方案请以官方产品文档和技术支持建议为准。在用于生产环境前，请充分验证计算结果。
-
 ## 技能列表
 
 - `./skills/xsky-xeos-planner`：XSKY XEOS 对象存储容量和性能规划
@@ -44,7 +40,26 @@ claude --plugin-dir ./infra-skills
 
 ## 创建新技能
 
-技能结构很简单——一个包含 `SKILL.md` 文件的目录，使用 YAML frontmatter 定义元数据：
+本项目遵循 [agentskills.io](https://agentskills.io/specification) 规范。每个技能是一个包含标准目录结构的独立目录：
+
+```
+skill-name/
+├── SKILL.md              # 必需：技能定义和使用说明
+├── README.md             # 推荐：技能概述和快速开始
+├── scripts/              # 可选：可执行脚本
+│   ├── main-script.js
+│   └── test.js
+├── evals/                # 推荐：评估测试
+│   ├── evals.json       # 测试用例定义
+│   ├── files/           # 测试输入文件
+│   └── README.md        # 评估指南
+└── references/           # 可选：参考文档
+    └── SPECS.md
+```
+
+### SKILL.md 格式
+
+使用 YAML frontmatter 定义元数据：
 
 ```yaml
 ---
@@ -65,24 +80,67 @@ description: 技能功能描述，以及何时应该触发此技能
 - 说明 2
 ```
 
-frontmatter 需要两个字段：
-- `name` — 唯一标识符（小写，用连字符分隔）
-- `description` — 技能功能的完整描述，包括触发条件
+frontmatter 必需字段：
+- `name` — 唯一标识符（小写，用连字符分隔，1-64 字符）
+- `description` — 技能功能的完整描述，包括触发条件（1-1024 字符）
+
+可选字段：
+- `license` — 许可证名称
+- `compatibility` — 环境要求说明
+- `metadata` — 自定义元数据（键值对）
+
+### 评估测试
+
+在 `evals/evals.json` 中定义测试用例：
+
+```json
+{
+  "skill_name": "my-skill-name",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "用户会输入的真实提示词",
+      "expected_output": "期望输出的描述",
+      "files": []
+    }
+  ]
+}
+```
+
+详细的评估指南请参考 [agentskills.io/skill-creation/evaluating-skills](https://agentskills.io/skill-creation/evaluating-skills)。
 
 ## 项目结构
 
 ```
 infra-skills/
 ├── .claude-plugin/
-│   └── plugin.json               # 插件清单
+│   └── plugin.json                    # 插件清单
 ├── skills/
 │   └── xsky-xeos-planner/
-│       ├── SKILL.md              # 技能定义
-│       ├── xsky-xeos-planner.js  # 核心算法
-│       └── test.js               # 测试套件
+│       ├── SKILL.md                   # 技能定义
+│       ├── README.md                  # 技能说明
+│       ├── scripts/                   # 可执行脚本
+│       │   ├── xsky-xeos-planner.js  # 核心算法
+│       │   └── test.js               # 单元测试
+│       ├── evals/                     # 评估测试
+│       │   ├── evals.json            # 测试用例
+│       │   ├── files/                # 测试文件
+│       │   └── README.md             # 评估指南
+│       └── references/                # 参考文档
+│           └── TECHNICAL_SPECS.md    # 技术规格
 ├── CHANGELOG.md
 └── README.md
 ```
+
+## 规范符合性
+
+本项目遵循 [agentskills.io](https://agentskills.io) 规范：
+
+- ✅ 标准目录结构（scripts/, references/, evals/）
+- ✅ YAML frontmatter 格式的 SKILL.md
+- ✅ 渐进式信息披露（metadata → instructions → resources）
+- ✅ 结构化评估框架（evals.json）
+- ✅ 参考文档分离（references/）
 
 ## 许可证
 

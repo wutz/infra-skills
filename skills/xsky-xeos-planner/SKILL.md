@@ -9,7 +9,7 @@ description: 规划 XSKY XEOS 对象存储的容量和性能。当用户提到 X
 
 ## 工作流程
 
-此 skill 使用 JavaScript 脚本 `xsky-xeos-planner.js` 进行核心计算，流程如下：
+此 skill 使用 JavaScript 脚本 `scripts/xsky-xeos-planner.js` 进行核心计算，流程如下：
 
 1. 收集用户需求（容量和性能）
 2. 调用 `xsky-xeos-planner.js` 脚本进行计算
@@ -49,11 +49,11 @@ description: 规划 XSKY XEOS 对象存储的容量和性能。当用户提到 X
 
 ### 步骤 2：调用计算脚本
 
-使用 Bash 工具调用 `xsky-xeos-planner.js` 脚本：
+使用 Bash 工具调用 `scripts/xsky-xeos-planner.js` 脚本：
 
 ```bash
 cd /Users/wutz/Projects/wutz/infra-skills/skills/xsky-xeos-planner
-node xsky-xeos-planner.js --capacity "500TiB" [--upload-bw "1GB/s"] [--download-bw "2GB/s"] [--upload-ops "50000"] [--download-ops "150000"] --json
+node scripts/xsky-xeos-planner.js --capacity "500TiB" [--upload-bw "1GB/s"] [--download-bw "2GB/s"] [--upload-ops "50000"] [--download-ops "150000"] --json
 ```
 
 参数说明：
@@ -113,3 +113,7 @@ node xsky-xeos-planner.js --capacity "500TiB" [--upload-bw "1GB/s"] [--download-
 - 如果性能需求较高，脚本会自动选择更小的磁盘以增加服务器数量
 - EC8+2 需要至少 5 台服务器，EC4+2 需要至少 3 台服务器
 - 如果无法满足性能需求，脚本会返回警告信息
+
+## 参考文档
+
+详细的技术规格和计算公式请参考：[references/TECHNICAL_SPECS.md](references/TECHNICAL_SPECS.md)
