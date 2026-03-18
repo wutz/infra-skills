@@ -83,7 +83,7 @@ node scripts/gpfs-ece-planner.js --capacity "500TiB" [--read-bw "100GB/s"] [--wr
 ### 步骤 3：解析并展示结果
 
 脚本会返回 JSON 格式的结果，包含：
-- `configuration`：配置方案（服务器台数、纠删码方案、容错能力、网络类型、磁盘配置）
+- `configuration`：配置方案（服务器台数、纠删码方案、磁盘配置）
 - `capacity`：可用容量
 - `performance`：性能指标（读/写带宽和 IOPS）
 - `performanceStatus`：性能状态
@@ -98,8 +98,6 @@ node scripts/gpfs-ece-planner.js --capacity "500TiB" [--read-bw "100GB/s"] [--wr
 配置方案:
   服务器台数: 3 台
   纠删码方案: EC4+2P
-  容错能力: 容忍 1 台服务器离线
-  网络类型: RoCE 800Gb
 
 每台服务器配置:
   处理器: 2 颗 Intel Xeon 6530

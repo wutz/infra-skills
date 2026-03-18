@@ -359,9 +359,6 @@ function formatResult(config) {
     configuration: {
       serverCount: config.serverCount,
       ecScheme: config.ecScheme,
-      faultTolerance: `容忍 ${config.faultTolerance} 台服务器离线`,
-      networkType: config.networkType === 'roce' ? 'RoCE 800Gb' :
-                   config.networkType === 'ib' ? 'InfiniBand 800Gb' : '以太网',
       diskConfig: `每台服务器 ${CONSTANTS.SSDS_PER_SERVER} × ${config.ssdSize}TB NVMe SSD`
     },
     capacity: {
@@ -459,8 +456,6 @@ GPFS ECE 高性能文件存储规划工具
       console.log('配置方案:');
       console.log(`  服务器台数: ${result.configuration.serverCount} 台`);
       console.log(`  纠删码方案: ${result.configuration.ecScheme}`);
-      console.log(`  容错能力: ${result.configuration.faultTolerance}`);
-      console.log(`  网络类型: ${result.configuration.networkType}`);
       console.log(`  磁盘配置: ${result.configuration.diskConfig}`);
       console.log('\n容量:');
       console.log(`  可用容量: ${result.capacity.available}`);
