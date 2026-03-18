@@ -9,6 +9,7 @@
 ## 技能列表
 
 - `./skills/xsky-xeos-planner`：XSKY XEOS 对象存储容量和性能规划
+- `./skills/gpfs-ece-planner`：GPFS ECE 高性能文件存储容量和性能规划
 
 ## 使用方式
 
@@ -115,13 +116,25 @@ frontmatter 必需字段：
 ```
 infra-skills/
 ├── .claude-plugin/
-│   └── plugin.json                    # 插件清单
+│   └── marketplace.json              # 插件清单
 ├── skills/
-│   └── xsky-xeos-planner/
+│   ├── xsky-xeos-planner/
+│   │   ├── SKILL.md                   # 技能定义
+│   │   ├── README.md                  # 技能说明
+│   │   ├── scripts/                   # 可执行脚本
+│   │   │   ├── xsky-xeos-planner.js  # 核心算法
+│   │   │   └── test.js               # 单元测试
+│   │   ├── evals/                     # 评估测试
+│   │   │   ├── evals.json            # 测试用例
+│   │   │   ├── files/                # 测试文件
+│   │   │   └── README.md             # 评估指南
+│   │   └── references/                # 参考文档
+│   │       └── TECHNICAL_SPECS.md    # 技术规格
+│   └── gpfs-ece-planner/
 │       ├── SKILL.md                   # 技能定义
 │       ├── README.md                  # 技能说明
 │       ├── scripts/                   # 可执行脚本
-│       │   ├── xsky-xeos-planner.js  # 核心算法
+│       │   ├── gpfs-ece-planner.js   # 核心算法
 │       │   └── test.js               # 单元测试
 │       ├── evals/                     # 评估测试
 │       │   ├── evals.json            # 测试用例

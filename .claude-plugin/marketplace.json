@@ -14,7 +14,8 @@
       "source": "./",
       "strict": false,
       "skills": [
-        "./skills/xsky-xeos-planner"
+        "./skills/xsky-xeos-planner",
+        "./skills/gpfs-ece-planner"
       ]
     }
   ]
