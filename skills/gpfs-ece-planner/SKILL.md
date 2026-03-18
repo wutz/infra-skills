@@ -39,9 +39,17 @@ description: 规划 GPFS ECE 高性能文件存储的容量和性能。当用户
 
 - **RoCE**（默认）：800Gb RDMA over Converged Ethernet
 - **InfiniBand**：800Gb InfiniBand
-- **Ethernet**：以太网（性能降至 30%）
+- **Ethernet**：以太网（性能降至 30%，固定乘数不随带宽变化）
 
-### 4. 容错级别（可选）
+### 4. 网络带宽（可选）
+
+默认 800Gb（2 块双口 200Gb NIC）。用户可指定实际网络总带宽（如 400Gb）。
+
+性能影响规则：
+- **RoCE/IB**：仅 BW（带宽）按比例缩放，IOPS 不受影响
+- **以太网**：所有性能指标统一使用 0.3 乘数，不受带宽参数影响
+
+### 5. 容错级别（可选）
 
 - **ft=1**（默认）：容忍 1 台服务器离线
 - **ft=2**：容忍 2 台服务器离线（至少 10 台）
@@ -59,7 +67,8 @@ description: 规划 GPFS ECE 高性能文件存储的容量和性能。当用户
    - 读 IOPS：例如 "1000000"
    - 写 IOPS：例如 "500000"
 3. **网络类型**（可选）：roce、ib 或 ethernet
-4. **容错级别**（可选）：1、2 或 3
+4. **网络带宽**（可选）：总带宽 Gb 值，如 400、800（默认 800）
+5. **容错级别**（可选）：1、2 或 3
 
 ### 步骤 2：调用计算脚本
 
@@ -67,7 +76,7 @@ description: 规划 GPFS ECE 高性能文件存储的容量和性能。当用户
 
 ```bash
 cd /Users/wutz/Projects/wutz/infra-skills/skills/gpfs-ece-planner
-node scripts/gpfs-ece-planner.js --capacity "500TiB" [--read-bw "100GB/s"] [--write-bw "50GB/s"] [--read-iops "1000000"] [--write-iops "500000"] [--network-type roce] [--fault-tolerance 1] --json
+node scripts/gpfs-ece-planner.js --capacity "500TiB" [--read-bw "100GB/s"] [--write-bw "50GB/s"] [--read-iops "1000000"] [--write-iops "500000"] [--network-type roce] [--network-bandwidth 800] [--fault-tolerance 1] --json
 ```
 
 参数说明：
@@ -77,6 +86,7 @@ node scripts/gpfs-ece-planner.js --capacity "500TiB" [--read-bw "100GB/s"] [--wr
 - `--read-iops`：读 IOPS 需求（可选）
 - `--write-iops`：写 IOPS 需求（可选）
 - `--network-type`：网络类型（可选，默认 roce）
+- `--network-bandwidth`：网络总带宽 Gb（可选，默认 800）
 - `--fault-tolerance`：容错级别（可选，默认 1）
 - `--json`：以 JSON 格式输出结果
 
@@ -125,7 +135,8 @@ node scripts/gpfs-ece-planner.js --capacity "500TiB" [--read-bw "100GB/s"] [--wr
 - EC 方案由服务器台数自动确定：3台→EC4+2P、4台→EC8+3P、5+台→EC8+2P
 - 每节点读带宽随节点数增加而递减（非线性），写带宽固定
 - 输出单位与用户输入单位保持一致（二进制或十进制）
-- 以太网性能为 RoCE/IB 的 30%
+- 以太网性能为 RoCE/IB 的 30%（固定乘数，不随带宽变化）
+- RoCE/IB 下非标准带宽仅影响 BW，不影响 IOPS
 - ft=2 至少需要 10 台服务器，ft=3 至少需要 11 台
 
 ## 参考文档

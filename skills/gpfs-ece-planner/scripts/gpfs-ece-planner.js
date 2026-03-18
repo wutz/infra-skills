@@ -26,7 +26,10 @@ const CONSTANTS = {
   WRITE_IOPS_PER_NODE: 225000,
 
   // 网络类型乘数
-  NETWORK_MULTIPLIERS: { roce: 1.0, ib: 1.0, ethernet: 0.3 }
+  NETWORK_MULTIPLIERS: { roce: 1.0, ib: 1.0, ethernet: 0.3 },
+
+  // 基准网络带宽 (Gb)
+  NETWORK_BANDWIDTH_BASE: 800
 };
 
 /**
@@ -80,13 +83,27 @@ function getReadBWPerNode(serverCount) {
 
 /**
  * 计算集群性能
+ * networkType: roce/ib/ethernet
+ * networkMultiplier: 网络类型乘数 (roce/ib=1.0, ethernet=0.3)
+ * bandwidthRatio: 实际带宽与基准800Gb的比值 (仅RoCE/IB的BW受影响)
  */
-function calculatePerformance(serverCount, networkMultiplier) {
+function calculatePerformance(serverCount, networkType, networkMultiplier, bandwidthRatio) {
   const readBWPerNode = getReadBWPerNode(serverCount);
 
+  if (networkType === 'ethernet') {
+    // 以太网：所有指标统一使用 0.3 乘数，不受带宽比例影响
+    return {
+      readBandwidth: serverCount * readBWPerNode * networkMultiplier,
+      writeBandwidth: serverCount * CONSTANTS.WRITE_BW_PER_NODE * networkMultiplier,
+      readIOPS: serverCount * CONSTANTS.READ_IOPS_PER_NODE * networkMultiplier,
+      writeIOPS: serverCount * CONSTANTS.WRITE_IOPS_PER_NODE * networkMultiplier
+    };
+  }
+
+  // RoCE/IB：BW 受带宽比例影响，IOPS 不受影响
   return {
-    readBandwidth: serverCount * readBWPerNode * networkMultiplier,
-    writeBandwidth: serverCount * CONSTANTS.WRITE_BW_PER_NODE * networkMultiplier,
+    readBandwidth: serverCount * readBWPerNode * networkMultiplier * bandwidthRatio,
+    writeBandwidth: serverCount * CONSTANTS.WRITE_BW_PER_NODE * networkMultiplier * bandwidthRatio,
     readIOPS: serverCount * CONSTANTS.READ_IOPS_PER_NODE * networkMultiplier,
     writeIOPS: serverCount * CONSTANTS.WRITE_IOPS_PER_NODE * networkMultiplier
   };
@@ -111,11 +128,11 @@ function findMinServersForCapacity(capacityTiB, ssdSizeTB, faultTolerance) {
 /**
  * 查找满足性能需求的最小服务器台数（迭代搜索，因读带宽非线性）
  */
-function findMinServersForPerformance(perfRequirements, networkMultiplier) {
+function findMinServersForPerformance(perfRequirements, networkType, networkMultiplier, bandwidthRatio) {
   if (Object.keys(perfRequirements).length === 0) return 0;
 
   for (let n = 3; n <= 200; n++) {
-    const perf = calculatePerformance(n, networkMultiplier);
+    const perf = calculatePerformance(n, networkType, networkMultiplier, bandwidthRatio);
     const satisfied =
       (!perfRequirements.readBandwidth || perf.readBandwidth >= perfRequirements.readBandwidth) &&
       (!perfRequirements.writeBandwidth || perf.writeBandwidth >= perfRequirements.writeBandwidth) &&
@@ -260,6 +277,10 @@ function planGPFSECE(requirements) {
   const networkType = requirements.networkType ? parseNetworkType(requirements.networkType) : 'roce';
   const networkMultiplier = CONSTANTS.NETWORK_MULTIPLIERS[networkType];
 
+  // 解析网络带宽，计算带宽比例（仅影响 RoCE/IB 的 BW）
+  const networkBandwidth = requirements.networkBandwidth ? parseInt(requirements.networkBandwidth) : CONSTANTS.NETWORK_BANDWIDTH_BASE;
+  const bandwidthRatio = networkBandwidth / CONSTANTS.NETWORK_BANDWIDTH_BASE;
+
   // 解析容错级别
   const faultTolerance = requirements.faultTolerance ? parseFaultTolerance(requirements.faultTolerance) : 1;
 
@@ -289,7 +310,7 @@ function planGPFSECE(requirements) {
   }
 
   // 最小性能服务器数
-  const minServersForPerf = findMinServersForPerformance(perfRequirements, networkMultiplier);
+  const minServersForPerf = findMinServersForPerformance(perfRequirements, networkType, networkMultiplier, bandwidthRatio);
   // 最小容错服务器数
   const minServersForFT = getMinServersForFT(faultTolerance);
 
@@ -309,7 +330,7 @@ function planGPFSECE(requirements) {
 
     // 计算实际容量和性能
     const actualCapacity = calculateCapacity(serverCount, ssdSize, ec.efficiency);
-    const performance = calculatePerformance(serverCount, networkMultiplier);
+    const performance = calculatePerformance(serverCount, networkType, networkMultiplier, bandwidthRatio);
 
     // 验证性能满足
     const perfSatisfied =
@@ -346,6 +367,8 @@ function planGPFSECE(requirements) {
     ...bestConfig,
     networkType,
     networkMultiplier,
+    networkBandwidth,
+    bandwidthRatio,
     capacityUnitPreference: capacityInfo.isBinary,
     bandwidthUnitPreference
   };
@@ -396,6 +419,7 @@ GPFS ECE 高性能文件存储规划工具
   --read-iops <IOPS>             读 IOPS 需求
   --write-iops <IOPS>            写 IOPS 需求
   --network-type <类型>          网络类型：roce|ib|ethernet（默认 roce）
+  --network-bandwidth <Gb>       网络总带宽，如 400、800（默认 800）
   --fault-tolerance <级别>       容错级别：1|2|3（默认 1）
   --json                         以 JSON 格式输出
 
@@ -403,6 +427,7 @@ GPFS ECE 高性能文件存储规划工具
   node gpfs-ece-planner.js --capacity 500TiB
   node gpfs-ece-planner.js --capacity 500TiB --read-bw 100GB/s --write-bw 50GB/s
   node gpfs-ece-planner.js --capacity 1PiB --fault-tolerance 2 --json
+  node gpfs-ece-planner.js --capacity 1PiB --network-type roce --network-bandwidth 400 --json
 `);
     process.exit(0);
   }
@@ -430,6 +455,9 @@ GPFS ECE 高性能文件存储规划工具
         break;
       case '--network-type':
         requirements.networkType = args[++i];
+        break;
+      case '--network-bandwidth':
+        requirements.networkBandwidth = args[++i];
         break;
       case '--fault-tolerance':
         requirements.faultTolerance = args[++i];
