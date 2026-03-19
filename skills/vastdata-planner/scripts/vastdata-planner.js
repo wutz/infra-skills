@@ -160,11 +160,11 @@ function findCnodeConfigs(requirements, diskTb) {
 }
 
 function printCnodeTable(configs) {
-  console.log('| 配置 | 可用容量 | 裸容量 | 读带宽 | 持续写带宽 | 峰值写带宽 | 读 IOPS | 写 IOPS | 备注 |');
-  console.log('|-----|--------|-------|-------|---------|---------|--------|--------|-----|');
+  console.log('| 配置 | 可用容量 | 裸容量 | 读带宽 | 持续写带宽 | 峰值写带宽 | 读 IOPS | 写 IOPS |');
+  console.log('|-----|--------|-------|-------|---------|---------|--------|--------|');
   for (const c of configs) {
-    const label = `${c.cnode_count} CNode (${c.cnode_model}) + ${c.dbox_count} DBox (${c.dbox_model}, ${c.disk_tb}TB盘)`;
-    console.log(`| ${label} | ${formatCapacity(c.usable_tb)} | ${formatCapacity(c.raw_tb)} | ${c.read_bw_gbs} GB/s | ${c.sustained_write_bw_gbs} GB/s | ${c.burst_write_bw_gbs} GB/s | ${c.read_iops_k}K | ${c.write_iops_k}K | ${c.notes || ''} |`);
+    const label = `${c.cnode_count} CNode (${c.cnode_model}) + ${c.dbox_count} DBox (${c.dbox_model}, ${c.disk_tb}TB NVMe)`;
+    console.log(`| ${label} | ${formatCapacity(c.usable_tb)} | ${formatCapacity(c.raw_tb)} | ${c.read_bw_gbs} GB/s | ${c.sustained_write_bw_gbs} GB/s | ${c.burst_write_bw_gbs} GB/s | ${c.read_iops_k}K | ${c.write_iops_k}K |`);
   }
   console.log();
 }
