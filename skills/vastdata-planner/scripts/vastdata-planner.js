@@ -109,17 +109,15 @@ function printEboxResults(requirements, diskFilter) {
     requirements.readIops || requirements.writeIops;
 
   if (hasReqs) {
-    const DISK_LABELS = { '15tb': '15.36TB', '30tb': '30.72TB', '60tb': '61.44TB' };
-    console.log('| 磁盘规格 | EBox数 | 可用容量 | 裸容量 | 读带宽 | 持续写带宽 | 峰值写带宽 | 读 IOPS | 写 IOPS |');
-    console.log('|---------|-------|--------|-------|-------|---------|---------|--------|--------|');
+    console.log('| 配置 | EBox数 | 可用容量 | 裸容量 | 读带宽 | 持续写带宽 | 峰值写带宽 | 读 IOPS | 写 IOPS |');
+    console.log('|-----|-------|--------|-------|-------|---------|---------|--------|--------|');
     for (const variant of variants) {
       const result = findEboxConfig(variant, requirements);
-      const diskLabel = DISK_LABELS[variant.key] || variant.key;
       if (!result) {
-        console.log(`| ${diskLabel} | ❌ 超出 250 EBox | - | - | - | - | - | - | - |`);
+        console.log(`| ${variant.label} | ❌ 超出 250 EBox | - | - | - | - | - | - | - |`);
       } else {
         const { entry, perf } = result;
-        console.log(`| ${diskLabel} | ${entry.ebox_count} | ${formatCapacity(entry.usable_tb)} | ${formatCapacity(entry.ebox_count * entry.raw_per_ebox_tb)} | ${+perf.read_bw_gbs.toFixed(1)} GB/s | ${+perf.sustained_write_bw_gbs.toFixed(1)} GB/s | ${+perf.burst_write_bw_gbs.toFixed(1)} GB/s | ${perf.read_iops_k}K | ${perf.write_iops_k}K |`);
+        console.log(`| ${variant.label} | ${entry.ebox_count} | ${formatCapacity(entry.usable_tb)} | ${formatCapacity(entry.ebox_count * entry.raw_per_ebox_tb)} | ${+perf.read_bw_gbs.toFixed(1)} GB/s | ${+perf.sustained_write_bw_gbs.toFixed(1)} GB/s | ${+perf.burst_write_bw_gbs.toFixed(1)} GB/s | ${perf.read_iops_k}K | ${perf.write_iops_k}K |`);
       }
     }
     console.log();
