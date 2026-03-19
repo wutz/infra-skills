@@ -1,0 +1,45 @@
+{
+  "skill_name": "vastdata-planner",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "我需要规划 VastData 存储，容量需求 500TB，帮我推荐方案。",
+      "expected_output": "返回 EBox 和 CNode+DBox 两条产品线的推荐配置，包括 EBox 数量、可用容量、读写带宽、IOPS 等完整信息。"
+    },
+    {
+      "id": 2,
+      "prompt": "帮我规划 VastData EBox 全闪存储，需要 2PB 可用容量。",
+      "expected_output": "返回三种磁盘规格（15TB、30TB、60TB NVMe）的 EBox 推荐配置，包括最少 EBox 数量、可用容量、读写带宽、IOPS 等信息。"
+    },
+    {
+      "id": 3,
+      "prompt": "规划 VastData CNode+DBox 方案，可用容量要求 1PB，读带宽不低于 200GB/s。",
+      "expected_output": "返回满足容量和读带宽要求的 CNode+DBox 配置，包括 CNode 型号和数量、DBox 型号和数量、可用容量、读带宽等信息。"
+    },
+    {
+      "id": 4,
+      "prompt": "我需要一个高性能存储系统，VastData EBox 方案，读 IOPS 要求 10000K，容量 1PB。",
+      "expected_output": "返回满足 IOPS 和容量要求的 EBox 推荐配置，包括 EBox 数量、所有磁盘规格下的性能对比，标注满足 IOPS 需求。"
+    },
+    {
+      "id": 5,
+      "prompt": "VastData 存储规划，容量 10PB，使用 61.44TB NVMe 磁盘的 EBox 配置。",
+      "expected_output": "返回 61.44TB NVMe 磁盘规格下满足 10PB 容量要求的 EBox 数量和配置详情。"
+    },
+    {
+      "id": 6,
+      "prompt": "帮我比较 VastData EBox 和 CNode+DBox 的方案，容量需求 800TB。",
+      "expected_output": "同时返回 EBox 和 CNode+DBox 两条产品线的推荐配置，便于用户对比选择。"
+    },
+    {
+      "id": 7,
+      "prompt": "我想了解 VastData CNode+DBox 所有可用配置，容量至少 500TB。",
+      "expected_output": "返回满足 500TB 容量要求的所有 CNode+DBox 预定义配置列表，包括各配置的 CNode/DBox 数量、容量、性能指标。"
+    },
+    {
+      "id": 8,
+      "prompt": "规划 VastData 存储，需要读带宽 500GB/s 以上，容量 3PB。",
+      "expected_output": "返回满足读带宽和容量要求的推荐配置，EBox 产品线给出满足 500GB/s 读带宽所需的 EBox 数量。"
+    }
+  ]
+}

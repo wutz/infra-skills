@@ -1,0 +1,1926 @@
+{
+  "description": "EBox NFS performance (independent of disk type)",
+  "note": "NFS 1MB Random for bandwidth; NFS 4K Random for IOPS",
+  "entries": [
+    {
+      "ebox_count": 11,
+      "read_bw_gbs": 231,
+      "sustained_write_bw_gbs": 28.6,
+      "burst_write_bw_gbs": 110,
+      "read_iops_k": 1980,
+      "write_iops_k": 261.25
+    },
+    {
+      "ebox_count": 12,
+      "read_bw_gbs": 252,
+      "sustained_write_bw_gbs": 31.200000000000003,
+      "burst_write_bw_gbs": 120,
+      "read_iops_k": 2160,
+      "write_iops_k": 300
+    },
+    {
+      "ebox_count": 13,
+      "read_bw_gbs": 273,
+      "sustained_write_bw_gbs": 33.800000000000004,
+      "burst_write_bw_gbs": 130,
+      "read_iops_k": 2340,
+      "write_iops_k": 325
+    },
+    {
+      "ebox_count": 14,
+      "read_bw_gbs": 294,
+      "sustained_write_bw_gbs": 36.4,
+      "burst_write_bw_gbs": 140,
+      "read_iops_k": 2520,
+      "write_iops_k": 350
+    },
+    {
+      "ebox_count": 15,
+      "read_bw_gbs": 315,
+      "sustained_write_bw_gbs": 39,
+      "burst_write_bw_gbs": 150,
+      "read_iops_k": 2700,
+      "write_iops_k": 375
+    },
+    {
+      "ebox_count": 16,
+      "read_bw_gbs": 315,
+      "sustained_write_bw_gbs": 39,
+      "burst_write_bw_gbs": 150,
+      "read_iops_k": 2700,
+      "write_iops_k": 375
+    },
+    {
+      "ebox_count": 17,
+      "read_bw_gbs": 336,
+      "sustained_write_bw_gbs": 41.6,
+      "burst_write_bw_gbs": 160,
+      "read_iops_k": 2880,
+      "write_iops_k": 400
+    },
+    {
+      "ebox_count": 18,
+      "read_bw_gbs": 357,
+      "sustained_write_bw_gbs": 44.2,
+      "burst_write_bw_gbs": 170,
+      "read_iops_k": 3060,
+      "write_iops_k": 425
+    },
+    {
+      "ebox_count": 19,
+      "read_bw_gbs": 378,
+      "sustained_write_bw_gbs": 46.800000000000004,
+      "burst_write_bw_gbs": 180,
+      "read_iops_k": 3240,
+      "write_iops_k": 450
+    },
+    {
+      "ebox_count": 20,
+      "read_bw_gbs": 399,
+      "sustained_write_bw_gbs": 49.4,
+      "burst_write_bw_gbs": 190,
+      "read_iops_k": 3420,
+      "write_iops_k": 475
+    },
+    {
+      "ebox_count": 21,
+      "read_bw_gbs": 420,
+      "sustained_write_bw_gbs": 52,
+      "burst_write_bw_gbs": 200,
+      "read_iops_k": 3600,
+      "write_iops_k": 500
+    },
+    {
+      "ebox_count": 22,
+      "read_bw_gbs": 441,
+      "sustained_write_bw_gbs": 54.6,
+      "burst_write_bw_gbs": 210,
+      "read_iops_k": 3780,
+      "write_iops_k": 525
+    },
+    {
+      "ebox_count": 23,
+      "read_bw_gbs": 462,
+      "sustained_write_bw_gbs": 57.2,
+      "burst_write_bw_gbs": 220,
+      "read_iops_k": 3960,
+      "write_iops_k": 550
+    },
+    {
+      "ebox_count": 24,
+      "read_bw_gbs": 483,
+      "sustained_write_bw_gbs": 59.800000000000004,
+      "burst_write_bw_gbs": 230,
+      "read_iops_k": 4140,
+      "write_iops_k": 575
+    },
+    {
+      "ebox_count": 25,
+      "read_bw_gbs": 504,
+      "sustained_write_bw_gbs": 62.400000000000006,
+      "burst_write_bw_gbs": 240,
+      "read_iops_k": 4320,
+      "write_iops_k": 600
+    },
+    {
+      "ebox_count": 26,
+      "read_bw_gbs": 525,
+      "sustained_write_bw_gbs": 65,
+      "burst_write_bw_gbs": 250,
+      "read_iops_k": 4500,
+      "write_iops_k": 625
+    },
+    {
+      "ebox_count": 27,
+      "read_bw_gbs": 546,
+      "sustained_write_bw_gbs": 67.60000000000001,
+      "burst_write_bw_gbs": 260,
+      "read_iops_k": 4680,
+      "write_iops_k": 650
+    },
+    {
+      "ebox_count": 28,
+      "read_bw_gbs": 567,
+      "sustained_write_bw_gbs": 70.2,
+      "burst_write_bw_gbs": 270,
+      "read_iops_k": 4860,
+      "write_iops_k": 675
+    },
+    {
+      "ebox_count": 29,
+      "read_bw_gbs": 588,
+      "sustained_write_bw_gbs": 72.8,
+      "burst_write_bw_gbs": 280,
+      "read_iops_k": 5040,
+      "write_iops_k": 700
+    },
+    {
+      "ebox_count": 30,
+      "read_bw_gbs": 609,
+      "sustained_write_bw_gbs": 75.4,
+      "burst_write_bw_gbs": 290,
+      "read_iops_k": 5220,
+      "write_iops_k": 725
+    },
+    {
+      "ebox_count": 31,
+      "read_bw_gbs": 630,
+      "sustained_write_bw_gbs": 78,
+      "burst_write_bw_gbs": 300,
+      "read_iops_k": 5400,
+      "write_iops_k": 750
+    },
+    {
+      "ebox_count": 32,
+      "read_bw_gbs": 651,
+      "sustained_write_bw_gbs": 80.60000000000001,
+      "burst_write_bw_gbs": 310,
+      "read_iops_k": 5580,
+      "write_iops_k": 775
+    },
+    {
+      "ebox_count": 33,
+      "read_bw_gbs": 672,
+      "sustained_write_bw_gbs": 83.2,
+      "burst_write_bw_gbs": 320,
+      "read_iops_k": 5760,
+      "write_iops_k": 800
+    },
+    {
+      "ebox_count": 34,
+      "read_bw_gbs": 693,
+      "sustained_write_bw_gbs": 85.8,
+      "burst_write_bw_gbs": 330,
+      "read_iops_k": 5940,
+      "write_iops_k": 825
+    },
+    {
+      "ebox_count": 35,
+      "read_bw_gbs": 714,
+      "sustained_write_bw_gbs": 88.4,
+      "burst_write_bw_gbs": 340,
+      "read_iops_k": 6120,
+      "write_iops_k": 850
+    },
+    {
+      "ebox_count": 36,
+      "read_bw_gbs": 735,
+      "sustained_write_bw_gbs": 91,
+      "burst_write_bw_gbs": 350,
+      "read_iops_k": 6300,
+      "write_iops_k": 875
+    },
+    {
+      "ebox_count": 37,
+      "read_bw_gbs": 756,
+      "sustained_write_bw_gbs": 93.60000000000001,
+      "burst_write_bw_gbs": 360,
+      "read_iops_k": 6480,
+      "write_iops_k": 900
+    },
+    {
+      "ebox_count": 38,
+      "read_bw_gbs": 777,
+      "sustained_write_bw_gbs": 96.2,
+      "burst_write_bw_gbs": 370,
+      "read_iops_k": 6660,
+      "write_iops_k": 925
+    },
+    {
+      "ebox_count": 39,
+      "read_bw_gbs": 798,
+      "sustained_write_bw_gbs": 98.8,
+      "burst_write_bw_gbs": 380,
+      "read_iops_k": 6840,
+      "write_iops_k": 950
+    },
+    {
+      "ebox_count": 40,
+      "read_bw_gbs": 819,
+      "sustained_write_bw_gbs": 101.4,
+      "burst_write_bw_gbs": 390,
+      "read_iops_k": 7020,
+      "write_iops_k": 975
+    },
+    {
+      "ebox_count": 41,
+      "read_bw_gbs": 840,
+      "sustained_write_bw_gbs": 104,
+      "burst_write_bw_gbs": 400,
+      "read_iops_k": 7200,
+      "write_iops_k": 1000
+    },
+    {
+      "ebox_count": 42,
+      "read_bw_gbs": 861,
+      "sustained_write_bw_gbs": 106.60000000000001,
+      "burst_write_bw_gbs": 410,
+      "read_iops_k": 7380,
+      "write_iops_k": 1025
+    },
+    {
+      "ebox_count": 43,
+      "read_bw_gbs": 882,
+      "sustained_write_bw_gbs": 109.2,
+      "burst_write_bw_gbs": 420,
+      "read_iops_k": 7560,
+      "write_iops_k": 1050
+    },
+    {
+      "ebox_count": 44,
+      "read_bw_gbs": 903,
+      "sustained_write_bw_gbs": 111.8,
+      "burst_write_bw_gbs": 430,
+      "read_iops_k": 7740,
+      "write_iops_k": 1075
+    },
+    {
+      "ebox_count": 45,
+      "read_bw_gbs": 924,
+      "sustained_write_bw_gbs": 114.4,
+      "burst_write_bw_gbs": 440,
+      "read_iops_k": 7920,
+      "write_iops_k": 1100
+    },
+    {
+      "ebox_count": 46,
+      "read_bw_gbs": 945,
+      "sustained_write_bw_gbs": 117,
+      "burst_write_bw_gbs": 450,
+      "read_iops_k": 8100,
+      "write_iops_k": 1125
+    },
+    {
+      "ebox_count": 47,
+      "read_bw_gbs": 966,
+      "sustained_write_bw_gbs": 119.60000000000001,
+      "burst_write_bw_gbs": 460,
+      "read_iops_k": 8280,
+      "write_iops_k": 1150
+    },
+    {
+      "ebox_count": 48,
+      "read_bw_gbs": 987,
+      "sustained_write_bw_gbs": 122.2,
+      "burst_write_bw_gbs": 470,
+      "read_iops_k": 8460,
+      "write_iops_k": 1175
+    },
+    {
+      "ebox_count": 49,
+      "read_bw_gbs": 1008,
+      "sustained_write_bw_gbs": 124.80000000000001,
+      "burst_write_bw_gbs": 480,
+      "read_iops_k": 8640,
+      "write_iops_k": 1200
+    },
+    {
+      "ebox_count": 50,
+      "read_bw_gbs": 1029,
+      "sustained_write_bw_gbs": 127.4,
+      "burst_write_bw_gbs": 490,
+      "read_iops_k": 8820,
+      "write_iops_k": 1225
+    },
+    {
+      "ebox_count": 51,
+      "read_bw_gbs": 1050,
+      "sustained_write_bw_gbs": 130,
+      "burst_write_bw_gbs": 500,
+      "read_iops_k": 9000,
+      "write_iops_k": 1250
+    },
+    {
+      "ebox_count": 52,
+      "read_bw_gbs": 1071,
+      "sustained_write_bw_gbs": 132.6,
+      "burst_write_bw_gbs": 510,
+      "read_iops_k": 9180,
+      "write_iops_k": 1275
+    },
+    {
+      "ebox_count": 53,
+      "read_bw_gbs": 1092,
+      "sustained_write_bw_gbs": 135.20000000000002,
+      "burst_write_bw_gbs": 520,
+      "read_iops_k": 9360,
+      "write_iops_k": 1300
+    },
+    {
+      "ebox_count": 54,
+      "read_bw_gbs": 1113,
+      "sustained_write_bw_gbs": 137.8,
+      "burst_write_bw_gbs": 530,
+      "read_iops_k": 9540,
+      "write_iops_k": 1325
+    },
+    {
+      "ebox_count": 55,
+      "read_bw_gbs": 1134,
+      "sustained_write_bw_gbs": 140.4,
+      "burst_write_bw_gbs": 540,
+      "read_iops_k": 9720,
+      "write_iops_k": 1350
+    },
+    {
+      "ebox_count": 56,
+      "read_bw_gbs": 1155,
+      "sustained_write_bw_gbs": 143,
+      "burst_write_bw_gbs": 550,
+      "read_iops_k": 9900,
+      "write_iops_k": 1375
+    },
+    {
+      "ebox_count": 57,
+      "read_bw_gbs": 1176,
+      "sustained_write_bw_gbs": 145.6,
+      "burst_write_bw_gbs": 560,
+      "read_iops_k": 10080,
+      "write_iops_k": 1400
+    },
+    {
+      "ebox_count": 58,
+      "read_bw_gbs": 1197,
+      "sustained_write_bw_gbs": 148.20000000000002,
+      "burst_write_bw_gbs": 570,
+      "read_iops_k": 10260,
+      "write_iops_k": 1425
+    },
+    {
+      "ebox_count": 59,
+      "read_bw_gbs": 1218,
+      "sustained_write_bw_gbs": 150.8,
+      "burst_write_bw_gbs": 580,
+      "read_iops_k": 10440,
+      "write_iops_k": 1450
+    },
+    {
+      "ebox_count": 60,
+      "read_bw_gbs": 1239,
+      "sustained_write_bw_gbs": 153.4,
+      "burst_write_bw_gbs": 590,
+      "read_iops_k": 10620,
+      "write_iops_k": 1475
+    },
+    {
+      "ebox_count": 61,
+      "read_bw_gbs": 1260,
+      "sustained_write_bw_gbs": 156,
+      "burst_write_bw_gbs": 600,
+      "read_iops_k": 10800,
+      "write_iops_k": 1500
+    },
+    {
+      "ebox_count": 62,
+      "read_bw_gbs": 1281,
+      "sustained_write_bw_gbs": 158.6,
+      "burst_write_bw_gbs": 610,
+      "read_iops_k": 10980,
+      "write_iops_k": 1525
+    },
+    {
+      "ebox_count": 63,
+      "read_bw_gbs": 1302,
+      "sustained_write_bw_gbs": 161.20000000000002,
+      "burst_write_bw_gbs": 620,
+      "read_iops_k": 11160,
+      "write_iops_k": 1550
+    },
+    {
+      "ebox_count": 64,
+      "read_bw_gbs": 1323,
+      "sustained_write_bw_gbs": 163.8,
+      "burst_write_bw_gbs": 630,
+      "read_iops_k": 11340,
+      "write_iops_k": 1575
+    },
+    {
+      "ebox_count": 65,
+      "read_bw_gbs": 1344,
+      "sustained_write_bw_gbs": 166.4,
+      "burst_write_bw_gbs": 640,
+      "read_iops_k": 11520,
+      "write_iops_k": 1600
+    },
+    {
+      "ebox_count": 66,
+      "read_bw_gbs": 1365,
+      "sustained_write_bw_gbs": 169,
+      "burst_write_bw_gbs": 650,
+      "read_iops_k": 11700,
+      "write_iops_k": 1625
+    },
+    {
+      "ebox_count": 67,
+      "read_bw_gbs": 1386,
+      "sustained_write_bw_gbs": 171.6,
+      "burst_write_bw_gbs": 660,
+      "read_iops_k": 11880,
+      "write_iops_k": 1650
+    },
+    {
+      "ebox_count": 68,
+      "read_bw_gbs": 1407,
+      "sustained_write_bw_gbs": 174.20000000000002,
+      "burst_write_bw_gbs": 670,
+      "read_iops_k": 12060,
+      "write_iops_k": 1675
+    },
+    {
+      "ebox_count": 69,
+      "read_bw_gbs": 1428,
+      "sustained_write_bw_gbs": 176.8,
+      "burst_write_bw_gbs": 680,
+      "read_iops_k": 12240,
+      "write_iops_k": 1700
+    },
+    {
+      "ebox_count": 70,
+      "read_bw_gbs": 1449,
+      "sustained_write_bw_gbs": 179.4,
+      "burst_write_bw_gbs": 690,
+      "read_iops_k": 12420,
+      "write_iops_k": 1725
+    },
+    {
+      "ebox_count": 71,
+      "read_bw_gbs": 1470,
+      "sustained_write_bw_gbs": 182,
+      "burst_write_bw_gbs": 700,
+      "read_iops_k": 12600,
+      "write_iops_k": 1750
+    },
+    {
+      "ebox_count": 72,
+      "read_bw_gbs": 1491,
+      "sustained_write_bw_gbs": 184.6,
+      "burst_write_bw_gbs": 710,
+      "read_iops_k": 12780,
+      "write_iops_k": 1775
+    },
+    {
+      "ebox_count": 73,
+      "read_bw_gbs": 1512,
+      "sustained_write_bw_gbs": 187.20000000000002,
+      "burst_write_bw_gbs": 720,
+      "read_iops_k": 12960,
+      "write_iops_k": 1800
+    },
+    {
+      "ebox_count": 74,
+      "read_bw_gbs": 1533,
+      "sustained_write_bw_gbs": 189.8,
+      "burst_write_bw_gbs": 730,
+      "read_iops_k": 13140,
+      "write_iops_k": 1825
+    },
+    {
+      "ebox_count": 75,
+      "read_bw_gbs": 1554,
+      "sustained_write_bw_gbs": 192.4,
+      "burst_write_bw_gbs": 740,
+      "read_iops_k": 13320,
+      "write_iops_k": 1850
+    },
+    {
+      "ebox_count": 76,
+      "read_bw_gbs": 1575,
+      "sustained_write_bw_gbs": 195,
+      "burst_write_bw_gbs": 750,
+      "read_iops_k": 13500,
+      "write_iops_k": 1875
+    },
+    {
+      "ebox_count": 77,
+      "read_bw_gbs": 1596,
+      "sustained_write_bw_gbs": 197.6,
+      "burst_write_bw_gbs": 760,
+      "read_iops_k": 13680,
+      "write_iops_k": 1900
+    },
+    {
+      "ebox_count": 78,
+      "read_bw_gbs": 1617,
+      "sustained_write_bw_gbs": 200.20000000000002,
+      "burst_write_bw_gbs": 770,
+      "read_iops_k": 13860,
+      "write_iops_k": 1925
+    },
+    {
+      "ebox_count": 79,
+      "read_bw_gbs": 1638,
+      "sustained_write_bw_gbs": 202.8,
+      "burst_write_bw_gbs": 780,
+      "read_iops_k": 14040,
+      "write_iops_k": 1950
+    },
+    {
+      "ebox_count": 80,
+      "read_bw_gbs": 1659,
+      "sustained_write_bw_gbs": 205.4,
+      "burst_write_bw_gbs": 790,
+      "read_iops_k": 14220,
+      "write_iops_k": 1975
+    },
+    {
+      "ebox_count": 81,
+      "read_bw_gbs": 1680,
+      "sustained_write_bw_gbs": 208,
+      "burst_write_bw_gbs": 800,
+      "read_iops_k": 14400,
+      "write_iops_k": 2000
+    },
+    {
+      "ebox_count": 82,
+      "read_bw_gbs": 1701,
+      "sustained_write_bw_gbs": 210.6,
+      "burst_write_bw_gbs": 810,
+      "read_iops_k": 14580,
+      "write_iops_k": 2025
+    },
+    {
+      "ebox_count": 83,
+      "read_bw_gbs": 1722,
+      "sustained_write_bw_gbs": 213.20000000000002,
+      "burst_write_bw_gbs": 820,
+      "read_iops_k": 14760,
+      "write_iops_k": 2050
+    },
+    {
+      "ebox_count": 84,
+      "read_bw_gbs": 1743,
+      "sustained_write_bw_gbs": 215.8,
+      "burst_write_bw_gbs": 830,
+      "read_iops_k": 14940,
+      "write_iops_k": 2075
+    },
+    {
+      "ebox_count": 85,
+      "read_bw_gbs": 1764,
+      "sustained_write_bw_gbs": 218.4,
+      "burst_write_bw_gbs": 840,
+      "read_iops_k": 15120,
+      "write_iops_k": 2100
+    },
+    {
+      "ebox_count": 86,
+      "read_bw_gbs": 1785,
+      "sustained_write_bw_gbs": 221,
+      "burst_write_bw_gbs": 850,
+      "read_iops_k": 15300,
+      "write_iops_k": 2125
+    },
+    {
+      "ebox_count": 87,
+      "read_bw_gbs": 1806,
+      "sustained_write_bw_gbs": 223.6,
+      "burst_write_bw_gbs": 860,
+      "read_iops_k": 15480,
+      "write_iops_k": 2150
+    },
+    {
+      "ebox_count": 88,
+      "read_bw_gbs": 1827,
+      "sustained_write_bw_gbs": 226.20000000000002,
+      "burst_write_bw_gbs": 870,
+      "read_iops_k": 15660,
+      "write_iops_k": 2175
+    },
+    {
+      "ebox_count": 89,
+      "read_bw_gbs": 1848,
+      "sustained_write_bw_gbs": 228.8,
+      "burst_write_bw_gbs": 880,
+      "read_iops_k": 15840,
+      "write_iops_k": 2200
+    },
+    {
+      "ebox_count": 90,
+      "read_bw_gbs": 1869,
+      "sustained_write_bw_gbs": 231.4,
+      "burst_write_bw_gbs": 890,
+      "read_iops_k": 16020,
+      "write_iops_k": 2225
+    },
+    {
+      "ebox_count": 91,
+      "read_bw_gbs": 1890,
+      "sustained_write_bw_gbs": 234,
+      "burst_write_bw_gbs": 900,
+      "read_iops_k": 16200,
+      "write_iops_k": 2250
+    },
+    {
+      "ebox_count": 92,
+      "read_bw_gbs": 1911,
+      "sustained_write_bw_gbs": 236.6,
+      "burst_write_bw_gbs": 910,
+      "read_iops_k": 16380,
+      "write_iops_k": 2275
+    },
+    {
+      "ebox_count": 93,
+      "read_bw_gbs": 1932,
+      "sustained_write_bw_gbs": 239.20000000000002,
+      "burst_write_bw_gbs": 920,
+      "read_iops_k": 16560,
+      "write_iops_k": 2300
+    },
+    {
+      "ebox_count": 94,
+      "read_bw_gbs": 1953,
+      "sustained_write_bw_gbs": 241.8,
+      "burst_write_bw_gbs": 930,
+      "read_iops_k": 16740,
+      "write_iops_k": 2325
+    },
+    {
+      "ebox_count": 95,
+      "read_bw_gbs": 1974,
+      "sustained_write_bw_gbs": 244.4,
+      "burst_write_bw_gbs": 940,
+      "read_iops_k": 16920,
+      "write_iops_k": 2350
+    },
+    {
+      "ebox_count": 96,
+      "read_bw_gbs": 1995,
+      "sustained_write_bw_gbs": 247,
+      "burst_write_bw_gbs": 950,
+      "read_iops_k": 17100,
+      "write_iops_k": 2375
+    },
+    {
+      "ebox_count": 97,
+      "read_bw_gbs": 2016,
+      "sustained_write_bw_gbs": 249.60000000000002,
+      "burst_write_bw_gbs": 960,
+      "read_iops_k": 17280,
+      "write_iops_k": 2400
+    },
+    {
+      "ebox_count": 98,
+      "read_bw_gbs": 2037,
+      "sustained_write_bw_gbs": 252.20000000000002,
+      "burst_write_bw_gbs": 970,
+      "read_iops_k": 17460,
+      "write_iops_k": 2425
+    },
+    {
+      "ebox_count": 99,
+      "read_bw_gbs": 2058,
+      "sustained_write_bw_gbs": 254.8,
+      "burst_write_bw_gbs": 980,
+      "read_iops_k": 17640,
+      "write_iops_k": 2450
+    },
+    {
+      "ebox_count": 100,
+      "read_bw_gbs": 2079,
+      "sustained_write_bw_gbs": 257.40000000000003,
+      "burst_write_bw_gbs": 990,
+      "read_iops_k": 17820,
+      "write_iops_k": 2475
+    },
+    {
+      "ebox_count": 101,
+      "read_bw_gbs": 2100,
+      "sustained_write_bw_gbs": 260,
+      "burst_write_bw_gbs": 1000,
+      "read_iops_k": 18000,
+      "write_iops_k": 2500
+    },
+    {
+      "ebox_count": 102,
+      "read_bw_gbs": 2121,
+      "sustained_write_bw_gbs": 262.6,
+      "burst_write_bw_gbs": 1010,
+      "read_iops_k": 18180,
+      "write_iops_k": 2525
+    },
+    {
+      "ebox_count": 103,
+      "read_bw_gbs": 2142,
+      "sustained_write_bw_gbs": 265.2,
+      "burst_write_bw_gbs": 1020,
+      "read_iops_k": 18360,
+      "write_iops_k": 2550
+    },
+    {
+      "ebox_count": 104,
+      "read_bw_gbs": 2163,
+      "sustained_write_bw_gbs": 267.8,
+      "burst_write_bw_gbs": 1030,
+      "read_iops_k": 18540,
+      "write_iops_k": 2575
+    },
+    {
+      "ebox_count": 105,
+      "read_bw_gbs": 2184,
+      "sustained_write_bw_gbs": 270.40000000000003,
+      "burst_write_bw_gbs": 1040,
+      "read_iops_k": 18720,
+      "write_iops_k": 2600
+    },
+    {
+      "ebox_count": 106,
+      "read_bw_gbs": 2205,
+      "sustained_write_bw_gbs": 273,
+      "burst_write_bw_gbs": 1050,
+      "read_iops_k": 18900,
+      "write_iops_k": 2625
+    },
+    {
+      "ebox_count": 107,
+      "read_bw_gbs": 2226,
+      "sustained_write_bw_gbs": 275.6,
+      "burst_write_bw_gbs": 1060,
+      "read_iops_k": 19080,
+      "write_iops_k": 2650
+    },
+    {
+      "ebox_count": 108,
+      "read_bw_gbs": 2247,
+      "sustained_write_bw_gbs": 278.2,
+      "burst_write_bw_gbs": 1070,
+      "read_iops_k": 19260,
+      "write_iops_k": 2675
+    },
+    {
+      "ebox_count": 109,
+      "read_bw_gbs": 2268,
+      "sustained_write_bw_gbs": 280.8,
+      "burst_write_bw_gbs": 1080,
+      "read_iops_k": 19440,
+      "write_iops_k": 2700
+    },
+    {
+      "ebox_count": 110,
+      "read_bw_gbs": 2289,
+      "sustained_write_bw_gbs": 283.40000000000003,
+      "burst_write_bw_gbs": 1090,
+      "read_iops_k": 19620,
+      "write_iops_k": 2725
+    },
+    {
+      "ebox_count": 111,
+      "read_bw_gbs": 2310,
+      "sustained_write_bw_gbs": 286,
+      "burst_write_bw_gbs": 1100,
+      "read_iops_k": 19800,
+      "write_iops_k": 2750
+    },
+    {
+      "ebox_count": 112,
+      "read_bw_gbs": 2331,
+      "sustained_write_bw_gbs": 288.6,
+      "burst_write_bw_gbs": 1110,
+      "read_iops_k": 19980,
+      "write_iops_k": 2775
+    },
+    {
+      "ebox_count": 113,
+      "read_bw_gbs": 2352,
+      "sustained_write_bw_gbs": 291.2,
+      "burst_write_bw_gbs": 1120,
+      "read_iops_k": 20160,
+      "write_iops_k": 2800
+    },
+    {
+      "ebox_count": 114,
+      "read_bw_gbs": 2373,
+      "sustained_write_bw_gbs": 293.8,
+      "burst_write_bw_gbs": 1130,
+      "read_iops_k": 20340,
+      "write_iops_k": 2825
+    },
+    {
+      "ebox_count": 115,
+      "read_bw_gbs": 2394,
+      "sustained_write_bw_gbs": 296.40000000000003,
+      "burst_write_bw_gbs": 1140,
+      "read_iops_k": 20520,
+      "write_iops_k": 2850
+    },
+    {
+      "ebox_count": 116,
+      "read_bw_gbs": 2415,
+      "sustained_write_bw_gbs": 299,
+      "burst_write_bw_gbs": 1150,
+      "read_iops_k": 20700,
+      "write_iops_k": 2875
+    },
+    {
+      "ebox_count": 117,
+      "read_bw_gbs": 2436,
+      "sustained_write_bw_gbs": 301.6,
+      "burst_write_bw_gbs": 1160,
+      "read_iops_k": 20880,
+      "write_iops_k": 2900
+    },
+    {
+      "ebox_count": 118,
+      "read_bw_gbs": 2457,
+      "sustained_write_bw_gbs": 304.2,
+      "burst_write_bw_gbs": 1170,
+      "read_iops_k": 21060,
+      "write_iops_k": 2925
+    },
+    {
+      "ebox_count": 119,
+      "read_bw_gbs": 2478,
+      "sustained_write_bw_gbs": 306.8,
+      "burst_write_bw_gbs": 1180,
+      "read_iops_k": 21240,
+      "write_iops_k": 2950
+    },
+    {
+      "ebox_count": 120,
+      "read_bw_gbs": 2499,
+      "sustained_write_bw_gbs": 309.40000000000003,
+      "burst_write_bw_gbs": 1190,
+      "read_iops_k": 21420,
+      "write_iops_k": 2975
+    },
+    {
+      "ebox_count": 121,
+      "read_bw_gbs": 2520,
+      "sustained_write_bw_gbs": 312,
+      "burst_write_bw_gbs": 1200,
+      "read_iops_k": 21600,
+      "write_iops_k": 3000
+    },
+    {
+      "ebox_count": 122,
+      "read_bw_gbs": 2541,
+      "sustained_write_bw_gbs": 314.6,
+      "burst_write_bw_gbs": 1210,
+      "read_iops_k": 21780,
+      "write_iops_k": 3025
+    },
+    {
+      "ebox_count": 123,
+      "read_bw_gbs": 2562,
+      "sustained_write_bw_gbs": 317.2,
+      "burst_write_bw_gbs": 1220,
+      "read_iops_k": 21960,
+      "write_iops_k": 3050
+    },
+    {
+      "ebox_count": 124,
+      "read_bw_gbs": 2583,
+      "sustained_write_bw_gbs": 319.8,
+      "burst_write_bw_gbs": 1230,
+      "read_iops_k": 22140,
+      "write_iops_k": 3075
+    },
+    {
+      "ebox_count": 125,
+      "read_bw_gbs": 2604,
+      "sustained_write_bw_gbs": 322.40000000000003,
+      "burst_write_bw_gbs": 1240,
+      "read_iops_k": 22320,
+      "write_iops_k": 3100
+    },
+    {
+      "ebox_count": 126,
+      "read_bw_gbs": 2625,
+      "sustained_write_bw_gbs": 325,
+      "burst_write_bw_gbs": 1250,
+      "read_iops_k": 22500,
+      "write_iops_k": 3125
+    },
+    {
+      "ebox_count": 127,
+      "read_bw_gbs": 2646,
+      "sustained_write_bw_gbs": 327.6,
+      "burst_write_bw_gbs": 1260,
+      "read_iops_k": 22680,
+      "write_iops_k": 3150
+    },
+    {
+      "ebox_count": 128,
+      "read_bw_gbs": 2667,
+      "sustained_write_bw_gbs": 330.2,
+      "burst_write_bw_gbs": 1270,
+      "read_iops_k": 22860,
+      "write_iops_k": 3175
+    },
+    {
+      "ebox_count": 129,
+      "read_bw_gbs": 2688,
+      "sustained_write_bw_gbs": 332.8,
+      "burst_write_bw_gbs": 1280,
+      "read_iops_k": 23040,
+      "write_iops_k": 3200
+    },
+    {
+      "ebox_count": 130,
+      "read_bw_gbs": 2709,
+      "sustained_write_bw_gbs": 335.40000000000003,
+      "burst_write_bw_gbs": 1290,
+      "read_iops_k": 23220,
+      "write_iops_k": 3225
+    },
+    {
+      "ebox_count": 131,
+      "read_bw_gbs": 2730,
+      "sustained_write_bw_gbs": 338,
+      "burst_write_bw_gbs": 1300,
+      "read_iops_k": 23400,
+      "write_iops_k": 3250
+    },
+    {
+      "ebox_count": 132,
+      "read_bw_gbs": 2751,
+      "sustained_write_bw_gbs": 340.6,
+      "burst_write_bw_gbs": 1310,
+      "read_iops_k": 23580,
+      "write_iops_k": 3275
+    },
+    {
+      "ebox_count": 133,
+      "read_bw_gbs": 2772,
+      "sustained_write_bw_gbs": 343.2,
+      "burst_write_bw_gbs": 1320,
+      "read_iops_k": 23760,
+      "write_iops_k": 3300
+    },
+    {
+      "ebox_count": 134,
+      "read_bw_gbs": 2793,
+      "sustained_write_bw_gbs": 345.8,
+      "burst_write_bw_gbs": 1330,
+      "read_iops_k": 23940,
+      "write_iops_k": 3325
+    },
+    {
+      "ebox_count": 135,
+      "read_bw_gbs": 2814,
+      "sustained_write_bw_gbs": 348.40000000000003,
+      "burst_write_bw_gbs": 1340,
+      "read_iops_k": 24120,
+      "write_iops_k": 3350
+    },
+    {
+      "ebox_count": 136,
+      "read_bw_gbs": 2835,
+      "sustained_write_bw_gbs": 351,
+      "burst_write_bw_gbs": 1350,
+      "read_iops_k": 24300,
+      "write_iops_k": 3375
+    },
+    {
+      "ebox_count": 137,
+      "read_bw_gbs": 2856,
+      "sustained_write_bw_gbs": 353.6,
+      "burst_write_bw_gbs": 1360,
+      "read_iops_k": 24480,
+      "write_iops_k": 3400
+    },
+    {
+      "ebox_count": 138,
+      "read_bw_gbs": 2877,
+      "sustained_write_bw_gbs": 356.2,
+      "burst_write_bw_gbs": 1370,
+      "read_iops_k": 24660,
+      "write_iops_k": 3425
+    },
+    {
+      "ebox_count": 139,
+      "read_bw_gbs": 2898,
+      "sustained_write_bw_gbs": 358.8,
+      "burst_write_bw_gbs": 1380,
+      "read_iops_k": 24840,
+      "write_iops_k": 3450
+    },
+    {
+      "ebox_count": 140,
+      "read_bw_gbs": 2919,
+      "sustained_write_bw_gbs": 361.40000000000003,
+      "burst_write_bw_gbs": 1390,
+      "read_iops_k": 25020,
+      "write_iops_k": 3475
+    },
+    {
+      "ebox_count": 141,
+      "read_bw_gbs": 2940,
+      "sustained_write_bw_gbs": 364,
+      "burst_write_bw_gbs": 1400,
+      "read_iops_k": 25200,
+      "write_iops_k": 3500
+    },
+    {
+      "ebox_count": 142,
+      "read_bw_gbs": 2961,
+      "sustained_write_bw_gbs": 366.6,
+      "burst_write_bw_gbs": 1410,
+      "read_iops_k": 25380,
+      "write_iops_k": 3525
+    },
+    {
+      "ebox_count": 143,
+      "read_bw_gbs": 2982,
+      "sustained_write_bw_gbs": 369.2,
+      "burst_write_bw_gbs": 1420,
+      "read_iops_k": 25560,
+      "write_iops_k": 3550
+    },
+    {
+      "ebox_count": 144,
+      "read_bw_gbs": 3003,
+      "sustained_write_bw_gbs": 371.8,
+      "burst_write_bw_gbs": 1430,
+      "read_iops_k": 25740,
+      "write_iops_k": 3575
+    },
+    {
+      "ebox_count": 145,
+      "read_bw_gbs": 3024,
+      "sustained_write_bw_gbs": 374.40000000000003,
+      "burst_write_bw_gbs": 1440,
+      "read_iops_k": 25920,
+      "write_iops_k": 3600
+    },
+    {
+      "ebox_count": 146,
+      "read_bw_gbs": 3045,
+      "sustained_write_bw_gbs": 377,
+      "burst_write_bw_gbs": 1450,
+      "read_iops_k": 26100,
+      "write_iops_k": 3625
+    },
+    {
+      "ebox_count": 147,
+      "read_bw_gbs": 3066,
+      "sustained_write_bw_gbs": 379.6,
+      "burst_write_bw_gbs": 1460,
+      "read_iops_k": 26280,
+      "write_iops_k": 3650
+    },
+    {
+      "ebox_count": 148,
+      "read_bw_gbs": 3087,
+      "sustained_write_bw_gbs": 382.2,
+      "burst_write_bw_gbs": 1470,
+      "read_iops_k": 26460,
+      "write_iops_k": 3675
+    },
+    {
+      "ebox_count": 149,
+      "read_bw_gbs": 3108,
+      "sustained_write_bw_gbs": 384.8,
+      "burst_write_bw_gbs": 1480,
+      "read_iops_k": 26640,
+      "write_iops_k": 3700
+    },
+    {
+      "ebox_count": 150,
+      "read_bw_gbs": 3129,
+      "sustained_write_bw_gbs": 387.40000000000003,
+      "burst_write_bw_gbs": 1490,
+      "read_iops_k": 26820,
+      "write_iops_k": 3725
+    },
+    {
+      "ebox_count": 151,
+      "read_bw_gbs": 3150,
+      "sustained_write_bw_gbs": 390,
+      "burst_write_bw_gbs": 1500,
+      "read_iops_k": 27000,
+      "write_iops_k": 3750
+    },
+    {
+      "ebox_count": 152,
+      "read_bw_gbs": 3171,
+      "sustained_write_bw_gbs": 392.6,
+      "burst_write_bw_gbs": 1510,
+      "read_iops_k": 27180,
+      "write_iops_k": 3775
+    },
+    {
+      "ebox_count": 153,
+      "read_bw_gbs": 3192,
+      "sustained_write_bw_gbs": 395.2,
+      "burst_write_bw_gbs": 1520,
+      "read_iops_k": 27360,
+      "write_iops_k": 3800
+    },
+    {
+      "ebox_count": 154,
+      "read_bw_gbs": 3213,
+      "sustained_write_bw_gbs": 397.8,
+      "burst_write_bw_gbs": 1530,
+      "read_iops_k": 27540,
+      "write_iops_k": 3825
+    },
+    {
+      "ebox_count": 155,
+      "read_bw_gbs": 3234,
+      "sustained_write_bw_gbs": 400.40000000000003,
+      "burst_write_bw_gbs": 1540,
+      "read_iops_k": 27720,
+      "write_iops_k": 3850
+    },
+    {
+      "ebox_count": 156,
+      "read_bw_gbs": 3255,
+      "sustained_write_bw_gbs": 403,
+      "burst_write_bw_gbs": 1550,
+      "read_iops_k": 27900,
+      "write_iops_k": 3875
+    },
+    {
+      "ebox_count": 157,
+      "read_bw_gbs": 3276,
+      "sustained_write_bw_gbs": 405.6,
+      "burst_write_bw_gbs": 1560,
+      "read_iops_k": 28080,
+      "write_iops_k": 3900
+    },
+    {
+      "ebox_count": 158,
+      "read_bw_gbs": 3297,
+      "sustained_write_bw_gbs": 408.2,
+      "burst_write_bw_gbs": 1570,
+      "read_iops_k": 28260,
+      "write_iops_k": 3925
+    },
+    {
+      "ebox_count": 159,
+      "read_bw_gbs": 3318,
+      "sustained_write_bw_gbs": 410.8,
+      "burst_write_bw_gbs": 1580,
+      "read_iops_k": 28440,
+      "write_iops_k": 3950
+    },
+    {
+      "ebox_count": 160,
+      "read_bw_gbs": 3339,
+      "sustained_write_bw_gbs": 413.40000000000003,
+      "burst_write_bw_gbs": 1590,
+      "read_iops_k": 28620,
+      "write_iops_k": 3975
+    },
+    {
+      "ebox_count": 161,
+      "read_bw_gbs": 3360,
+      "sustained_write_bw_gbs": 416,
+      "burst_write_bw_gbs": 1600,
+      "read_iops_k": 28800,
+      "write_iops_k": 4000
+    },
+    {
+      "ebox_count": 162,
+      "read_bw_gbs": 3381,
+      "sustained_write_bw_gbs": 418.6,
+      "burst_write_bw_gbs": 1610,
+      "read_iops_k": 28980,
+      "write_iops_k": 4025
+    },
+    {
+      "ebox_count": 163,
+      "read_bw_gbs": 3402,
+      "sustained_write_bw_gbs": 421.2,
+      "burst_write_bw_gbs": 1620,
+      "read_iops_k": 29160,
+      "write_iops_k": 4050
+    },
+    {
+      "ebox_count": 164,
+      "read_bw_gbs": 3423,
+      "sustained_write_bw_gbs": 423.8,
+      "burst_write_bw_gbs": 1630,
+      "read_iops_k": 29340,
+      "write_iops_k": 4075
+    },
+    {
+      "ebox_count": 165,
+      "read_bw_gbs": 3444,
+      "sustained_write_bw_gbs": 426.40000000000003,
+      "burst_write_bw_gbs": 1640,
+      "read_iops_k": 29520,
+      "write_iops_k": 4100
+    },
+    {
+      "ebox_count": 166,
+      "read_bw_gbs": 3465,
+      "sustained_write_bw_gbs": 429,
+      "burst_write_bw_gbs": 1650,
+      "read_iops_k": 29700,
+      "write_iops_k": 4125
+    },
+    {
+      "ebox_count": 167,
+      "read_bw_gbs": 3486,
+      "sustained_write_bw_gbs": 431.6,
+      "burst_write_bw_gbs": 1660,
+      "read_iops_k": 29880,
+      "write_iops_k": 4150
+    },
+    {
+      "ebox_count": 168,
+      "read_bw_gbs": 3507,
+      "sustained_write_bw_gbs": 434.2,
+      "burst_write_bw_gbs": 1670,
+      "read_iops_k": 30060,
+      "write_iops_k": 4175
+    },
+    {
+      "ebox_count": 169,
+      "read_bw_gbs": 3528,
+      "sustained_write_bw_gbs": 436.8,
+      "burst_write_bw_gbs": 1680,
+      "read_iops_k": 30240,
+      "write_iops_k": 4200
+    },
+    {
+      "ebox_count": 170,
+      "read_bw_gbs": 3549,
+      "sustained_write_bw_gbs": 439.40000000000003,
+      "burst_write_bw_gbs": 1690,
+      "read_iops_k": 30420,
+      "write_iops_k": 4225
+    },
+    {
+      "ebox_count": 171,
+      "read_bw_gbs": 3570,
+      "sustained_write_bw_gbs": 442,
+      "burst_write_bw_gbs": 1700,
+      "read_iops_k": 30600,
+      "write_iops_k": 4250
+    },
+    {
+      "ebox_count": 172,
+      "read_bw_gbs": 3591,
+      "sustained_write_bw_gbs": 444.6,
+      "burst_write_bw_gbs": 1710,
+      "read_iops_k": 30780,
+      "write_iops_k": 4275
+    },
+    {
+      "ebox_count": 173,
+      "read_bw_gbs": 3612,
+      "sustained_write_bw_gbs": 447.2,
+      "burst_write_bw_gbs": 1720,
+      "read_iops_k": 30960,
+      "write_iops_k": 4300
+    },
+    {
+      "ebox_count": 174,
+      "read_bw_gbs": 3633,
+      "sustained_write_bw_gbs": 449.8,
+      "burst_write_bw_gbs": 1730,
+      "read_iops_k": 31140,
+      "write_iops_k": 4325
+    },
+    {
+      "ebox_count": 175,
+      "read_bw_gbs": 3654,
+      "sustained_write_bw_gbs": 452.40000000000003,
+      "burst_write_bw_gbs": 1740,
+      "read_iops_k": 31320,
+      "write_iops_k": 4350
+    },
+    {
+      "ebox_count": 176,
+      "read_bw_gbs": 3675,
+      "sustained_write_bw_gbs": 455,
+      "burst_write_bw_gbs": 1750,
+      "read_iops_k": 31500,
+      "write_iops_k": 4375
+    },
+    {
+      "ebox_count": 177,
+      "read_bw_gbs": 3696,
+      "sustained_write_bw_gbs": 457.6,
+      "burst_write_bw_gbs": 1760,
+      "read_iops_k": 31680,
+      "write_iops_k": 4400
+    },
+    {
+      "ebox_count": 178,
+      "read_bw_gbs": 3717,
+      "sustained_write_bw_gbs": 460.2,
+      "burst_write_bw_gbs": 1770,
+      "read_iops_k": 31860,
+      "write_iops_k": 4425
+    },
+    {
+      "ebox_count": 179,
+      "read_bw_gbs": 3738,
+      "sustained_write_bw_gbs": 462.8,
+      "burst_write_bw_gbs": 1780,
+      "read_iops_k": 32040,
+      "write_iops_k": 4450
+    },
+    {
+      "ebox_count": 180,
+      "read_bw_gbs": 3759,
+      "sustained_write_bw_gbs": 465.40000000000003,
+      "burst_write_bw_gbs": 1790,
+      "read_iops_k": 32220,
+      "write_iops_k": 4475
+    },
+    {
+      "ebox_count": 181,
+      "read_bw_gbs": 3780,
+      "sustained_write_bw_gbs": 468,
+      "burst_write_bw_gbs": 1800,
+      "read_iops_k": 32400,
+      "write_iops_k": 4500
+    },
+    {
+      "ebox_count": 182,
+      "read_bw_gbs": 3801,
+      "sustained_write_bw_gbs": 470.6,
+      "burst_write_bw_gbs": 1810,
+      "read_iops_k": 32580,
+      "write_iops_k": 4525
+    },
+    {
+      "ebox_count": 183,
+      "read_bw_gbs": 3822,
+      "sustained_write_bw_gbs": 473.2,
+      "burst_write_bw_gbs": 1820,
+      "read_iops_k": 32760,
+      "write_iops_k": 4550
+    },
+    {
+      "ebox_count": 184,
+      "read_bw_gbs": 3843,
+      "sustained_write_bw_gbs": 475.8,
+      "burst_write_bw_gbs": 1830,
+      "read_iops_k": 32940,
+      "write_iops_k": 4575
+    },
+    {
+      "ebox_count": 185,
+      "read_bw_gbs": 3864,
+      "sustained_write_bw_gbs": 478.40000000000003,
+      "burst_write_bw_gbs": 1840,
+      "read_iops_k": 33120,
+      "write_iops_k": 4600
+    },
+    {
+      "ebox_count": 186,
+      "read_bw_gbs": 3885,
+      "sustained_write_bw_gbs": 481,
+      "burst_write_bw_gbs": 1850,
+      "read_iops_k": 33300,
+      "write_iops_k": 4625
+    },
+    {
+      "ebox_count": 187,
+      "read_bw_gbs": 3906,
+      "sustained_write_bw_gbs": 483.6,
+      "burst_write_bw_gbs": 1860,
+      "read_iops_k": 33480,
+      "write_iops_k": 4650
+    },
+    {
+      "ebox_count": 188,
+      "read_bw_gbs": 3927,
+      "sustained_write_bw_gbs": 486.2,
+      "burst_write_bw_gbs": 1870,
+      "read_iops_k": 33660,
+      "write_iops_k": 4675
+    },
+    {
+      "ebox_count": 189,
+      "read_bw_gbs": 3948,
+      "sustained_write_bw_gbs": 488.8,
+      "burst_write_bw_gbs": 1880,
+      "read_iops_k": 33840,
+      "write_iops_k": 4700
+    },
+    {
+      "ebox_count": 190,
+      "read_bw_gbs": 3969,
+      "sustained_write_bw_gbs": 491.40000000000003,
+      "burst_write_bw_gbs": 1890,
+      "read_iops_k": 34020,
+      "write_iops_k": 4725
+    },
+    {
+      "ebox_count": 191,
+      "read_bw_gbs": 3990,
+      "sustained_write_bw_gbs": 494,
+      "burst_write_bw_gbs": 1900,
+      "read_iops_k": 34200,
+      "write_iops_k": 4750
+    },
+    {
+      "ebox_count": 192,
+      "read_bw_gbs": 4011,
+      "sustained_write_bw_gbs": 496.6,
+      "burst_write_bw_gbs": 1910,
+      "read_iops_k": 34380,
+      "write_iops_k": 4775
+    },
+    {
+      "ebox_count": 193,
+      "read_bw_gbs": 4032,
+      "sustained_write_bw_gbs": 499.20000000000005,
+      "burst_write_bw_gbs": 1920,
+      "read_iops_k": 34560,
+      "write_iops_k": 4800
+    },
+    {
+      "ebox_count": 194,
+      "read_bw_gbs": 4053,
+      "sustained_write_bw_gbs": 501.8,
+      "burst_write_bw_gbs": 1930,
+      "read_iops_k": 34740,
+      "write_iops_k": 4825
+    },
+    {
+      "ebox_count": 195,
+      "read_bw_gbs": 4074,
+      "sustained_write_bw_gbs": 504.40000000000003,
+      "burst_write_bw_gbs": 1940,
+      "read_iops_k": 34920,
+      "write_iops_k": 4850
+    },
+    {
+      "ebox_count": 196,
+      "read_bw_gbs": 4095,
+      "sustained_write_bw_gbs": 507,
+      "burst_write_bw_gbs": 1950,
+      "read_iops_k": 35100,
+      "write_iops_k": 4875
+    },
+    {
+      "ebox_count": 197,
+      "read_bw_gbs": 4116,
+      "sustained_write_bw_gbs": 509.6,
+      "burst_write_bw_gbs": 1960,
+      "read_iops_k": 35280,
+      "write_iops_k": 4900
+    },
+    {
+      "ebox_count": 198,
+      "read_bw_gbs": 4137,
+      "sustained_write_bw_gbs": 512.2,
+      "burst_write_bw_gbs": 1970,
+      "read_iops_k": 35460,
+      "write_iops_k": 4925
+    },
+    {
+      "ebox_count": 199,
+      "read_bw_gbs": 4158,
+      "sustained_write_bw_gbs": 514.8000000000001,
+      "burst_write_bw_gbs": 1980,
+      "read_iops_k": 35640,
+      "write_iops_k": 4950
+    },
+    {
+      "ebox_count": 200,
+      "read_bw_gbs": 4179,
+      "sustained_write_bw_gbs": 517.4,
+      "burst_write_bw_gbs": 1990,
+      "read_iops_k": 35820,
+      "write_iops_k": 4975
+    },
+    {
+      "ebox_count": 201,
+      "read_bw_gbs": 4200,
+      "sustained_write_bw_gbs": 520,
+      "burst_write_bw_gbs": 2000,
+      "read_iops_k": 36000,
+      "write_iops_k": 5000
+    },
+    {
+      "ebox_count": 202,
+      "read_bw_gbs": 4221,
+      "sustained_write_bw_gbs": 522.6,
+      "burst_write_bw_gbs": 2010,
+      "read_iops_k": 36180,
+      "write_iops_k": 5025
+    },
+    {
+      "ebox_count": 203,
+      "read_bw_gbs": 4242,
+      "sustained_write_bw_gbs": 525.2,
+      "burst_write_bw_gbs": 2020,
+      "read_iops_k": 36360,
+      "write_iops_k": 5050
+    },
+    {
+      "ebox_count": 204,
+      "read_bw_gbs": 4263,
+      "sustained_write_bw_gbs": 527.8000000000001,
+      "burst_write_bw_gbs": 2030,
+      "read_iops_k": 36540,
+      "write_iops_k": 5075
+    },
+    {
+      "ebox_count": 205,
+      "read_bw_gbs": 4284,
+      "sustained_write_bw_gbs": 530.4,
+      "burst_write_bw_gbs": 2040,
+      "read_iops_k": 36720,
+      "write_iops_k": 5100
+    },
+    {
+      "ebox_count": 206,
+      "read_bw_gbs": 4305,
+      "sustained_write_bw_gbs": 533,
+      "burst_write_bw_gbs": 2050,
+      "read_iops_k": 36900,
+      "write_iops_k": 5125
+    },
+    {
+      "ebox_count": 207,
+      "read_bw_gbs": 4326,
+      "sustained_write_bw_gbs": 535.6,
+      "burst_write_bw_gbs": 2060,
+      "read_iops_k": 37080,
+      "write_iops_k": 5150
+    },
+    {
+      "ebox_count": 208,
+      "read_bw_gbs": 4347,
+      "sustained_write_bw_gbs": 538.2,
+      "burst_write_bw_gbs": 2070,
+      "read_iops_k": 37260,
+      "write_iops_k": 5175
+    },
+    {
+      "ebox_count": 209,
+      "read_bw_gbs": 4368,
+      "sustained_write_bw_gbs": 540.8000000000001,
+      "burst_write_bw_gbs": 2080,
+      "read_iops_k": 37440,
+      "write_iops_k": 5200
+    },
+    {
+      "ebox_count": 210,
+      "read_bw_gbs": 4389,
+      "sustained_write_bw_gbs": 543.4,
+      "burst_write_bw_gbs": 2090,
+      "read_iops_k": 37620,
+      "write_iops_k": 5225
+    },
+    {
+      "ebox_count": 211,
+      "read_bw_gbs": 4410,
+      "sustained_write_bw_gbs": 546,
+      "burst_write_bw_gbs": 2100,
+      "read_iops_k": 37800,
+      "write_iops_k": 5250
+    },
+    {
+      "ebox_count": 212,
+      "read_bw_gbs": 4431,
+      "sustained_write_bw_gbs": 548.6,
+      "burst_write_bw_gbs": 2110,
+      "read_iops_k": 37980,
+      "write_iops_k": 5275
+    },
+    {
+      "ebox_count": 213,
+      "read_bw_gbs": 4452,
+      "sustained_write_bw_gbs": 551.2,
+      "burst_write_bw_gbs": 2120,
+      "read_iops_k": 38160,
+      "write_iops_k": 5300
+    },
+    {
+      "ebox_count": 214,
+      "read_bw_gbs": 4473,
+      "sustained_write_bw_gbs": 553.8000000000001,
+      "burst_write_bw_gbs": 2130,
+      "read_iops_k": 38340,
+      "write_iops_k": 5325
+    },
+    {
+      "ebox_count": 215,
+      "read_bw_gbs": 4494,
+      "sustained_write_bw_gbs": 556.4,
+      "burst_write_bw_gbs": 2140,
+      "read_iops_k": 38520,
+      "write_iops_k": 5350
+    },
+    {
+      "ebox_count": 216,
+      "read_bw_gbs": 4515,
+      "sustained_write_bw_gbs": 559,
+      "burst_write_bw_gbs": 2150,
+      "read_iops_k": 38700,
+      "write_iops_k": 5375
+    },
+    {
+      "ebox_count": 217,
+      "read_bw_gbs": 4536,
+      "sustained_write_bw_gbs": 561.6,
+      "burst_write_bw_gbs": 2160,
+      "read_iops_k": 38880,
+      "write_iops_k": 5400
+    },
+    {
+      "ebox_count": 218,
+      "read_bw_gbs": 4557,
+      "sustained_write_bw_gbs": 564.2,
+      "burst_write_bw_gbs": 2170,
+      "read_iops_k": 39060,
+      "write_iops_k": 5425
+    },
+    {
+      "ebox_count": 219,
+      "read_bw_gbs": 4578,
+      "sustained_write_bw_gbs": 566.8000000000001,
+      "burst_write_bw_gbs": 2180,
+      "read_iops_k": 39240,
+      "write_iops_k": 5450
+    },
+    {
+      "ebox_count": 220,
+      "read_bw_gbs": 4599,
+      "sustained_write_bw_gbs": 569.4,
+      "burst_write_bw_gbs": 2190,
+      "read_iops_k": 39420,
+      "write_iops_k": 5475
+    },
+    {
+      "ebox_count": 221,
+      "read_bw_gbs": 4620,
+      "sustained_write_bw_gbs": 572,
+      "burst_write_bw_gbs": 2200,
+      "read_iops_k": 39600,
+      "write_iops_k": 5500
+    },
+    {
+      "ebox_count": 222,
+      "read_bw_gbs": 4641,
+      "sustained_write_bw_gbs": 574.6,
+      "burst_write_bw_gbs": 2210,
+      "read_iops_k": 39780,
+      "write_iops_k": 5525
+    },
+    {
+      "ebox_count": 223,
+      "read_bw_gbs": 4662,
+      "sustained_write_bw_gbs": 577.2,
+      "burst_write_bw_gbs": 2220,
+      "read_iops_k": 39960,
+      "write_iops_k": 5550
+    },
+    {
+      "ebox_count": 224,
+      "read_bw_gbs": 4683,
+      "sustained_write_bw_gbs": 579.8000000000001,
+      "burst_write_bw_gbs": 2230,
+      "read_iops_k": 40140,
+      "write_iops_k": 5575
+    },
+    {
+      "ebox_count": 225,
+      "read_bw_gbs": 4704,
+      "sustained_write_bw_gbs": 582.4,
+      "burst_write_bw_gbs": 2240,
+      "read_iops_k": 40320,
+      "write_iops_k": 5600
+    },
+    {
+      "ebox_count": 226,
+      "read_bw_gbs": 4725,
+      "sustained_write_bw_gbs": 585,
+      "burst_write_bw_gbs": 2250,
+      "read_iops_k": 40500,
+      "write_iops_k": 5625
+    },
+    {
+      "ebox_count": 227,
+      "read_bw_gbs": 4746,
+      "sustained_write_bw_gbs": 587.6,
+      "burst_write_bw_gbs": 2260,
+      "read_iops_k": 40680,
+      "write_iops_k": 5650
+    },
+    {
+      "ebox_count": 228,
+      "read_bw_gbs": 4767,
+      "sustained_write_bw_gbs": 590.2,
+      "burst_write_bw_gbs": 2270,
+      "read_iops_k": 40860,
+      "write_iops_k": 5675
+    },
+    {
+      "ebox_count": 229,
+      "read_bw_gbs": 4788,
+      "sustained_write_bw_gbs": 592.8000000000001,
+      "burst_write_bw_gbs": 2280,
+      "read_iops_k": 41040,
+      "write_iops_k": 5700
+    },
+    {
+      "ebox_count": 230,
+      "read_bw_gbs": 4809,
+      "sustained_write_bw_gbs": 595.4,
+      "burst_write_bw_gbs": 2290,
+      "read_iops_k": 41220,
+      "write_iops_k": 5725
+    },
+    {
+      "ebox_count": 231,
+      "read_bw_gbs": 4830,
+      "sustained_write_bw_gbs": 598,
+      "burst_write_bw_gbs": 2300,
+      "read_iops_k": 41400,
+      "write_iops_k": 5750
+    },
+    {
+      "ebox_count": 232,
+      "read_bw_gbs": 4851,
+      "sustained_write_bw_gbs": 600.6,
+      "burst_write_bw_gbs": 2310,
+      "read_iops_k": 41580,
+      "write_iops_k": 5775
+    },
+    {
+      "ebox_count": 233,
+      "read_bw_gbs": 4872,
+      "sustained_write_bw_gbs": 603.2,
+      "burst_write_bw_gbs": 2320,
+      "read_iops_k": 41760,
+      "write_iops_k": 5800
+    },
+    {
+      "ebox_count": 234,
+      "read_bw_gbs": 4893,
+      "sustained_write_bw_gbs": 605.8000000000001,
+      "burst_write_bw_gbs": 2330,
+      "read_iops_k": 41940,
+      "write_iops_k": 5825
+    },
+    {
+      "ebox_count": 235,
+      "read_bw_gbs": 4914,
+      "sustained_write_bw_gbs": 608.4,
+      "burst_write_bw_gbs": 2340,
+      "read_iops_k": 42120,
+      "write_iops_k": 5850
+    },
+    {
+      "ebox_count": 236,
+      "read_bw_gbs": 4935,
+      "sustained_write_bw_gbs": 611,
+      "burst_write_bw_gbs": 2350,
+      "read_iops_k": 42300,
+      "write_iops_k": 5875
+    },
+    {
+      "ebox_count": 237,
+      "read_bw_gbs": 4956,
+      "sustained_write_bw_gbs": 613.6,
+      "burst_write_bw_gbs": 2360,
+      "read_iops_k": 42480,
+      "write_iops_k": 5900
+    },
+    {
+      "ebox_count": 238,
+      "read_bw_gbs": 4977,
+      "sustained_write_bw_gbs": 616.2,
+      "burst_write_bw_gbs": 2370,
+      "read_iops_k": 42660,
+      "write_iops_k": 5925
+    },
+    {
+      "ebox_count": 239,
+      "read_bw_gbs": 4998,
+      "sustained_write_bw_gbs": 618.8000000000001,
+      "burst_write_bw_gbs": 2380,
+      "read_iops_k": 42840,
+      "write_iops_k": 5950
+    },
+    {
+      "ebox_count": 240,
+      "read_bw_gbs": 5019,
+      "sustained_write_bw_gbs": 621.4,
+      "burst_write_bw_gbs": 2390,
+      "read_iops_k": 43020,
+      "write_iops_k": 5975
+    },
+    {
+      "ebox_count": 241,
+      "read_bw_gbs": 5040,
+      "sustained_write_bw_gbs": 624,
+      "burst_write_bw_gbs": 2400,
+      "read_iops_k": 43200,
+      "write_iops_k": 6000
+    },
+    {
+      "ebox_count": 242,
+      "read_bw_gbs": 5061,
+      "sustained_write_bw_gbs": 626.6,
+      "burst_write_bw_gbs": 2410,
+      "read_iops_k": 43380,
+      "write_iops_k": 6025
+    },
+    {
+      "ebox_count": 243,
+      "read_bw_gbs": 5082,
+      "sustained_write_bw_gbs": 629.2,
+      "burst_write_bw_gbs": 2420,
+      "read_iops_k": 43560,
+      "write_iops_k": 6050
+    },
+    {
+      "ebox_count": 244,
+      "read_bw_gbs": 5103,
+      "sustained_write_bw_gbs": 631.8000000000001,
+      "burst_write_bw_gbs": 2430,
+      "read_iops_k": 43740,
+      "write_iops_k": 6075
+    },
+    {
+      "ebox_count": 245,
+      "read_bw_gbs": 5124,
+      "sustained_write_bw_gbs": 634.4,
+      "burst_write_bw_gbs": 2440,
+      "read_iops_k": 43920,
+      "write_iops_k": 6100
+    },
+    {
+      "ebox_count": 246,
+      "read_bw_gbs": 5145,
+      "sustained_write_bw_gbs": 637,
+      "burst_write_bw_gbs": 2450,
+      "read_iops_k": 44100,
+      "write_iops_k": 6125
+    },
+    {
+      "ebox_count": 247,
+      "read_bw_gbs": 5166,
+      "sustained_write_bw_gbs": 639.6,
+      "burst_write_bw_gbs": 2460,
+      "read_iops_k": 44280,
+      "write_iops_k": 6150
+    },
+    {
+      "ebox_count": 248,
+      "read_bw_gbs": 5187,
+      "sustained_write_bw_gbs": 642.2,
+      "burst_write_bw_gbs": 2470,
+      "read_iops_k": 44460,
+      "write_iops_k": 6175
+    },
+    {
+      "ebox_count": 249,
+      "read_bw_gbs": 5208,
+      "sustained_write_bw_gbs": 644.8000000000001,
+      "burst_write_bw_gbs": 2480,
+      "read_iops_k": 44640,
+      "write_iops_k": 6200
+    },
+    {
+      "ebox_count": 250,
+      "read_bw_gbs": 5229,
+      "sustained_write_bw_gbs": 647.4,
+      "burst_write_bw_gbs": 2490,
+      "read_iops_k": 44820,
+      "write_iops_k": 6225
+    }
+  ]
+}

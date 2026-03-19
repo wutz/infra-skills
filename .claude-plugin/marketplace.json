@@ -15,7 +15,8 @@
       "strict": false,
       "skills": [
         "./skills/xsky-xeos-planner",
-        "./skills/gpfs-ece-planner"
+        "./skills/gpfs-ece-planner",
+        "./skills/vastdata-planner"
       ]
     }
   ]

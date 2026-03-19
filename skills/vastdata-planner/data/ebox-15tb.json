@@ -1,0 +1,1209 @@
+{
+  "disk": {
+    "name": "15.36TB NVMe",
+    "description": "2×800GB SCM + 8×15.36TB NVMe SSD",
+    "raw_per_ebox_tb": 122.88
+  },
+  "entries": [
+    {
+      "ebox_count": 11,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 982.6713599999998
+    },
+    {
+      "ebox_count": 12,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 1096.33536
+    },
+    {
+      "ebox_count": 13,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 1209.7413119999999
+    },
+    {
+      "ebox_count": 14,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 1322.7540479999998
+    },
+    {
+      "ebox_count": 15,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 1435.6684799999998
+    },
+    {
+      "ebox_count": 16,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 1548.288
+    },
+    {
+      "ebox_count": 17,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 1660.932096
+    },
+    {
+      "ebox_count": 18,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 1773.4533119999999
+    },
+    {
+      "ebox_count": 19,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 1885.753344
+    },
+    {
+      "ebox_count": 20,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 1998.2745599999998
+    },
+    {
+      "ebox_count": 21,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 2110.3165440000002
+    },
+    {
+      "ebox_count": 22,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 2222.702592
+    },
+    {
+      "ebox_count": 23,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 2334.756864
+    },
+    {
+      "ebox_count": 24,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 2446.884864
+    },
+    {
+      "ebox_count": 25,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 2558.9759999999997
+    },
+    {
+      "ebox_count": 26,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 2670.91968
+    },
+    {
+      "ebox_count": 27,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 2782.9370879999997
+    },
+    {
+      "ebox_count": 28,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 2894.9544960000003
+    },
+    {
+      "ebox_count": 29,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 3006.898176
+    },
+    {
+      "ebox_count": 30,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 3118.6944
+    },
+    {
+      "ebox_count": 31,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 3230.650368
+    },
+    {
+      "ebox_count": 32,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 3342.7292159999997
+    },
+    {
+      "ebox_count": 33,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 3454.488576
+    },
+    {
+      "ebox_count": 34,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 3566.272512
+    },
+    {
+      "ebox_count": 35,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 3678.47424
+    },
+    {
+      "ebox_count": 36,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 3790.2090239999998
+    },
+    {
+      "ebox_count": 37,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 3901.857792
+    },
+    {
+      "ebox_count": 38,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 4013.8506239999997
+    },
+    {
+      "ebox_count": 39,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 4125.708288
+    },
+    {
+      "ebox_count": 40,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 4237.3939199999995
+    },
+    {
+      "ebox_count": 41,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 4349.3744639999995
+    },
+    {
+      "ebox_count": 42,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 4461.1338240000005
+    },
+    {
+      "ebox_count": 43,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 4572.635136
+    },
+    {
+      "ebox_count": 44,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 4684.382208
+    },
+    {
+      "ebox_count": 45,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 4796.37504
+    },
+    {
+      "ebox_count": 46,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 4908.048384
+    },
+    {
+      "ebox_count": 47,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 5019.9429119999995
+    },
+    {
+      "ebox_count": 48,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 5131.4688
+    },
+    {
+      "ebox_count": 49,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 5243.191296
+    },
+    {
+      "ebox_count": 50,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 5355.1104
+    },
+    {
+      "ebox_count": 51,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 5467.226112
+    },
+    {
+      "ebox_count": 52,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 5578.899455999999
+    },
+    {
+      "ebox_count": 53,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 5690.744831999999
+    },
+    {
+      "ebox_count": 54,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 5802.098688
+    },
+    {
+      "ebox_count": 55,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 5913.599999999999
+    },
+    {
+      "ebox_count": 56,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 6025.936896
+    },
+    {
+      "ebox_count": 57,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 6137.745408
+    },
+    {
+      "ebox_count": 58,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 6248.9886719999995
+    },
+    {
+      "ebox_count": 59,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 6361.0798079999995
+    },
+    {
+      "ebox_count": 60,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 6472.58112
+    },
+    {
+      "ebox_count": 61,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 6584.205312
+    },
+    {
+      "ebox_count": 62,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 6695.952383999999
+    },
+    {
+      "ebox_count": 63,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 6807.822336
+    },
+    {
+      "ebox_count": 64,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 6919.815168
+    },
+    {
+      "ebox_count": 65,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 7031.132159999999
+    },
+    {
+      "ebox_count": 66,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 7142.547456
+    },
+    {
+      "ebox_count": 67,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 7254.884351999999
+    },
+    {
+      "ebox_count": 68,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 7366.508544
+    },
+    {
+      "ebox_count": 69,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 7478.23104
+    },
+    {
+      "ebox_count": 70,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 7590.05184
+    },
+    {
+      "ebox_count": 71,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 7701.098496
+    },
+    {
+      "ebox_count": 72,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 7813.103615999999
+    },
+    {
+      "ebox_count": 73,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 7925.207039999999
+    },
+    {
+      "ebox_count": 74,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 8036.499456
+    },
+    {
+      "ebox_count": 75,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 8147.865599999999
+    },
+    {
+      "ebox_count": 76,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 8260.23936
+    },
+    {
+      "ebox_count": 77,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 8368.92672
+    },
+    {
+      "ebox_count": 78,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 8477.61408
+    },
+    {
+      "ebox_count": 79,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 8586.30144
+    },
+    {
+      "ebox_count": 80,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 8694.9888
+    },
+    {
+      "ebox_count": 81,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 8803.676159999999
+    },
+    {
+      "ebox_count": 82,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 8912.363519999999
+    },
+    {
+      "ebox_count": 83,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 9021.05088
+    },
+    {
+      "ebox_count": 84,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 9129.73824
+    },
+    {
+      "ebox_count": 85,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 9238.4256
+    },
+    {
+      "ebox_count": 86,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 9347.11296
+    },
+    {
+      "ebox_count": 87,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 9455.80032
+    },
+    {
+      "ebox_count": 88,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 9564.48768
+    },
+    {
+      "ebox_count": 89,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 9673.17504
+    },
+    {
+      "ebox_count": 90,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 9781.8624
+    },
+    {
+      "ebox_count": 91,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 9890.54976
+    },
+    {
+      "ebox_count": 92,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 9999.23712
+    },
+    {
+      "ebox_count": 93,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 10107.92448
+    },
+    {
+      "ebox_count": 94,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 10216.61184
+    },
+    {
+      "ebox_count": 95,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 10325.2992
+    },
+    {
+      "ebox_count": 96,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 10433.98656
+    },
+    {
+      "ebox_count": 97,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 10542.67392
+    },
+    {
+      "ebox_count": 98,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 10651.36128
+    },
+    {
+      "ebox_count": 99,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 10760.048639999999
+    },
+    {
+      "ebox_count": 100,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 10868.735999999999
+    },
+    {
+      "ebox_count": 101,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 10977.42336
+    },
+    {
+      "ebox_count": 102,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 11086.11072
+    },
+    {
+      "ebox_count": 103,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 11194.79808
+    },
+    {
+      "ebox_count": 104,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 11303.48544
+    },
+    {
+      "ebox_count": 105,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 11412.1728
+    },
+    {
+      "ebox_count": 106,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 11520.86016
+    },
+    {
+      "ebox_count": 107,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 11629.54752
+    },
+    {
+      "ebox_count": 108,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 11738.23488
+    },
+    {
+      "ebox_count": 109,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 11846.92224
+    },
+    {
+      "ebox_count": 110,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 11955.6096
+    },
+    {
+      "ebox_count": 111,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 12064.29696
+    },
+    {
+      "ebox_count": 112,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 12172.98432
+    },
+    {
+      "ebox_count": 113,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 12281.67168
+    },
+    {
+      "ebox_count": 114,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 12390.35904
+    },
+    {
+      "ebox_count": 115,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 12499.0464
+    },
+    {
+      "ebox_count": 116,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 12607.73376
+    },
+    {
+      "ebox_count": 117,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 12716.421119999999
+    },
+    {
+      "ebox_count": 118,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 12825.108479999999
+    },
+    {
+      "ebox_count": 119,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 12933.79584
+    },
+    {
+      "ebox_count": 120,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 13042.4832
+    },
+    {
+      "ebox_count": 121,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 13151.17056
+    },
+    {
+      "ebox_count": 122,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 13259.85792
+    },
+    {
+      "ebox_count": 123,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 13368.54528
+    },
+    {
+      "ebox_count": 124,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 13477.23264
+    },
+    {
+      "ebox_count": 125,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 13585.92
+    },
+    {
+      "ebox_count": 126,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 13694.60736
+    },
+    {
+      "ebox_count": 127,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 13803.29472
+    },
+    {
+      "ebox_count": 128,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 13911.98208
+    },
+    {
+      "ebox_count": 129,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 14020.66944
+    },
+    {
+      "ebox_count": 130,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 14129.3568
+    },
+    {
+      "ebox_count": 131,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 14238.04416
+    },
+    {
+      "ebox_count": 132,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 14346.73152
+    },
+    {
+      "ebox_count": 133,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 14455.41888
+    },
+    {
+      "ebox_count": 134,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 14564.10624
+    },
+    {
+      "ebox_count": 135,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 14672.793599999999
+    },
+    {
+      "ebox_count": 136,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 14781.480959999999
+    },
+    {
+      "ebox_count": 137,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 14890.168319999999
+    },
+    {
+      "ebox_count": 138,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 14998.85568
+    },
+    {
+      "ebox_count": 139,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 15107.54304
+    },
+    {
+      "ebox_count": 140,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 15216.2304
+    },
+    {
+      "ebox_count": 141,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 15324.91776
+    },
+    {
+      "ebox_count": 142,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 15433.60512
+    },
+    {
+      "ebox_count": 143,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 15542.29248
+    },
+    {
+      "ebox_count": 144,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 15650.97984
+    },
+    {
+      "ebox_count": 145,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 15759.6672
+    },
+    {
+      "ebox_count": 146,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 15868.35456
+    },
+    {
+      "ebox_count": 147,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 15977.04192
+    },
+    {
+      "ebox_count": 148,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 16085.72928
+    },
+    {
+      "ebox_count": 149,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 16194.41664
+    },
+    {
+      "ebox_count": 150,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 16303.104
+    },
+    {
+      "ebox_count": 151,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 16411.79136
+    },
+    {
+      "ebox_count": 152,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 16520.47872
+    },
+    {
+      "ebox_count": 153,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 16629.16608
+    },
+    {
+      "ebox_count": 154,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 16737.85344
+    },
+    {
+      "ebox_count": 155,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 16846.5408
+    },
+    {
+      "ebox_count": 156,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 16955.22816
+    },
+    {
+      "ebox_count": 157,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 17063.91552
+    },
+    {
+      "ebox_count": 158,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 17172.60288
+    },
+    {
+      "ebox_count": 159,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 17281.29024
+    },
+    {
+      "ebox_count": 160,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 17389.9776
+    },
+    {
+      "ebox_count": 161,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 17498.66496
+    },
+    {
+      "ebox_count": 162,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 17607.352319999998
+    },
+    {
+      "ebox_count": 163,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 17716.039679999998
+    },
+    {
+      "ebox_count": 164,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 17824.727039999998
+    },
+    {
+      "ebox_count": 165,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 17933.4144
+    },
+    {
+      "ebox_count": 166,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 18042.10176
+    },
+    {
+      "ebox_count": 167,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 18150.78912
+    },
+    {
+      "ebox_count": 168,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 18259.47648
+    },
+    {
+      "ebox_count": 169,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 18368.16384
+    },
+    {
+      "ebox_count": 170,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 18476.8512
+    },
+    {
+      "ebox_count": 171,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 18585.53856
+    },
+    {
+      "ebox_count": 172,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 18694.22592
+    },
+    {
+      "ebox_count": 173,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 18802.91328
+    },
+    {
+      "ebox_count": 174,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 18911.60064
+    },
+    {
+      "ebox_count": 175,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 19020.288
+    },
+    {
+      "ebox_count": 176,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 19128.97536
+    },
+    {
+      "ebox_count": 177,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 19237.66272
+    },
+    {
+      "ebox_count": 178,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 19346.35008
+    },
+    {
+      "ebox_count": 179,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 19455.03744
+    },
+    {
+      "ebox_count": 180,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 19563.7248
+    },
+    {
+      "ebox_count": 181,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 19672.41216
+    },
+    {
+      "ebox_count": 182,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 19781.09952
+    },
+    {
+      "ebox_count": 183,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 19889.78688
+    },
+    {
+      "ebox_count": 184,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 19998.47424
+    },
+    {
+      "ebox_count": 185,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 20107.1616
+    },
+    {
+      "ebox_count": 186,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 20215.84896
+    },
+    {
+      "ebox_count": 187,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 20324.53632
+    },
+    {
+      "ebox_count": 188,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 20433.22368
+    },
+    {
+      "ebox_count": 189,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 20541.91104
+    },
+    {
+      "ebox_count": 190,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 20650.5984
+    },
+    {
+      "ebox_count": 191,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 20759.28576
+    },
+    {
+      "ebox_count": 192,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 20867.97312
+    },
+    {
+      "ebox_count": 193,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 20976.66048
+    },
+    {
+      "ebox_count": 194,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 21085.34784
+    },
+    {
+      "ebox_count": 195,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 21194.0352
+    },
+    {
+      "ebox_count": 196,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 21302.72256
+    },
+    {
+      "ebox_count": 197,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 21411.40992
+    },
+    {
+      "ebox_count": 198,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 21520.097279999998
+    },
+    {
+      "ebox_count": 199,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 21628.784639999998
+    },
+    {
+      "ebox_count": 200,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 21737.471999999998
+    },
+    {
+      "ebox_count": 201,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 21846.159359999998
+    },
+    {
+      "ebox_count": 202,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 21954.84672
+    },
+    {
+      "ebox_count": 203,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 22063.53408
+    },
+    {
+      "ebox_count": 204,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 22172.22144
+    },
+    {
+      "ebox_count": 205,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 22280.9088
+    },
+    {
+      "ebox_count": 206,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 22389.59616
+    },
+    {
+      "ebox_count": 207,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 22498.28352
+    },
+    {
+      "ebox_count": 208,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 22606.97088
+    },
+    {
+      "ebox_count": 209,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 22715.65824
+    },
+    {
+      "ebox_count": 210,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 22824.3456
+    },
+    {
+      "ebox_count": 211,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 22933.03296
+    },
+    {
+      "ebox_count": 212,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 23041.72032
+    },
+    {
+      "ebox_count": 213,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 23150.40768
+    },
+    {
+      "ebox_count": 214,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 23259.09504
+    },
+    {
+      "ebox_count": 215,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 23367.7824
+    },
+    {
+      "ebox_count": 216,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 23476.46976
+    },
+    {
+      "ebox_count": 217,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 23585.15712
+    },
+    {
+      "ebox_count": 218,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 23693.84448
+    },
+    {
+      "ebox_count": 219,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 23802.53184
+    },
+    {
+      "ebox_count": 220,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 23911.2192
+    },
+    {
+      "ebox_count": 221,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 24019.90656
+    },
+    {
+      "ebox_count": 222,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 24128.59392
+    },
+    {
+      "ebox_count": 223,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 24237.28128
+    },
+    {
+      "ebox_count": 224,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 24345.96864
+    },
+    {
+      "ebox_count": 225,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 24454.656
+    },
+    {
+      "ebox_count": 226,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 24563.34336
+    },
+    {
+      "ebox_count": 227,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 24672.03072
+    },
+    {
+      "ebox_count": 228,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 24780.71808
+    },
+    {
+      "ebox_count": 229,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 24889.40544
+    },
+    {
+      "ebox_count": 230,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 24998.0928
+    },
+    {
+      "ebox_count": 231,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 25106.78016
+    },
+    {
+      "ebox_count": 232,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 25215.46752
+    },
+    {
+      "ebox_count": 233,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 25324.15488
+    },
+    {
+      "ebox_count": 234,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 25432.842239999998
+    },
+    {
+      "ebox_count": 235,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 25541.529599999998
+    },
+    {
+      "ebox_count": 236,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 25650.216959999998
+    },
+    {
+      "ebox_count": 237,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 25758.904319999998
+    },
+    {
+      "ebox_count": 238,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 25867.59168
+    },
+    {
+      "ebox_count": 239,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 25976.27904
+    },
+    {
+      "ebox_count": 240,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 26084.9664
+    },
+    {
+      "ebox_count": 241,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 26193.65376
+    },
+    {
+      "ebox_count": 242,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 26302.34112
+    },
+    {
+      "ebox_count": 243,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 26411.02848
+    },
+    {
+      "ebox_count": 244,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 26519.71584
+    },
+    {
+      "ebox_count": 245,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 26628.4032
+    },
+    {
+      "ebox_count": 246,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 26737.09056
+    },
+    {
+      "ebox_count": 247,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 26845.77792
+    },
+    {
+      "ebox_count": 248,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 26954.46528
+    },
+    {
+      "ebox_count": 249,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 27063.15264
+    },
+    {
+      "ebox_count": 250,
+      "raw_per_ebox_tb": 122.88,
+      "usable_tb": 27171.84
+    }
+  ]
+}
