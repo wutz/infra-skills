@@ -13,6 +13,7 @@
 | [`xsky-xeos-planner`](./skills/xsky-xeos-planner) | XSKY XEOS 对象存储容量和性能规划 |
 | [`gpfs-ece-planner`](./skills/gpfs-ece-planner) | GPFS ECE 高性能文件存储容量和性能规划 |
 | [`vastdata-planner`](./skills/vastdata-planner) | VastData 全闪存储容量和性能规划 |
+| [`weka-planner`](./skills/weka-planner) | Weka 高性能文件系统容量和性能规划 |
 
 ## 使用方式
 
