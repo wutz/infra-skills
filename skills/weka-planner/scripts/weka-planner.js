@@ -94,6 +94,9 @@ function findFeasibleConfigs(capacityTiB, perfRequirements, networkType, protect
   for (let nodes = CONSTANTS.MIN_NODES; nodes <= 100; nodes++) {
     const protection = getProtectionScheme(nodes, protectionLevel);
 
+    // 保护方案条带宽度不能超过数据节点数
+    if (protection.D + protection.P > nodes) continue;
+
     for (const nvme of CONSTANTS.NVME_OPTIONS) {
       for (const ssdSize of CONSTANTS.SSD_SIZES_TB) {
         const actualCapacity = calculateCapacity(nodes, nvme, ssdSize, protection.D, protection.P);
