@@ -2,7 +2,7 @@
 
 /**
  * Weka 高性能文件系统容量和性能规划计算器
- * 根据容量和性能需求计算 Weka 集群配置方案
+ * 根据容量和性能需求计算 Weka 集群配置方案（输出多个方案）
  */
 
 // 常量配置
@@ -28,28 +28,21 @@ const CONSTANTS = {
 
 /**
  * 根据节点数和保护级别确定保护方案
- * @param {number} nodeCount - 节点数
- * @param {number} protectionLevel - 保护级别 (2, 3, 4)
- * @returns {object} - { D, P, stripeWidth, efficiency }
  */
 function getProtectionScheme(nodeCount, protectionLevel = 2) {
   let D, P;
 
   if (nodeCount >= 100) {
-    // 100+ 节点：推荐 N+4
     D = 8;
     P = 4;
   } else if (nodeCount >= 10) {
-    // 10-99 节点：D=8
     D = 8;
     P = protectionLevel;
   } else {
-    // 6-9 节点：D=5
     D = 5;
-    P = Math.min(protectionLevel, 3);  // 6-9节点最多支持P=3，保证D>P
+    P = Math.min(protectionLevel, 3);
   }
 
-  // 验证约束
   if (D <= P) {
     throw new Error(`数据块 (D=${D}) 必须大于校验块 (P=${P})`);
   }
@@ -70,12 +63,6 @@ function getProtectionScheme(nodeCount, protectionLevel = 2) {
 
 /**
  * 计算给定配置下的可用容量 (TiB)
- * @param {number} nodes - 节点数
- * @param {number} nvme - 每节点 NVMe 数量
- * @param {number} ssdTB - 单盘容量 (TB)
- * @param {number} D - 数据块数
- * @param {number} P - 校验块数
- * @returns {number} - 可用容量 (TiB)
  */
 function calculateCapacity(nodes, nvme, ssdTB, D, P) {
   const efficiency = D / (D + P);
@@ -84,55 +71,198 @@ function calculateCapacity(nodes, nvme, ssdTB, D, P) {
 
 /**
  * 计算集群性能
- * @param {number} nodes - 节点数
- * @param {number} nvme - 每节点 NVMe 数量
- * @param {string} networkType - 网络类型 ('100gb' 或 '200gb')
- * @returns {object} - { readBW, writeBW, readIOPS, writeIOPS } (GB/s 和 IOPS)
  */
 function calculatePerformance(nodes, nvme, networkType) {
-  // 写性能（不受网络限制）
   const writeBW = nodes * nvme * CONSTANTS.WRITE_BW_PER_NVME_NODE;
   const writeIOPS = nodes * nvme * CONSTANTS.WRITE_IOPS_PER_NVME_NODE;
-
-  // 读 IOPS（不受网络限制）
   const readIOPS = nodes * nvme * CONSTANTS.READ_IOPS_PER_NVME_NODE;
 
-  // 读带宽（受网络带宽限制）
   const networkBWPerNode = networkType === '200gb' ? CONSTANTS.NETWORK_BW_200GB : CONSTANTS.NETWORK_BW_100GB;
   const networkCapacity = nodes * networkBWPerNode;
   const theoreticalReadBW = nodes * nvme * CONSTANTS.READ_BW_PER_NVME_NODE;
   const readBW = Math.min(theoreticalReadBW, networkCapacity);
 
-  return {
-    readBW,
-    writeBW,
-    readIOPS,
-    writeIOPS
-  };
+  return { readBW, writeBW, readIOPS, writeIOPS };
 }
 
 /**
- * 主规划函数：查找满足所有需求的最优配置
- * @param {object} requirements - 需求参数
- * @returns {object} - 最优配置方案
+ * 查找所有满足需求的可行配置
+ */
+function findFeasibleConfigs(capacityTiB, perfRequirements, networkType, protectionLevel) {
+  const configs = [];
+
+  for (let nodes = CONSTANTS.MIN_NODES; nodes <= 100; nodes++) {
+    const protection = getProtectionScheme(nodes, protectionLevel);
+
+    for (const nvme of CONSTANTS.NVME_OPTIONS) {
+      for (const ssdSize of CONSTANTS.SSD_SIZES_TB) {
+        const actualCapacity = calculateCapacity(nodes, nvme, ssdSize, protection.D, protection.P);
+        if (actualCapacity < capacityTiB) continue;
+
+        const performance = calculatePerformance(nodes + CONSTANTS.HOT_SPARE, nvme, networkType);
+
+        const perfOk =
+          (!perfRequirements.readBW || performance.readBW >= perfRequirements.readBW) &&
+          (!perfRequirements.writeBW || performance.writeBW >= perfRequirements.writeBW) &&
+          (!perfRequirements.readIOPS || performance.readIOPS >= perfRequirements.readIOPS) &&
+          (!perfRequirements.writeIOPS || performance.writeIOPS >= perfRequirements.writeIOPS);
+
+        if (!perfOk) continue;
+
+        configs.push({ nodes, nvme, ssdSize, protection, actualCapacity, performance });
+      }
+    }
+  }
+
+  return configs;
+}
+
+/**
+ * 从可行配置中选出代表性方案（最多 4 个）
+ * 推荐方案排第一（资源最少），其余方案体现不同权衡
+ */
+function selectRepresentativeConfigs(feasible) {
+  if (feasible.length === 0) return [];
+
+  // 按资源升序排列
+  feasible.sort((a, b) =>
+    a.nodes !== b.nodes ? a.nodes - b.nodes :
+    a.nvme !== b.nvme ? a.nvme - b.nvme :
+    a.ssdSize - b.ssdSize
+  );
+
+  const min = feasible[0];
+  const selected = [min];
+  const added = new Set([`${min.nodes}-${min.nvme}-${min.ssdSize}`]);
+
+  function tryAdd(candidate) {
+    if (!candidate) return;
+    const key = `${candidate.nodes}-${candidate.nvme}-${candidate.ssdSize}`;
+    if (added.has(key)) return;
+    added.add(key);
+    selected.push(candidate);
+  }
+
+  // 方案 B：同节点数，更多 NVMe（提升性能）
+  const nvmeIdx = CONSTANTS.NVME_OPTIONS.indexOf(min.nvme);
+  if (nvmeIdx + 1 < CONSTANTS.NVME_OPTIONS.length) {
+    tryAdd(feasible.find(c =>
+      c.nodes === min.nodes &&
+      c.nvme === CONSTANTS.NVME_OPTIONS[nvmeIdx + 1] &&
+      c.ssdSize === min.ssdSize
+    ));
+  }
+
+  // 方案 C：同节点数，更大 SSD（提升容量余量）
+  const ssdIdx = CONSTANTS.SSD_SIZES_TB.indexOf(min.ssdSize);
+  if (ssdIdx + 1 < CONSTANTS.SSD_SIZES_TB.length) {
+    tryAdd(feasible.find(c =>
+      c.nodes === min.nodes &&
+      c.nvme === min.nvme &&
+      c.ssdSize === CONSTANTS.SSD_SIZES_TB[ssdIdx + 1]
+    ));
+  }
+
+  // 方案 D：更多节点（横向扩展），优先选择触发新保护等级的节点数（EC 5+P → EC 8+P 边界为 10 节点）
+  if (selected.length < 4) {
+    const moreNodes = feasible.filter(c => c.nodes > min.nodes);
+    if (moreNodes.length > 0) {
+      // 优先跨保护等级（EC 5+P → EC 8+P）
+      const tierChange = moreNodes.find(c => c.protection.D !== min.protection.D);
+      tryAdd(tierChange || moreNodes[0]);
+    }
+  }
+
+  return selected;
+}
+
+/**
+ * 为每个方案生成优缺点说明
+ */
+function generateProsAndCons(config, allSelected, capacityTiB) {
+  const pros = [];
+  const cons = [];
+
+  const recommended = allSelected[0]; // 推荐方案（资源最少）
+  const isRecommended = config === recommended;
+
+  const minNodes = Math.min(...allSelected.map(c => c.nodes));
+  const maxNodes = Math.max(...allSelected.map(c => c.nodes));
+  const maxNvme = Math.max(...allSelected.map(c => c.nvme));
+  const minSsd = Math.min(...allSelected.map(c => c.ssdSize));
+  const maxSsd = Math.max(...allSelected.map(c => c.ssdSize));
+
+  const headroomPct = Math.round((config.actualCapacity / capacityTiB - 1) * 100);
+  const hasMultipleSchemes = allSelected.some(c => c.protection.scheme !== config.protection.scheme);
+
+  // 推荐方案
+  if (isRecommended) {
+    pros.push('成本最低');
+    pros.push('运维简单');
+    if (headroomPct < 20) cons.push(`容量余量小（超配${headroomPct}%）`);
+    if (minNodes !== maxNodes) cons.push('扩展需增加节点');
+  } else if (config.nodes === minNodes) {
+    // 同节点数但更多磁盘
+    pros.push('机房占用与推荐方案相同');
+    cons.push('磁盘更多，成本高于推荐方案');
+  } else {
+    // 更多节点
+    pros.push(`并行度高，单节点故障影响小`);
+    cons.push('节点多，采购和机房成本更高');
+  }
+
+  // NVMe 数量
+  if (config.nvme === maxNvme && !isRecommended) {
+    pros.push(`性能翻倍（${config.nvme}盘/节点）`);
+  }
+  if (config.nvme < maxNvme && !isRecommended) {
+    cons.push('性能余量相对有限');
+  }
+
+  // SSD 尺寸
+  if (config.ssdSize === maxSsd && !isRecommended) {
+    pros.push(`容量余量大（超配${headroomPct}%）`);
+    pros.push('存储密度高');
+    cons.push(`大盘单价较高`);
+  } else if (config.ssdSize === minSsd && headroomPct >= 20 && !isRecommended) {
+    pros.push(`容量余量充裕（超配${headroomPct}%）`);
+  }
+
+  // 保护方案差异
+  if (hasMultipleSchemes) {
+    if (config.protection.D === 8) {
+      pros.push(`存储效率更高（${(config.protection.efficiency * 100).toFixed(1)}%）`);
+    } else {
+      cons.push(`存储效率较低（${(config.protection.efficiency * 100).toFixed(1)}%）`);
+    }
+  }
+
+  // 唯一方案时
+  if (allSelected.length === 1) {
+    pros.push('满足所有容量和性能需求');
+    pros.push('配置紧凑，初始投入最优');
+  }
+
+  return { pros, cons };
+}
+
+/**
+ * 主规划函数：返回多个方案数组，第一个为推荐方案
  */
 function planWeka(requirements) {
   const capacityInfo = parseCapacity(requirements.capacity);
   const capacityTiB = capacityInfo.tib;
 
-  // 解析网络类型（未指定时默认使用高规格 200gb）
   const networkType = requirements.networkType ? requirements.networkType.toLowerCase() : CONSTANTS.DEFAULT_NETWORK;
   if (!['100gb', '200gb'].includes(networkType)) {
     throw new Error(`不支持的网络类型: ${requirements.networkType}，请使用 100gb 或 200gb`);
   }
 
-  // 解析保护级别
   const protectionLevel = requirements.protectionLevel ? parseInt(requirements.protectionLevel) : 2;
   if (![2, 3, 4].includes(protectionLevel)) {
     throw new Error(`无效的保护级别: ${protectionLevel}，请使用 2、3 或 4`);
   }
 
-  // 解析性能需求
   const perfRequirements = {};
   let bandwidthUnitPreference = null;
 
@@ -152,72 +282,28 @@ function planWeka(requirements) {
   if (requirements.writeIOPS) {
     perfRequirements.writeIOPS = parseInt(requirements.writeIOPS);
   }
+  if (bandwidthUnitPreference === null) bandwidthUnitPreference = false;
 
-  if (bandwidthUnitPreference === null) {
-    bandwidthUnitPreference = false;
-  }
-
-  // 搜索最优配置
-  let bestConfig = null;
-
-  for (let nodes = CONSTANTS.MIN_NODES; nodes <= 100; nodes++) {
-    // 确定保护方案
-    const protection = getProtectionScheme(nodes, protectionLevel);
-
-    for (const nvme of CONSTANTS.NVME_OPTIONS) {
-      for (const ssdSize of CONSTANTS.SSD_SIZES_TB) {
-        // 计算容量
-        const actualCapacity = calculateCapacity(nodes, nvme, ssdSize, protection.D, protection.P);
-        if (actualCapacity < capacityTiB) continue;
-
-        // 计算性能（热备节点参与性能计算）
-        const performance = calculatePerformance(nodes + CONSTANTS.HOT_SPARE, nvme, networkType);
-
-        // 验证性能满足
-        const perfSatisfied =
-          (!perfRequirements.readBW || performance.readBW >= perfRequirements.readBW) &&
-          (!perfRequirements.writeBW || performance.writeBW >= perfRequirements.writeBW) &&
-          (!perfRequirements.readIOPS || performance.readIOPS >= perfRequirements.readIOPS) &&
-          (!perfRequirements.writeIOPS || performance.writeIOPS >= perfRequirements.writeIOPS);
-
-        if (!perfSatisfied) continue;
-
-        const config = {
-          nodes,
-      nvme,
-       ssdSize,
-          protection,
-          actualCapacity,
-          performance
-        };
-
-        // 选择标准：节点最少 → NVMe 最少 → SSD 最小
-        if (!bestConfig ||
-            nodes < bestConfig.nodes ||
-            (nodes === bestConfig.nodes && nvme < bestConfig.nvme) ||
-            (nodes === bestConfig.nodes && nvme === bestConfig.nvme && ssdSize < bestConfig.ssdSize)) {
-          bestConfig = config;
-    }
-      }
-    }
-
-    // 如果找到满足条件的配置，不再增加节点数
-    if (bestConfig && bestConfig.nodes === nodes) {
-    break;
-    }
-  }
-
-  if (!bestConfig) {
+  const feasible = findFeasibleConfigs(capacityTiB, perfRequirements, networkType, protectionLevel);
+  if (feasible.length === 0) {
     throw new Error('无法找到满足所有需求的配置方案（最大支持 100 节点）');
   }
 
-  return {
-    ...bestConfig,
-    networkType,
-    protectionLevel,
-    capacityUnitPreference: capacityInfo.isBinary,
-    bandwidthUnitPreference
-  };
+  const selected = selectRepresentativeConfigs(feasible);
+
+  return selected.map((config, idx) => {
+    const { pros, cons } = generateProsAndCons(config, selected, capacityTiB);
+    return {
+      ...config,
+      recommended: idx === 0,
+      pros,
+      cons,
+      networkType,
+      protectionLevel,
+      capacityUnitPreference: capacityInfo.isBinary,
+      bandwidthUnitPreference
+    };
+  });
 }
 
 /**
@@ -235,20 +321,11 @@ function parseCapacity(input) {
 
   let tib;
   switch (unit) {
-    case 'TB':
-      tib = value * CONSTANTS.TB_TO_TIB;
-    break;
-    case 'PB':
-      tib = value * 1000 * CONSTANTS.TB_TO_TIB;
-      break;
-    case 'TIB':
-      tib = value;
-      break;
-    case 'PIB':
-      tib = value * 1024;
-      break;
-    default:
-      throw new Error(`不支持的单位: ${unit}`);
+    case 'TB':  tib = value * CONSTANTS.TB_TO_TIB; break;
+    case 'PB':  tib = value * 1000 * CONSTANTS.TB_TO_TIB; break;
+    case 'TIB': tib = value; break;
+    case 'PIB': tib = value * 1024; break;
+    default: throw new Error(`不支持的单位: ${unit}`);
   }
 
   return { tib, unit, isBinary };
@@ -274,10 +351,9 @@ function parseBandwidth(input) {
   } else if (unitLower === 'gb/s') {
     gbps = value;
   } else if (unitLower === 'mib/s') {
-    gbps = value / 1024 * 1.024;  // MiB/s to GB/s: MiB/s * 1.024 / 1000 * 1000 = MiB/s * 1.024 / 1000
     gbps = value * 1.024 / 1000;
   } else if (unitLower === 'gib/s') {
-    gbps = value * 1.024;  // GiB/s to GB/s: GiB/s * 1024 MiB/GiB * 1.024 MB/MiB / 1000 MB/GB
+    gbps = value * 1.024;
   } else {
     throw new Error(`不支持的带宽单位: ${unit}`);
   }
@@ -290,15 +366,11 @@ function parseBandwidth(input) {
  */
 function formatCapacity(tib, preferBinary = true) {
   if (preferBinary) {
-    if (tib >= 1024) {
-      return `${(tib / 1024).toFixed(2)} PiB`;
-    }
+    if (tib >= 1024) return `${(tib / 1024).toFixed(2)} PiB`;
     return `${tib.toFixed(2)} TiB`;
   } else {
     const tb = tib / CONSTANTS.TB_TO_TIB;
-    if (tb >= 1000) {
-      return `${(tb / 1000).toFixed(2)} PB`;
-    }
+    if (tb >= 1000) return `${(tb / 1000).toFixed(2)} PB`;
     return `${tb.toFixed(2)} TB`;
   }
 }
@@ -309,24 +381,21 @@ function formatCapacity(tib, preferBinary = true) {
 function formatBandwidth(gbps, preferBinary = true) {
   if (preferBinary) {
     const gibps = gbps * 1000 / 1024;
-    if (gibps >= 1) {
-      return `${gibps.toFixed(2)} GiB/s`;
-    }
+    if (gibps >= 1) return `${gibps.toFixed(2)} GiB/s`;
     return `${(gibps * 1024).toFixed(2)} MiB/s`;
   } else {
-    if (gbps >= 1) {
-      return `${gbps.toFixed(2)} GB/s`;
-    }
+    if (gbps >= 1) return `${gbps.toFixed(2)} GB/s`;
     return `${(gbps * 1000).toFixed(2)} MB/s`;
   }
 }
 
 /**
- * 格式化输出结果
+ * 将单个内部 config 格式化为输出结构
  */
-function formatResult(config) {
+function formatPlan(config) {
   const totalNodes = config.nodes + CONSTANTS.HOT_SPARE;
-  const result = {
+  return {
+    recommended: config.recommended,
     configuration: {
       nodeCount: totalNodes,
       dataNodeCount: config.nodes,
@@ -349,10 +418,9 @@ function formatResult(config) {
       readIOPS: `${Math.floor(config.performance.readIOPS).toLocaleString()} IOPS`,
       writeIOPS: `${Math.floor(config.performance.writeIOPS).toLocaleString()} IOPS`
     },
-    performanceStatus: '所有性能指标满足需求'
+    pros: config.pros,
+    cons: config.cons
   };
-
-  return result;
 }
 
 // CLI 入口
@@ -370,13 +438,13 @@ Weka 高性能文件系统容量和性能规划工具
   --capacity <容量>          容量需求，如 "500TiB", "1.5PiB"
 
 可选参数:
-  --read-bw <带宽>               读带宽需求，如 "200GB/s", "1GiB/s"
-  --write-bw <带宽>           写带宽需求，如 "50GB/s", "500MiB/s"
-  --read-iops <IOPS>             读 IOPS 需求
-  --write-iops <IOPS>         写 IOPS 需求
-  --network-type <类型>        网络类型：100gb|200gb（默认 200gb）
-  --protection-level <级别>      保护级别：2|3|4（默认 2）
-  --json                以 JSON 格式输出
+  --read-bw <带宽>           读带宽需求，如 "200GB/s", "1GiB/s"
+  --write-bw <带宽>          写带宽需求，如 "50GB/s", "500MiB/s"
+  --read-iops <IOPS>         读 IOPS 需求
+  --write-iops <IOPS>        写 IOPS 需求
+  --network-type <类型>      网络类型：100gb|200gb（默认 200gb）
+  --protection-level <级别>  保护级别：2|3|4（默认 2）
+  --json                     以 JSON 格式输出
 
 示例:
   node weka-planner.js --capacity 500TiB
@@ -393,30 +461,14 @@ Weka 高性能文件系统容量和性能规划工具
 
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
-    case '--capacity':
-      requirements.capacity = args[++i];
-        break;
-      case '--read-bw':
-        requirements.readBandwidth = args[++i];
-   break;
-      case '--write-bw':
-        requirements.writeBandwidth = args[++i];
-        break;
-      case '--read-iops':
-        requirements.readIOPS = args[++i];
-      break;
-      case '--write-iops':
-        requirements.writeIOPS = args[++i];
-        break;
-      case '--network-type':
-     requirements.networkType = args[++i];
-        break;
-      case '--protection-level':
-        requirements.protectionLevel = args[++i];
-        break;
-        case '--json':
-        jsonOutput = true;
-        break;
+      case '--capacity':          requirements.capacity = args[++i]; break;
+      case '--read-bw':           requirements.readBandwidth = args[++i]; break;
+      case '--write-bw':          requirements.writeBandwidth = args[++i]; break;
+      case '--read-iops':         requirements.readIOPS = args[++i]; break;
+      case '--write-iops':        requirements.writeIOPS = args[++i]; break;
+      case '--network-type':      requirements.networkType = args[++i]; break;
+      case '--protection-level':  requirements.protectionLevel = args[++i]; break;
+      case '--json':              jsonOutput = true; break;
     }
   }
 
@@ -426,30 +478,26 @@ Weka 高性能文件系统容量和性能规划工具
   }
 
   try {
-    const config = planWeka(requirements);
-    const result = formatResult(config);
+    const plans = planWeka(requirements);
+    const formatted = plans.map(formatPlan);
 
     if (jsonOutput) {
-      console.log(JSON.stringify(result, null, 2));
+      console.log(JSON.stringify(formatted, null, 2));
     } else {
-    console.log('\n=== Weka 高性能文件系统规划方案 ===\n');
-      console.log('配置方案:');
-      console.log(`  节点数: ${result.configuration.nodeCount} 节点（${result.configuration.dataNodeCount} 数据节点 + ${result.configuration.hotSpareCount} 热备节点）`);
-      console.log(`  CPU: ${result.configuration.cpuModel}`);
-      console.log(`  内存: ${result.configuration.memory}`);
-      console.log(`  网络: ${result.configuration.networkType}`);
-      console.log(`  磁盘配置: ${result.configuration.diskConfig}`);
-      console.log(`  保护方案: ${result.configuration.protectionScheme}`);
-      console.log('\n容量:');
-      console.log(`  可用容量: ${result.capacity.available}`);
-      console.log(`  存储效率: ${result.capacity.efficiency}`);
-      console.log('\n性能:');
-      console.log(`  读带宽: ${result.performance.readBandwidth}`);
-      console.log(`  写带宽: ${result.performance.writeBandwidth}`);
-      console.log(`  读 IOPS: ${result.performance.readIOPS}`);
-      console.log(`  写 IOPS: ${result.performance.writeIOPS}`);
-      console.log(`\n性能状态: ${result.performanceStatus}`);
-      console.log();
+      console.log('\n=== Weka 高性能文件系统规划方案 ===\n');
+      formatted.forEach((plan, idx) => {
+        const label = plan.recommended ? `方案一（推荐）` : `方案${idx + 1}`;
+        console.log(`--- ${label} ---`);
+        console.log(`节点数: ${plan.configuration.nodeCount} 节点（${plan.configuration.dataNodeCount} 数据 + ${plan.configuration.hotSpareCount} 热备）`);
+        console.log(`磁盘: ${plan.configuration.diskConfig}`);
+        console.log(`保护: ${plan.configuration.protectionScheme}  效率: ${plan.capacity.efficiency}`);
+        console.log(`容量: ${plan.capacity.available}`);
+        console.log(`读带宽: ${plan.performance.readBandwidth}  写带宽: ${plan.performance.writeBandwidth}`);
+        console.log(`读IOPS: ${plan.performance.readIOPS}  写IOPS: ${plan.performance.writeIOPS}`);
+        if (plan.pros.length > 0) console.log(`优点: ${plan.pros.join('；')}`);
+        if (plan.cons.length > 0) console.log(`缺点: ${plan.cons.join('；')}`);
+        console.log();
+      });
     }
   } catch (error) {
     console.error(`错误: ${error.message}`);
@@ -460,11 +508,14 @@ Weka 高性能文件系统容量和性能规划工具
 // 导出函数供其他模块使用
 module.exports = {
   planWeka,
-  formatResult,
+  formatPlan,
   parseCapacity,
   parseBandwidth,
   getProtectionScheme,
   calculateCapacity,
   calculatePerformance,
+  findFeasibleConfigs,
+  selectRepresentativeConfigs,
+  generateProsAndCons,
   CONSTANTS
 };
