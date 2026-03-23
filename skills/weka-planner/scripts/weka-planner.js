@@ -21,33 +21,28 @@ const CONSTANTS = {
   READ_IOPS_PER_NVME_NODE: 225000,
   READ_BW_PER_NVME_NODE: 4.346,      // GB/s (无网络瓶颈时)
 
-  // 网络带宽限制 (每节点，2 块双口网卡)
-  NETWORK_BW_100GB: 45.0,            // GB/s per node (100Gb 双口×2 = 4×100Gb)
-  NETWORK_BW_200GB: 90.0,            // GB/s per node (200Gb 双口×2 = 4×200Gb)
+  // 网络带宽限制 (每节点，基于文档参考数据)
+  NETWORK_BW_100GB: 22.5,            // GB/s per node (100Gb×2)
+  NETWORK_BW_200GB: 45.0,            // GB/s per node (200Gb×2)
 };
 
 /**
  * 根据节点数和保护级别确定保护方案
  */
 function getProtectionScheme(nodeCount, protectionLevel = 2) {
-  let D, P;
+  let P;
 
   if (nodeCount >= 100) {
-    D = 8;
     P = 4;
-  } else if (nodeCount >= 18) {
-    D = 8;
-    P = protectionLevel;
-  } else if (nodeCount >= 10) {
-    D = 5;
-    P = protectionLevel;
   } else {
-    D = 3;
-    P = Math.min(protectionLevel, 2);
+    P = Math.min(protectionLevel, nodeCount < 10 ? 2 : protectionLevel);
   }
 
+  // 在满足约束条件下最大化条带宽度：D+P ≤ nodeCount, D+P ≤ 20, D > P
+  const D = Math.min(nodeCount - P, 20 - P);
+
   if (D <= P) {
-    throw new Error(`数据块 (D=${D}) 必须大于校验块 (P=${P})`);
+    throw new Error(`数据块 (D=${D}) 必须大于校验块 (P=${P})，节点数不足`);
   }
 
   const stripeWidth = D + P;
@@ -347,10 +342,10 @@ function formatPlan(config) {
       dataNodeCount: config.nodes,
       hotSpareCount: CONSTANTS.HOT_SPARE,
       cpuModel: 'Intel 5418Y',
-      memory: '32GB',
+      memory: '32GB DDR4 × 12',
       nvmePerNode: config.nvme,
       ssdSize: `${config.ssdSize}TB`,
-      networkType: config.networkType === '100gb' ? '100Gb 双口×2' : '200Gb 双口×2',
+      networkType: config.networkType === '100gb' ? '2×100Gb × 2' : '2×200Gb × 2',
       protectionScheme: config.protection.scheme,
       diskConfig: `每节点 ${config.nvme} × ${config.ssdSize}TB NVMe SSD`
     },

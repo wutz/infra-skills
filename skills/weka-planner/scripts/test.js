@@ -77,34 +77,40 @@ try {
   testsFailed++;
 }
 
-// 测试 3: 保护方案选择
-console.log('\n测试 3: 保护方案选择');
+// 测试 3: 保护方案选择（最大条带宽度策略）
+console.log('\n测试 3: 保护方案选择（最大条带宽度）');
 try {
+  // 6 节点 N+2: D = min(6-2, 20-2) = 4, EC 4+2
   const p1 = getProtectionScheme(6, 2);
-  assert(p1.D === 3 && p1.P === 2, '6 节点 N+2: EC 3+2');
-  assert(p1.stripeWidth === 5, '6 节点条带宽度为 5');
-  assertApprox(p1.efficiency, 3/5, 0.1, '6 节点效率为 60%');
+  assert(p1.D === 4 && p1.P === 2, '6 节点 N+2: EC 4+2（最大条带宽度）');
+  assert(p1.stripeWidth === 6, '6 节点条带宽度为 6');
+  assertApprox(p1.efficiency, 4/6, 0.1, '6 节点效率约 66.7%');
 
+  // 10 节点 N+2: D = min(10-2, 20-2) = 8, EC 8+2
   const p2 = getProtectionScheme(10, 2);
-  assert(p2.D === 5 && p2.P === 2, '10 节点 N+2: EC 5+2');
-  assert(p2.stripeWidth === 7, '10 节点条带宽度为 7');
-  assertApprox(p2.efficiency, 5/7, 0.1, '10 节点效率约 71.4%');
+  assert(p2.D === 8 && p2.P === 2, '10 节点 N+2: EC 8+2（最大条带宽度）');
+  assert(p2.stripeWidth === 10, '10 节点条带宽度为 10');
+  assertApprox(p2.efficiency, 8/10, 0.1, '10 节点效率为 80%');
 
+  // 18 节点 N+2: D = min(18-2, 20-2) = 16, EC 16+2
   const p3 = getProtectionScheme(18, 2);
-  assert(p3.D === 8 && p3.P === 2, '18 节点 N+2: EC 8+2');
-  assert(p3.stripeWidth === 10, '18 节点条带宽度为 10');
-  assertApprox(p3.efficiency, 0.8, 0.1, '18 节点效率为 80%');
+  assert(p3.D === 16 && p3.P === 2, '18 节点 N+2: EC 16+2（最大条带宽度）');
+  assert(p3.stripeWidth === 18, '18 节点条带宽度为 18');
+  assertApprox(p3.efficiency, 16/18, 0.1, '18 节点效率约 88.9%');
 
+  // 100 节点 N+4: D = min(100-4, 20-4) = 16, EC 16+4
   const p4 = getProtectionScheme(100, 2);
-  assert(p4.D === 8 && p4.P === 4, '100 节点推荐 N+4: EC 8+4');
-  assert(p4.stripeWidth === 12, '100 节点条带宽度为 12');
-  assertApprox(p4.efficiency, 8/12, 0.1, '100 节点效率约 66.7%');
+  assert(p4.D === 16 && p4.P === 4, '100 节点 N+4: EC 16+4（最大条带宽度）');
+  assert(p4.stripeWidth === 20, '100 节点条带宽度为 20');
+  assertApprox(p4.efficiency, 16/20, 0.1, '100 节点效率为 80%');
 
+  // 10 节点 N+3: D = min(10-3, 20-3) = 7, EC 7+3
   const p5 = getProtectionScheme(10, 3);
-  assert(p5.D === 5 && p5.P === 3, '10 节点 N+3: EC 5+3');
+  assert(p5.D === 7 && p5.P === 3, '10 节点 N+3: EC 7+3（最大条带宽度）');
 
+  // 6 节点 N+3: P 被限制为 2, D = min(6-2, 20-2) = 4, EC 4+2
   const p6 = getProtectionScheme(6, 3);
-  assert(p6.D === 3 && p6.P === 2, '6 节点 N+3: EC 3+2（P被限制为2）');
+  assert(p6.D === 4 && p6.P === 2, '6 节点 N+3: EC 4+2（P被限制为2）');
 } catch (e) {
   console.error(`✗ 保护方案选择失败: ${e.message}`);
   testsFailed++;
