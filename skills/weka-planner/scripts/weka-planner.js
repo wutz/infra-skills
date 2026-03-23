@@ -7,8 +7,8 @@
 
 // 常量配置
 const CONSTANTS = {
-  MIN_NODES: 6,
-  NVME_OPTIONS: [4, 8, 12],
+  MIN_TOTAL_NODES: 6,          // 最小总节点数（数据节点+热备节点）
+  NVME_OPTIONS: [12],
   SSD_SIZES_TB: [7.68, 15.36],
   TB_TO_TIB: 0.909,
   METADATA_RESERVED: 0.9,          // 10% 元数据和系统保留
@@ -35,12 +35,15 @@ function getProtectionScheme(nodeCount, protectionLevel = 2) {
   if (nodeCount >= 100) {
     D = 8;
     P = 4;
-  } else if (nodeCount >= 10) {
+  } else if (nodeCount >= 18) {
     D = 8;
     P = protectionLevel;
-  } else {
+  } else if (nodeCount >= 10) {
     D = 5;
-    P = Math.min(protectionLevel, 3);
+    P = protectionLevel;
+  } else {
+    D = 3;
+    P = Math.min(protectionLevel, 2);
   }
 
   if (D <= P) {
@@ -91,7 +94,8 @@ function calculatePerformance(nodes, nvme, networkType) {
 function findFeasibleConfigs(capacityTiB, perfRequirements, networkType, protectionLevel) {
   const configs = [];
 
-  for (let nodes = CONSTANTS.MIN_NODES; nodes <= 100; nodes++) {
+  const minDataNodes = CONSTANTS.MIN_TOTAL_NODES - CONSTANTS.HOT_SPARE;
+  for (let nodes = minDataNodes; ; nodes++) {
     const protection = getProtectionScheme(nodes, protectionLevel);
 
     // 保护方案条带宽度不能超过数据节点数
@@ -112,95 +116,76 @@ function findFeasibleConfigs(capacityTiB, perfRequirements, networkType, protect
 
         if (!perfOk) continue;
 
-        configs.push({ nodes, nvme, ssdSize, protection, actualCapacity, performance });
+        const rawCapacity = nodes * nvme * ssdSize * CONSTANTS.TB_TO_TIB;
+        configs.push({ nodes, nvme, ssdSize, protection, actualCapacity, rawCapacity, performance });
       }
     }
-  }
 
-  return configs;
+    // 找到满足需求的最小节点数后停止搜索
+    if (configs.length > 0) return configs;
+  }
 }
 
 /**
- * 从可行配置中选出 2 个代表性方案：
- * 1. 性价比方案（资源最少）
- * 2. 高性能方案（同节点数下最多 NVMe，否则跨节点最高性能）
+ * 从可行配置中选出方案（最小节点数，不同磁盘规格）：
+ * - cost: 推荐（最少节点 + 最小磁盘）
+ * - capacity: 容量升级（同节点数，更大磁盘）
  */
 function selectRepresentativeConfigs(feasible) {
   if (feasible.length === 0) return [];
 
-  // 按资源升序排列
+  // 按资源升序排列：节点数 → NVMe数 → 磁盘大小
   feasible.sort((a, b) =>
     a.nodes !== b.nodes ? a.nodes - b.nodes :
     a.nvme !== b.nvme ? a.nvme - b.nvme :
     a.ssdSize - b.ssdSize
   );
 
-  const costEffective = feasible[0]; // 性价比方案
+  const selected = [];
+  const seen = new Set();
 
-  // 高性能方案：同节点数下 NVMe 翻倍（下一档），否则取整体性能最高的不同配置
-  const sameNodeHighPerf = feasible
-    .filter(c => c.nodes === costEffective.nodes && c.nvme > costEffective.nvme)
-    .sort((a, b) => a.nvme - b.nvme || a.ssdSize - b.ssdSize)[0];
+  function addConfig(config, role) {
+    if (!config) return;
+    const key = `${config.nodes}-${config.nvme}-${config.ssdSize}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    selected.push({ ...config, role });
+  }
 
-  // 跨节点高性能：优先保护方案升级边界（5+P→8+P），否则取不超过2倍节点数的最佳配置
-  const crossNodeHighPerf = feasible
-    .filter(c => c.nodes > costEffective.nodes && c.nodes <= costEffective.nodes * 2)
-    .sort((a, b) => (b.nodes * b.nvme) - (a.nodes * a.nvme) || a.ssdSize - b.ssdSize)[0];
+  // cost: 第一个可行配置（最少节点 + 最小磁盘）
+  const cost = feasible[0];
+  addConfig(cost, 'cost');
 
-  const highPerf = sameNodeHighPerf || crossNodeHighPerf;
+  // capacity: 同节点数，更大磁盘（7.68→15.36）
+  const capacity = feasible.find(c =>
+    c.nodes === cost.nodes && c.nvme === cost.nvme && c.ssdSize > cost.ssdSize
+  );
+  addConfig(capacity, 'capacity');
 
-  if (!highPerf) return [costEffective];
-
-  return [costEffective, highPerf];
+  return selected;
 }
 
 /**
- * 为每个方案生成优缺点说明（2方案：性价比 vs 高性能）
+ * 基于角色生成优缺点说明
  */
-function generateProsAndCons(config, allSelected, capacityTiB) {
+function generateProsAndCons(config, role, capacityTiB) {
   const pros = [];
   const cons = [];
-
-  const isCostEffective = config === allSelected[0];
   const headroomPct = Math.round((config.actualCapacity / capacityTiB - 1) * 100);
 
-  if (allSelected.length === 1) {
-    pros.push('成本最低');
-    pros.push('满足所有容量和性能需求');
-    if (headroomPct < 20) cons.push(`容量余量小（超配${headroomPct}%）`);
-    return { pros, cons };
-  }
+  switch (role) {
+    case 'cost':
+      pros.push('成本最低，初始投入最小');
+      pros.push('运维简单');
+      if (headroomPct < 20) cons.push(`容量余量小（超配${headroomPct}%）`);
+      break;
 
-  const other = isCostEffective ? allSelected[1] : allSelected[0];
-  const hasMultipleSchemes = allSelected.some(c => c.protection.scheme !== config.protection.scheme);
-
-  if (isCostEffective) {
-    // 性价比方案
-    pros.push('成本最低，初始投入最小');
-    pros.push('运维简单');
-    if (headroomPct < 20) cons.push(`容量余量小（超配${headroomPct}%）`);
-    const perfRatio = (other.nodes * other.nvme) / (config.nodes * config.nvme);
-    cons.push(`性能低于高性能方案（约${perfRatio.toFixed(1)}x 差距）`);
-    if (hasMultipleSchemes && config.protection.D < other.protection.D) {
-      cons.push(`存储效率较低（${(config.protection.efficiency * 100).toFixed(1)}%）`);
-    }
-  } else {
-    // 高性能方案
-    const sameNodes = config.nodes === other.nodes;
-    if (sameNodes) {
-      pros.push('机房占用与性价比方案相同');
-      const perfRatio = (config.nodes * config.nvme) / (other.nodes * other.nvme);
-      pros.push(`性能提升约${perfRatio.toFixed(1)}x（${config.nvme}盘/节点）`);
-      cons.push('磁盘更多，成本高于性价比方案');
-    } else {
-      pros.push('并行度高，单节点故障影响小');
-      pros.push(`性能更强（${config.nodes}数据节点 × ${config.nvme}盘）`);
-      cons.push('节点更多，采购和机房成本更高');
-    }
-    if (headroomPct >= 30) pros.push(`容量余量充裕（超配${headroomPct}%）`);
-    if (hasMultipleSchemes && config.protection.D === 8) {
-      pros.push(`存储效率更高（${(config.protection.efficiency * 100).toFixed(1)}%）`);
-    }
+    case 'capacity':
+      pros.push('机房占用与推荐方案相同');
+      pros.push(`容量余量大（超配${headroomPct}%）`);
+      pros.push('存储密度高');
+      cons.push('大盘单价较高');
+      break;
   }
 
   return { pros, cons };
@@ -246,13 +231,13 @@ function planWeka(requirements) {
 
   const feasible = findFeasibleConfigs(capacityTiB, perfRequirements, networkType, protectionLevel);
   if (feasible.length === 0) {
-    throw new Error('无法找到满足所有需求的配置方案（最大支持 100 节点）');
+    throw new Error('无法找到满足所有需求的配置方案');
   }
 
   const selected = selectRepresentativeConfigs(feasible);
 
   return selected.map((config, idx) => {
-    const { pros, cons } = generateProsAndCons(config, selected, capacityTiB);
+    const { pros, cons } = generateProsAndCons(config, config.role, capacityTiB);
     return {
       ...config,
       recommended: idx === 0,
@@ -356,6 +341,7 @@ function formatPlan(config) {
   const totalNodes = config.nodes + CONSTANTS.HOT_SPARE;
   return {
     recommended: config.recommended,
+    role: config.role,
     configuration: {
       nodeCount: totalNodes,
       dataNodeCount: config.nodes,
@@ -370,6 +356,7 @@ function formatPlan(config) {
     },
     capacity: {
       available: formatCapacity(config.actualCapacity, config.capacityUnitPreference),
+      raw: formatCapacity(config.rawCapacity, config.capacityUnitPreference),
       efficiency: `${(config.protection.efficiency * 100).toFixed(1)}%`
     },
     performance: {
@@ -390,6 +377,8 @@ if (require.main === module) {
   if (args.length === 0 || args.includes('--help') || args.includes('-h')) {
     console.log(`
 Weka 高性能文件系统容量和性能规划工具
+
+每节点固定 12 × NVMe SSD（7.68TB 或 15.36TB），最少 6 节点，默认 1 热备节点，无节点上限
 
 用法:
   node weka-planner.js --capacity <容量> [选项]
@@ -455,26 +444,39 @@ Weka 高性能文件系统容量和性能规划工具
       if (requirements.writeIOPS)      console.log(`  - 写 IOPS ≥ ${parseInt(requirements.writeIOPS).toLocaleString()}`);
       console.log();
 
+      // 通用硬件配置（从第一个方案取，所有方案相同）
+      const commonConfig = formatted[0].configuration;
+      console.log('## 通用硬件配置\n');
+      console.log(`| 项目 | 配置 |`);
+      console.log(`| --- | --- |`);
+      console.log(`| CPU | ${commonConfig.cpuModel} |`);
+      console.log(`| 内存 | ${commonConfig.memory} |`);
+      console.log(`| 网络 | ${commonConfig.networkType} |`);
+      console.log(`| 热备节点 | ${commonConfig.hotSpareCount} |`);
+      console.log();
+
       console.log('## 硬件方案对比\n');
 
-      const headers = ['方案', '节点数', '磁盘配置', '保护方案', '可用容量', '读带宽', '写带宽', '读 IOPS', '写 IOPS', '优缺点'];
+      const roleLabels = {
+        cost: '★ 推荐',
+        capacity: '容量升级',
+      };
+
+      const headers = ['方案', '节点数', '磁盘配置', '保护方案', '可用容量', '裸容量', '读带宽', '写带宽', '读 IOPS', '写 IOPS'];
       const rows = formatted.map((plan, idx) => {
         const c = plan.configuration;
-        const label = idx === 0 ? '性价比方案 ★ 推荐' : '高性能方案';
-        const pros = plan.pros.join('；');
-        const cons = plan.cons.join('；');
-        const proscons = pros && cons ? `优：${pros} / 缺：${cons}` : pros ? `优：${pros}` : `缺：${cons}`;
+        const label = `方案${idx + 1} ${roleLabels[plan.role] || ''}`;
         return [
           label,
           `${c.nodeCount}（${c.dataNodeCount}数据+${c.hotSpareCount}热备）`,
           `${c.nvmePerNode} × ${c.ssdSize}`,
-          c.protectionScheme,
+       c.protectionScheme,
           plan.capacity.available,
+          plan.capacity.raw,
           plan.performance.readBandwidth,
           plan.performance.writeBandwidth,
           plan.performance.readIOPS.replace(' IOPS', ''),
-          plan.performance.writeIOPS.replace(' IOPS', ''),
-          proscons
+          plan.performance.writeIOPS.replace(' IOPS', '')
         ];
       });
 
@@ -483,6 +485,16 @@ Weka 高性能文件系统容量和性能规划工具
       console.log('| ' + sep.join(' | ') + ' |');
       rows.forEach(r => console.log('| ' + r.join(' | ') + ' |'));
       console.log();
+
+      // 方案说明独立成节
+      console.log('### 方案说明\n');
+      formatted.forEach((plan, idx) => {
+        const label = `方案${idx + 1} ${roleLabels[plan.role] || ''}`;
+        console.log(`**${label}**`);
+        if (plan.pros.length > 0) console.log(`- 优点：${plan.pros.join('；')}`);
+        if (plan.cons.length > 0) console.log(`- 缺点：${plan.cons.join('；')}`);
+        console.log();
+      });
     }
   } catch (error) {
     console.error(`错误: ${error.message}`);
