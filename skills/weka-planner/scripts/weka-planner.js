@@ -88,6 +88,9 @@ function calculatePerformance(nodes, nvme, networkType) {
  */
 function findFeasibleConfigs(capacityTiB, perfRequirements, networkType, protectionLevel) {
   const configs = [];
+  const smallestSSD = CONSTANTS.SSD_SIZES_TB[0]; // 7.68TB
+  let foundMinNodes = false;
+  let foundSmallDisk = false;
 
   const minDataNodes = CONSTANTS.MIN_TOTAL_NODES - CONSTANTS.HOT_SPARE;
   for (let nodes = minDataNodes; ; nodes++) {
@@ -113,11 +116,14 @@ function findFeasibleConfigs(capacityTiB, perfRequirements, networkType, protect
 
         const rawCapacity = nodes * nvme * ssdSize * CONSTANTS.TB_TO_TIB;
         configs.push({ nodes, nvme, ssdSize, protection, actualCapacity, rawCapacity, performance });
+
+        if (!foundMinNodes) foundMinNodes = true;
+        if (ssdSize === smallestSSD) foundSmallDisk = true;
       }
     }
 
-    // 找到满足需求的最小节点数后停止搜索
-    if (configs.length > 0) return configs;
+    // 找到最小节点数方案后，如果还没找到小盘方案则继续搜索
+    if (foundMinNodes && foundSmallDisk) return configs;
   }
 }
 
@@ -125,6 +131,7 @@ function findFeasibleConfigs(capacityTiB, perfRequirements, networkType, protect
  * 从可行配置中选出方案（最小节点数，不同磁盘规格）：
  * - cost: 推荐（最少节点 + 最小磁盘）
  * - capacity: 容量升级（同节点数，更大磁盘）
+ * - performance: 性能方案（更多节点 + 小盘，更高性能）
  */
 function selectRepresentativeConfigs(feasible) {
   if (feasible.length === 0) return [];
@@ -157,6 +164,13 @@ function selectRepresentativeConfigs(feasible) {
   );
   addConfig(capacity, 'capacity');
 
+  // performance: 更多节点 + 小盘（7.68TB），提供更高性能
+  const smallestSSD = CONSTANTS.SSD_SIZES_TB[0];
+  const performance = feasible.find(c =>
+    c.nodes > cost.nodes && c.ssdSize === smallestSSD
+  );
+  addConfig(performance, 'performance');
+
   return selected;
 }
 
@@ -180,6 +194,13 @@ function generateProsAndCons(config, role, capacityTiB) {
       pros.push(`容量余量大（超配${headroomPct}%）`);
       pros.push('存储密度高');
       cons.push('大盘单价较高');
+      break;
+
+    case 'performance':
+      pros.push('更多节点提供更高读写性能');
+      pros.push('小盘单价低');
+      if (headroomPct > 20) pros.push(`容量余量大（超配${headroomPct}%）`);
+      cons.push('节点数更多，硬件和运维成本增加');
       break;
   }
 
@@ -454,6 +475,7 @@ Weka 高性能文件系统容量和性能规划工具
       const roleLabels = {
         cost: '★ 推荐',
         capacity: '容量升级',
+        performance: '性能升级',
       };
 
       const headers = ['方案', '节点数', '磁盘配置', '保护方案', '可用容量', '裸容量', '读带宽', '写带宽', '读 IOPS', '写 IOPS'];
