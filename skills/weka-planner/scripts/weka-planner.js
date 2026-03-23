@@ -18,7 +18,7 @@ const CONSTANTS = {
   // 性能公式系数
   WRITE_BW_PER_NVME_NODE: 0.6625,    // GB/s
   WRITE_IOPS_PER_NVME_NODE: 27000,
-  READ_IOPS_PER_NVME_NODE: 225000,
+  READ_IOPS_PER_NVME_NODE: 220875,    // 每节点 2,650,500 / 12 NVMe
   READ_BW_PER_NVME_NODE: 4.346,      // GB/s (无网络瓶颈时)
 
   // 网络带宽限制 (每节点，基于文档参考数据)
@@ -447,7 +447,6 @@ Weka 高性能文件系统容量和性能规划工具
       console.log(`| CPU | ${commonConfig.cpuModel} |`);
       console.log(`| 内存 | ${commonConfig.memory} |`);
       console.log(`| 网络 | ${commonConfig.networkType} |`);
-      console.log(`| 热备节点 | ${commonConfig.hotSpareCount} |`);
       console.log();
 
       console.log('## 硬件方案对比\n');
