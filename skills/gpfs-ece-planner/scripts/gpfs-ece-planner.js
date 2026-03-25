@@ -10,7 +10,7 @@ const CONSTANTS = {
   SSDS_PER_SERVER: 24,
   TB_TO_TIB: 0.909,
   METADATA_RESERVED: 0.9,          // 10% 元数据和系统保留
-  SSD_SIZES: [1.92, 3.84, 7.68, 15.36],  // TB，从小到大
+  SSD_SIZES: [7.68, 15.36],  // TB，从小到大
 
   // EC 方案效率
   EC4_2P_EFFICIENCY: 0.6667,       // 4/6
@@ -350,6 +350,33 @@ function planGPFSECE(requirements) {
       actualCapacity,
       performance
     });
+  }
+
+  // 如果没有 ft=2 的方案，为第二个方案生成 ft=2 版本
+  const hasFt2 = allConfigs.some(c => c.faultTolerance === 2);
+
+  if (!requirements.faultTolerance && !hasFt2 && allConfigs.length >= 1) {
+    const firstConfig = allConfigs[0];
+    const ft2MinServers = 10;
+
+    if (firstConfig.serverCount < ft2MinServers) {
+      // 使用相同 SSD 规格，但增加到 10 台以支持 ft=2
+      const ec = getECScheme(ft2MinServers, 2);
+      const actualCapacity = calculateCapacity(ft2MinServers, firstConfig.ssdSize, ec.efficiency);
+      const performance = calculatePerformance(ft2MinServers, networkType, networkMultiplier, bandwidthRatio);
+
+      if (actualCapacity >= capacityTiB) {
+        allConfigs.push({
+          serverCount: ft2MinServers,
+          ssdSize: firstConfig.ssdSize,
+          ecScheme: ec.scheme,
+          ecEfficiency: ec.efficiency,
+          faultTolerance: 2,
+          actualCapacity,
+          performance
+        });
+      }
+    }
   }
 
   // 按台数排序，台数相同按 SSD 大小排序
