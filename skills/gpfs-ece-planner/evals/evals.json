@@ -3,53 +3,92 @@
   "evals": [
     {
       "id": 1,
-      "prompt": "我需要规划一个 GPFS ECE 高性能文件存储，容量需求是 50TiB，帮我计算需要多少台服务器和什么配置。",
-      "expected_output": "返回服务器配置方案，包括服务器台数（3台）、纠删码方案（EC4+2P）、磁盘配置（24×1.92TB NVMe SSD）、可用容量、性能指标等完整信息。"
+      "prompt": "规划 1 PiB GPFS 存储",
+      "expected_output": "应该输出多个方案（不同服务器台数和SSD配置），每个方案包含容量和性能数据，并给出推荐方案",
+      "files": [],
+      "assertions": [
+        {
+          "name": "multiple_solutions",
+          "description": "输出包含多个方案（至少2个）"
+        },
+        {
+          "name": "recommended_marked",
+          "description": "明确标注了推荐方案"
+        },
+        {
+          "name": "capacity_satisfied",
+          "description": "所有方案的可用容量都 >= 1 PiB"
+        },
+        {
+          "name": "performance_included",
+          "description": "每个方案都包含性能指标（读写带宽和IOPS）"
+        },
+        {
+          "name": "config_details",
+          "description": "每个方案都包含服务器台数、纠删码方案、磁盘配置"
+        }
+      ]
     },
     {
       "id": 2,
-      "prompt": "帮我规划 GPFS ECE 存储，需要 500TiB 容量。",
-      "expected_output": "返回服务器配置方案，包括服务器台数（3台）、纠删码方案（EC4+2P）、磁盘配置（24×15.36TB NVMe SSD）、可用容量、性能指标等完整信息。"
+      "prompt": "我需要 500TiB 的 GPFS 存储，要求读带宽至少 150GB/s",
+      "expected_output": "应该输出多个满足容量和性能需求的方案，标注哪些方案满足性能要求，并给出推荐",
+      "files": [],
+      "assertions": [
+        {
+          "name": "multiple_solutions",
+          "description": "输出包含多个方案"
+        },
+        {
+          "name": "capacity_satisfied",
+          "description": "所有方案的可用容量都 >= 500 TiB"
+        },
+        {
+          "name": "performance_satisfied",
+          "description": "所有方案的读带宽都 >= 150 GB/s"
+        },
+        {
+          "name": "recommended_marked",
+          "description": "明确标注了推荐方案"
+        },
+        {
+          "name": "performance_comparison",
+          "description": "可以看到不同方案的性能差异"
+        }
+      ]
     },
     {
       "id": 3,
-      "prompt": "我要部署一个 GPFS ECE 高性能文件存储系统，容量 1PiB，请给出硬件配置建议。",
-      "expected_output": "返回服务器配置方案，包括服务器台数（5台）、纠删码方案（EC8+2P）、磁盘配置（24×15.36TB NVMe SSD）、可用容量、性能指标等完整信息。"
+      "prompt": "规划一个 2PiB 的 GPFS 集群，容错级别 ft=2",
+      "expected_output": "应该输出多个方案（至少10台服务器起），展示容量和性能，给出推荐方案",
+      "files": [],
+      "assertions": [
+        {
+          "name": "multiple_solutions",
+          "description": "输出包含多个方案"
+        },
+        {
+          "name": "capacity_satisfied",
+          "description": "所有方案的可用容量都 >= 2 PiB"
+        },
+        {
+          "name": "min_servers_ft2",
+          "description": "所有方案的服务器台数都 >= 10（ft=2 要求）"
+        },
+        {
+          "name": "recommended_marked",
+          "description": "明确标注了推荐方案"
+        },
+        {
+          "name": "ec_scheme_shown",
+          "description": "显示了纠删码方案（应该是 EC8+2P）"
+        }
+      ]
     },
     {
       "id": 4,
-      "prompt": "规划 GPFS ECE 存储，容量 100TiB，读带宽需要 200GB/s。",
-      "expected_output": "返回服务器配置方案，因读带宽需求增加台数，包括服务器台数（4台）、纠删码方案（EC8+3P）、磁盘配置（24×1.92TB NVMe SSD）、可用容量、性能指标（读带宽满足需求）等完整信息。"
-    },
-    {
-      "id": 5,
-      "prompt": "我需要一个 GPFS ECE 存储，容量 100TiB，写带宽 100GB/s。",
-      "expected_output": "返回服务器配置方案，因写带宽需求增加台数，包括服务器台数（5台）、纠删码方案（EC8+2P）、磁盘配置（24×1.92TB NVMe SSD）、可用容量、性能指标（写带宽满足需求）等完整信息。"
-    },
-    {
-      "id": 6,
-      "prompt": "规划 GPFS ECE 存储，容量 100TiB，容错级别要求 ft=2，能承受 2 台服务器同时离线。",
-      "expected_output": "返回服务器配置方案，因容错要求 ft=2 增加到至少 10 台，包括服务器台数（10台）、纠删码方案（EC8+2P）、磁盘配置（24×1.92TB NVMe SSD）、容错能力（容忍2台离线）等完整信息。"
-    },
-    {
-      "id": 7,
-      "prompt": "我需要一个高可靠的 GPFS ECE 集群，容量 100TiB，要求能容忍 3 台服务器同时故障。",
-      "expected_output": "返回服务器配置方案，因 ft=3 要求至少 11 台且强制 EC8+3P，包括服务器台数（11台）、纠删码方案（EC8+3P）、磁盘配置（24×1.92TB NVMe SSD）、容错能力（容忍3台离线）等完整信息。"
-    },
-    {
-      "id": 8,
-      "prompt": "规划 GPFS ECE 存储，容量 100TiB，使用以太网而不是 RoCE，读带宽需要 200GB/s。",
-      "expected_output": "返回服务器配置方案，因以太网性能降至 30% 需要更多服务器，包括服务器台数（15台）、纠删码方案（EC8+2P）、磁盘配置（24×1.92TB NVMe SSD）等完整信息。"
-    },
-    {
-      "id": 9,
-      "prompt": "规划 GPFS 高性能存储，容量 500TB（十进制单位），帮我算一下配置。",
-      "expected_output": "返回服务器配置方案，正确处理十进制单位（TB），包括服务器台数、纠删码方案、磁盘配置、可用容量（以十进制单位显示）等完整信息。"
-    },
-    {
-      "id": 10,
-      "prompt": "我需要一个 GPFS ECE 存储，容量 100TiB，读 IOPS 需要 100 万。",
-      "expected_output": "返回服务器配置方案，因 IOPS 需求增加台数，包括服务器台数（5台）、纠删码方案（EC8+2P）、磁盘配置（24×1.92TB NVMe SSD）、读 IOPS 满足需求等完整信息。"
+      "prompt": "规划 GPFS 高性能存储，容量 500TB（十进制单位）",
+      "expected_output": "应该输出多个方案，正确处理十进制单位（TB），容量以十进制单位显示，给出推荐"
     }
   ]
 }

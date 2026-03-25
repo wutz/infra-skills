@@ -1,0 +1,27 @@
+{
+  "eval_id": 2,
+  "eval_name": "capacity-with-performance",
+  "prompt": "我需要 500TiB 的 GPFS 存储，要求读带宽至少 150GB/s",
+  "assertions": [
+    {
+      "name": "multiple_solutions",
+      "description": "输出包含多个方案"
+    },
+    {
+      "name": "capacity_satisfied",
+      "description": "所有方案的可用容量都 >= 500 TiB"
+    },
+    {
+      "name": "performance_satisfied",
+      "description": "所有方案的读带宽都 >= 150 GB/s"
+    },
+    {
+      "name": "recommended_marked",
+      "description": "明确标注了推荐方案"
+    },
+    {
+      "name": "performance_comparison",
+      "description": "可以看到不同方案的性能差异"
+    }
+  ]
+}

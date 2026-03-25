@@ -267,7 +267,7 @@ function formatBandwidth(mibps, preferBinary = true) {
 }
 
 /**
- * 主规划函数
+ * 主规划函数 - 生成多个方案
  */
 function planGPFSECE(requirements) {
   const capacityInfo = parseCapacity(requirements.capacity);
@@ -314,8 +314,8 @@ function planGPFSECE(requirements) {
   // 最小容错服务器数
   const minServersForFT = getMinServersForFT(faultTolerance);
 
-  // 对每种 SSD 规格，找最优方案
-  let bestConfig = null;
+  // 收集所有满足需求的方案
+  const allConfigs = [];
 
   for (const ssdSize of CONSTANTS.SSD_SIZES) {
     // 查找满足容量的最小台数
@@ -341,7 +341,7 @@ function planGPFSECE(requirements) {
 
     if (actualCapacity < capacityTiB || !perfSatisfied) continue;
 
-    const config = {
+    allConfigs.push({
       serverCount,
       ssdSize,
       ecScheme: ec.scheme,
@@ -349,22 +349,25 @@ function planGPFSECE(requirements) {
       faultTolerance: ec.tolerance,
       actualCapacity,
       performance
-    };
-
-    // 选择标准：台数最少；台数相同选 SSD 最小
-    if (!bestConfig ||
-        serverCount < bestConfig.serverCount ||
-        (serverCount === bestConfig.serverCount && ssdSize < bestConfig.ssdSize)) {
-      bestConfig = config;
-    }
+    });
   }
+
+  // 按台数排序，台数相同按 SSD 大小排序
+  allConfigs.sort((a, b) => {
+    if (a.serverCount !== b.serverCount) return a.serverCount - b.serverCount;
+    return a.ssdSize - b.ssdSize;
+  });
+
+  // 推荐方案：台数最少的第一个
+  const bestConfig = allConfigs.length > 0 ? allConfigs[0] : null;
 
   if (!bestConfig) {
     throw new Error('无法找到满足所有需求的配置方案');
   }
 
   return {
-    ...bestConfig,
+    allConfigs,
+    bestConfig,
     networkType,
     networkMultiplier,
     networkBandwidth,
@@ -377,26 +380,32 @@ function planGPFSECE(requirements) {
 /**
  * 格式化输出结果
  */
-function formatResult(config) {
-  const result = {
+function formatResult(planResult) {
+  const { allConfigs, bestConfig, capacityUnitPreference, bandwidthUnitPreference } = planResult;
+
+  const solutions = allConfigs.map((config, index) => ({
+    solutionId: index + 1,
+    isRecommended: config === bestConfig,
     configuration: {
       serverCount: config.serverCount,
       ecScheme: config.ecScheme,
       diskConfig: `每台服务器 ${CONSTANTS.SSDS_PER_SERVER} × ${config.ssdSize}TB NVMe SSD`
     },
     capacity: {
-      available: formatCapacity(config.actualCapacity, config.capacityUnitPreference)
+      available: formatCapacity(config.actualCapacity, capacityUnitPreference)
     },
     performance: {
-      readBandwidth: formatBandwidth(config.performance.readBandwidth, config.bandwidthUnitPreference),
-      writeBandwidth: formatBandwidth(config.performance.writeBandwidth, config.bandwidthUnitPreference),
+      readBandwidth: formatBandwidth(config.performance.readBandwidth, bandwidthUnitPreference),
+      writeBandwidth: formatBandwidth(config.performance.writeBandwidth, bandwidthUnitPreference),
       readIOPS: `${Math.floor(config.performance.readIOPS).toLocaleString()} IOPS`,
       writeIOPS: `${Math.floor(config.performance.writeIOPS).toLocaleString()} IOPS`
-    },
-    performanceStatus: '所有性能指标满足需求'
-  };
+    }
+  }));
 
-  return result;
+  return {
+    solutions,
+    recommendedSolution: 1
+  };
 }
 
 // CLI 入口
@@ -474,26 +483,28 @@ GPFS ECE 高性能文件存储规划工具
   }
 
   try {
-    const config = planGPFSECE(requirements);
-    const result = formatResult(config);
+    const planResult = planGPFSECE(requirements);
+    const result = formatResult(planResult);
 
     if (jsonOutput) {
       console.log(JSON.stringify(result, null, 2));
     } else {
       console.log('\n=== GPFS ECE 高性能文件存储规划方案 ===\n');
-      console.log('配置方案:');
-      console.log(`  服务器台数: ${result.configuration.serverCount} 台`);
-      console.log(`  纠删码方案: ${result.configuration.ecScheme}`);
-      console.log(`  磁盘配置: ${result.configuration.diskConfig}`);
-      console.log('\n容量:');
-      console.log(`  可用容量: ${result.capacity.available}`);
-      console.log('\n性能:');
-      console.log(`  读带宽: ${result.performance.readBandwidth}`);
-      console.log(`  写带宽: ${result.performance.writeBandwidth}`);
-      console.log(`  读 IOPS: ${result.performance.readIOPS}`);
-      console.log(`  写 IOPS: ${result.performance.writeIOPS}`);
-      console.log(`\n性能状态: ${result.performanceStatus}`);
-      console.log();
+      console.log(`共找到 ${result.solutions.length} 个满足需求的方案\n`);
+
+      result.solutions.forEach((solution) => {
+        const prefix = solution.isRecommended ? '【推荐】' : '        ';
+        console.log(`${prefix}方案 ${solution.solutionId}:`);
+        console.log(`  服务器台数: ${solution.configuration.serverCount} 台`);
+        console.log(`  纠删码方案: ${solution.configuration.ecScheme}`);
+        console.log(`  磁盘配置: ${solution.configuration.diskConfig}`);
+        console.log(`  可用容量: ${solution.capacity.available}`);
+        console.log(`  读带宽: ${solution.performance.readBandwidth}`);
+        console.log(`  写带宽: ${solution.performance.writeBandwidth}`);
+        console.log(`  读 IOPS: ${solution.performance.readIOPS}`);
+        console.log(`  写 IOPS: ${solution.performance.writeIOPS}`);
+        console.log();
+      });
     }
   } catch (error) {
     console.error(`错误: ${error.message}`);

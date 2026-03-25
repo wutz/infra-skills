@@ -1,0 +1,32 @@
+{
+  "expectations": [
+    {
+      "text": "multiple_solutions",
+      "passed": true,
+      "evidence": "找到 4 个方案"
+    },
+    {
+      "text": "capacity_satisfied",
+      "passed": true,
+      "evidence": "容量: 603.20, 603.17, 542.85, 512.69 TiB"
+    },
+    {
+      "text": "performance_satisfied",
+      "passed": true,
+      "evidence": "读带宽: 159.74, 259.73, 444.06, 750.22 GB/s"
+    },
+    {
+      "text": "recommended_marked",
+      "passed": true,
+      "evidence": "找到推荐标记"
+    },
+    {
+      "text": "performance_comparison",
+      "passed": true,
+      "evidence": "可以对比 4 个方案的性能"
+    }
+  ],
+  "pass_rate": 1.0,
+  "passed": 5,
+  "total": 5
+}

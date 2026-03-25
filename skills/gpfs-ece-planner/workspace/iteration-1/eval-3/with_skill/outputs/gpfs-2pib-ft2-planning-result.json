@@ -1,0 +1,91 @@
+{
+  "requirements": {
+    "capacity": "2 PiB",
+    "faultTolerance": "ft=2",
+    "networkType": "RoCE",
+    "networkBandwidth": "800Gb"
+  },
+  "solutions": [
+    {
+      "solutionId": 1,
+      "isRecommended": true,
+      "configuration": {
+        "serverCount": 10,
+        "ecScheme": "EC8+2P",
+        "diskConfig": "每台服务器 24 × 15.36TB NVMe SSD"
+      },
+      "capacity": {
+        "available": "2.36 PiB"
+      },
+      "performance": {
+        "readBandwidth": "486.89 GB/s",
+        "writeBandwidth": "223.23 GB/s",
+        "readIOPS": "2,250,000 IOPS",
+        "writeIOPS": "2,250,000 IOPS"
+      }
+    },
+    {
+      "solutionId": 2,
+      "isRecommended": false,
+      "configuration": {
+        "serverCount": 17,
+        "ecScheme": "EC8+2P",
+        "diskConfig": "每台服务器 24 × 7.68TB NVMe SSD"
+      },
+      "capacity": {
+        "available": "2.00 PiB"
+      },
+      "performance": {
+        "readBandwidth": "750.22 GB/s",
+        "writeBandwidth": "379.49 GB/s",
+        "readIOPS": "3,825,000 IOPS",
+        "writeIOPS": "3,825,000 IOPS"
+      }
+    },
+    {
+      "solutionId": 3,
+      "isRecommended": false,
+      "configuration": {
+        "serverCount": 34,
+        "ecScheme": "EC8+2P",
+        "diskConfig": "每台服务器 24 × 3.84TB NVMe SSD"
+      },
+      "capacity": {
+        "available": "2.00 PiB"
+      },
+      "performance": {
+        "readBandwidth": "1323.01 GB/s",
+        "writeBandwidth": "758.99 GB/s",
+        "readIOPS": "7,650,000 IOPS",
+        "writeIOPS": "7,650,000 IOPS"
+      }
+    },
+    {
+      "solutionId": 4,
+      "isRecommended": false,
+      "configuration": {
+        "serverCount": 68,
+        "ecScheme": "EC8+2P",
+        "diskConfig": "每台服务器 24 × 1.92TB NVMe SSD"
+      },
+      "capacity": {
+        "available": "2.00 PiB"
+      },
+      "performance": {
+        "readBandwidth": "2646.02 GB/s",
+        "writeBandwidth": "1517.98 GB/s",
+        "readIOPS": "15,300,000 IOPS",
+        "writeIOPS": "15,300,000 IOPS"
+      }
+    }
+  ],
+  "recommendedSolution": 1,
+  "hardwarePerServer": {
+    "processor": "2 颗 Intel Xeon 6530",
+    "memory": "16 根 32GB DDR5 4800（共 512GB）",
+    "systemDisk": "2 块 480GB SATA SSD 做 RAID1",
+    "storageNetwork": "2 块双口 200Gb RoCE NIC（共 800Gb）",
+    "managementNetwork": "1 块双口 25Gb 以太网卡",
+    "dataDisk": "根据方案选择相应数量和规格的 NVMe SSD"
+  }
+}

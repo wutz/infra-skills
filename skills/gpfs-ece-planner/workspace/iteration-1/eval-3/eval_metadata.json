@@ -1,0 +1,27 @@
+{
+  "eval_id": 3,
+  "eval_name": "high-availability-ft2",
+  "prompt": "规划一个 2PiB 的 GPFS 集群，容错级别 ft=2",
+  "assertions": [
+    {
+      "name": "multiple_solutions",
+      "description": "输出包含多个方案"
+    },
+    {
+      "name": "capacity_satisfied",
+      "description": "所有方案的可用容量都 >= 2 PiB"
+    },
+    {
+      "name": "min_servers_ft2",
+      "description": "所有方案的服务器台数都 >= 10（ft=2 要求）"
+    },
+    {
+      "name": "recommended_marked",
+      "description": "明确标注了推荐方案"
+    },
+    {
+      "name": "ec_scheme_shown",
+      "description": "显示了纠删码方案（应该是 EC8+2P）"
+    }
+  ]
+}

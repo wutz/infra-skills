@@ -1,0 +1,32 @@
+{
+  "expectations": [
+    {
+      "text": "multiple_solutions",
+      "passed": true,
+      "evidence": "找到 4 个方案"
+    },
+    {
+      "text": "recommended_marked",
+      "passed": true,
+      "evidence": "找到推荐标记"
+    },
+    {
+      "text": "capacity_satisfied",
+      "passed": true,
+      "evidence": "容量: 1.18, 1.06, 1.00, 1.00 PiB"
+    },
+    {
+      "text": "performance_included",
+      "passed": true,
+      "evidence": "包含完整性能指标"
+    },
+    {
+      "text": "config_details",
+      "passed": true,
+      "evidence": "包含完整配置信息"
+    }
+  ],
+  "pass_rate": 1.0,
+  "passed": 5,
+  "total": 5
+}

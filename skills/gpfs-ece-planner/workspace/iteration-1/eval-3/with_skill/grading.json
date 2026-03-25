@@ -1,0 +1,32 @@
+{
+  "expectations": [
+    {
+      "text": "multiple_solutions",
+      "passed": false,
+      "evidence": "找到 0 个方案"
+    },
+    {
+      "text": "capacity_satisfied",
+      "passed": true,
+      "evidence": "容量:  PiB"
+    },
+    {
+      "text": "min_servers_ft2",
+      "passed": true,
+      "evidence": "服务器台数: "
+    },
+    {
+      "text": "recommended_marked",
+      "passed": true,
+      "evidence": "找到推荐标记"
+    },
+    {
+      "text": "ec_scheme_shown",
+      "passed": true,
+      "evidence": "显示 EC8+2P"
+    }
+  ],
+  "pass_rate": 0.8,
+  "passed": 4,
+  "total": 5
+}
