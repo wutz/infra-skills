@@ -352,30 +352,37 @@ function planGPFSECE(requirements) {
     });
   }
 
-  // 如果没有 ft=2 的方案，为第二个方案生成 ft=2 版本
+  // 如果没有 ft=2 的方案，生成一个 ft=2 方案
   const hasFt2 = allConfigs.some(c => c.faultTolerance === 2);
 
   if (!requirements.faultTolerance && !hasFt2 && allConfigs.length >= 1) {
     const firstConfig = allConfigs[0];
     const ft2MinServers = 10;
 
-    if (firstConfig.serverCount < ft2MinServers) {
-      // 使用相同 SSD 规格，但增加到 10 台以支持 ft=2
-      const ec = getECScheme(ft2MinServers, 2);
-      const actualCapacity = calculateCapacity(ft2MinServers, firstConfig.ssdSize, ec.efficiency);
-      const performance = calculatePerformance(ft2MinServers, networkType, networkMultiplier, bandwidthRatio);
+    // 尝试生成一个接近需求的 ft=2 方案（6-10台之间）
+    let bestFt2Config = null;
+
+    for (let servers = Math.max(6, firstConfig.serverCount); servers <= ft2MinServers; servers++) {
+      const ec = getECScheme(servers, 2);
+      const actualCapacity = calculateCapacity(servers, firstConfig.ssdSize, ec.efficiency);
+      const performance = calculatePerformance(servers, networkType, networkMultiplier, bandwidthRatio);
 
       if (actualCapacity >= capacityTiB) {
-        allConfigs.push({
-          serverCount: ft2MinServers,
+        bestFt2Config = {
+          serverCount: servers,
           ssdSize: firstConfig.ssdSize,
           ecScheme: ec.scheme,
           ecEfficiency: ec.efficiency,
           faultTolerance: 2,
           actualCapacity,
           performance
-        });
+        };
+        break;
       }
+    }
+
+    if (bestFt2Config) {
+      allConfigs.push(bestFt2Config);
     }
   }
 
@@ -385,15 +392,34 @@ function planGPFSECE(requirements) {
     return a.ssdSize - b.ssdSize;
   });
 
+  // 去重：合并相同配置的方案（台数、SSD、EC相同），保留容错级别更高的
+  const uniqueConfigs = [];
+  for (const config of allConfigs) {
+    const existing = uniqueConfigs.find(c =>
+      c.serverCount === config.serverCount &&
+      c.ssdSize === config.ssdSize &&
+      c.ecScheme === config.ecScheme
+    );
+
+    if (existing) {
+      // 保留容错级别更高的
+      if (config.faultTolerance > existing.faultTolerance) {
+        Object.assign(existing, config);
+      }
+    } else {
+      uniqueConfigs.push(config);
+    }
+  }
+
   // 推荐方案：台数最少的第一个
-  const bestConfig = allConfigs.length > 0 ? allConfigs[0] : null;
+  const bestConfig = uniqueConfigs.length > 0 ? uniqueConfigs[0] : null;
 
   if (!bestConfig) {
     throw new Error('无法找到满足所有需求的配置方案');
   }
 
   return {
-    allConfigs,
+    allConfigs: uniqueConfigs,
     bestConfig,
     networkType,
     networkMultiplier,
@@ -407,14 +433,25 @@ function planGPFSECE(requirements) {
 /**
  * 生成方案特点
  */
-function generateCharacteristics(config, allConfigs) {
+function generateCharacteristics(config, allConfigs, index) {
   const chars = [];
-  const isFirst = config === allConfigs[0];
-  const isLast = config === allConfigs[allConfigs.length - 1];
+  const isFirst = index === 0;
+  const isLast = index === allConfigs.length - 1;
 
-  if (isFirst) chars.push('最少服务器台数，初期投资最低');
-  if (isLast && allConfigs.length > 1) chars.push('最高性能');
-  if (!isFirst && !isLast) chars.push('性能与成本平衡');
+  // 判断是否为容量型（同台数但更大SSD）
+  const isCapacityOriented = index > 0 &&
+    config.serverCount === allConfigs[index - 1].serverCount &&
+    config.ssdSize > allConfigs[index - 1].ssdSize;
+
+  if (isFirst) {
+    chars.push('最少服务器台数，初期投资最低');
+  } else if (isCapacityOriented) {
+    chars.push('容量型，提供更大存储空间');
+  } else if (isLast && allConfigs.length > 1) {
+    chars.push('最高性能');
+  } else {
+    chars.push('性能与成本平衡');
+  }
 
   if (config.faultTolerance === 2) chars.push('容忍2台服务器离线');
   else if (config.faultTolerance === 3) chars.push('容忍3台服务器离线');
@@ -446,7 +483,7 @@ function formatResult(planResult) {
       readIOPS: `${Math.floor(config.performance.readIOPS).toLocaleString()} IOPS`,
       writeIOPS: `${Math.floor(config.performance.writeIOPS).toLocaleString()} IOPS`
     },
-    characteristics: generateCharacteristics(config, allConfigs)
+    characteristics: generateCharacteristics(config, allConfigs, index)
   }));
 
   return {
