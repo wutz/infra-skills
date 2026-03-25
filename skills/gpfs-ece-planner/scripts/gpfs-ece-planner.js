@@ -405,6 +405,25 @@ function planGPFSECE(requirements) {
 }
 
 /**
+ * 生成方案特点
+ */
+function generateCharacteristics(config, allConfigs) {
+  const chars = [];
+  const isFirst = config === allConfigs[0];
+  const isLast = config === allConfigs[allConfigs.length - 1];
+
+  if (isFirst) chars.push('最少服务器台数，初期投资最低');
+  if (isLast && allConfigs.length > 1) chars.push('最高性能');
+  if (!isFirst && !isLast) chars.push('性能与成本平衡');
+
+  if (config.faultTolerance === 2) chars.push('容忍2台服务器离线');
+  else if (config.faultTolerance === 3) chars.push('容忍3台服务器离线');
+  else chars.push('容忍1台服务器离线');
+
+  return chars.join('；');
+}
+
+/**
  * 格式化输出结果
  */
 function formatResult(planResult) {
@@ -426,7 +445,8 @@ function formatResult(planResult) {
       writeBandwidth: formatBandwidth(config.performance.writeBandwidth, bandwidthUnitPreference),
       readIOPS: `${Math.floor(config.performance.readIOPS).toLocaleString()} IOPS`,
       writeIOPS: `${Math.floor(config.performance.writeIOPS).toLocaleString()} IOPS`
-    }
+    },
+    characteristics: generateCharacteristics(config, allConfigs)
   }));
 
   return {
