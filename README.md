@@ -10,6 +10,7 @@
 
 | 技能 | 描述 |
 |------|------|
+| [`storage-planner-router`](./skills/storage-planner-router) | 存储规划路由器，根据需求提供方案对比并调用相应规划技能 |
 | [`xsky-xeos-planner`](./skills/xsky-xeos-planner) | XSKY XEOS 对象存储容量和性能规划 |
 | [`gpfs-ece-planner`](./skills/gpfs-ece-planner) | GPFS ECE 高性能文件存储容量和性能规划 |
 | [`vastdata-planner`](./skills/vastdata-planner) | VastData 全闪存储容量和性能规划 |
