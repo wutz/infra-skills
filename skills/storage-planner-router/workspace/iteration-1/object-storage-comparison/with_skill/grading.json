@@ -1,0 +1,37 @@
+{
+  "eval_id": 2,
+  "eval_name": "object-storage-comparison",
+  "prompt": "我们需要建设一个对象存储系统，容量需求 500TB，主要用于存储训练数据集和模型文件。希望看看 XSKY XEOS 和 Vastdata S3 两个方案的对比，哪个更合适？",
+  "expectations": [
+    {
+      "text": "展示了对象存储方案对比表格",
+      "passed": true,
+      "evidence": "包含完整的方案对比总结表格，对比了服务器数、容量、介质、性能等关键指标"
+    },
+    {
+      "text": "同时调用了 xsky-xeos-planner 和 vastdata-planner",
+      "passed": true,
+      "evidence": "输出包含两个方案的详细配置，XSKY XEOS（3台服务器）和 Vastdata S3（11个EBox）"
+    },
+    {
+      "text": "输出包含两个方案的汇总对比表格",
+      "passed": true,
+      "evidence": "方案对比总结表格清晰展示了所有关键指标的对比"
+    },
+    {
+      "text": "XSKY XEOS 方案的详细规划完整呈现",
+      "passed": true,
+      "evidence": "包含配置方案、服务器配置、容量、性能、优劣势分析"
+    },
+    {
+      "text": "Vastdata 方案的详细规划完整呈现",
+      "passed": true,
+      "evidence": "包含EBox配置、容量、性能、优劣势分析"
+    },
+    {
+      "text": "两个方案的容量都 >= 500TB",
+      "passed": true,
+      "evidence": "XSKY XEOS: 518.43 TB, Vastdata S3: 982.67 TB"
+    }
+  ]
+}

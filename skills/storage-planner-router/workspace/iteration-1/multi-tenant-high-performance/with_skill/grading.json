@@ -1,0 +1,42 @@
+{
+  "eval_id": 3,
+  "eval_name": "multi-tenant-high-performance",
+  "prompt": "我们要建设一个多租户的高性能存储平台，需要 1PB 容量，支持 QoS，读带宽 150GB/s，写带宽 50GB/s。请帮我对比 Vastdata 和 Weka 两个方案。",
+  "expectations": [
+    {
+      "text": "展示了文件系统方案对比表格",
+      "passed": true,
+      "evidence": "包含完整的综合对比分析表格，对比了性能、容量等关键指标"
+    },
+    {
+      "text": "识别出多租户和 QoS 需求",
+      "passed": true,
+      "evidence": "需求概述中明确列出多租户支持和QoS保障，并有专门的'多租户与QoS支持'章节详细说明"
+    },
+    {
+      "text": "同时调用了 vastdata-planner 和 weka-planner",
+      "passed": true,
+      "evidence": "输出包含VastData（EBox和CNode+DBox）和Weka（方案1和方案2）的详细规划"
+    },
+    {
+      "text": "输出包含两个方案的汇总对比表格",
+      "passed": true,
+      "evidence": "综合对比分析表格清晰展示了所有方案的性能指标对比"
+    },
+    {
+      "text": "两个方案的容量都 >= 1PB",
+      "passed": true,
+      "evidence": "VastData EBox: 2.06 PB, VastData CNode+DBox: 8.17 PB, Weka方案1: 1.16 PB, Weka方案2: 1.08 PB"
+    },
+    {
+      "text": "两个方案的读带宽都 >= 150GB/s",
+      "passed": true,
+      "evidence": "VastData EBox: 420 GB/s, VastData CNode+DBox: 406 GB/s, Weka方案1: 450 GB/s, Weka方案2: 720 GB/s"
+    },
+    {
+      "text": "两个方案的写带宽都 >= 50GB/s",
+      "passed": true,
+      "evidence": "VastData: 52 GB/s持续写, Weka方案1: 79.50 GB/s, Weka方案2: 127.20 GB/s"
+    }
+  ]
+}

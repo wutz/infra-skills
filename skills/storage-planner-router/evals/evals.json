@@ -1,0 +1,50 @@
+{
+  "skill_name": "storage-planner-router",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "我需要为 AI 训练集群规划存储，需要 2PB 可用容量，读带宽至少 100GB/s，写带宽至少 30GB/s。我们是单租户环境，预算有限，但对性能要求比较高。",
+      "expected_output": "展示文件系统方案对比，推荐 GPFS ECE（预算有限+单租户），调用 gpfs-ece-planner 生成详细规划",
+      "files": [],
+      "assertions": [
+        {"text": "展示了文件系统方案对比表格"},
+        {"text": "识别出单租户和预算有限的需求特征"},
+        {"text": "推荐了 GPFS ECE 方案"},
+        {"text": "调用了 gpfs-ece-planner 子技能"},
+        {"text": "输出包含详细的硬件配置"},
+        {"text": "可用容量 >= 2PB"},
+        {"text": "读带宽 >= 100GB/s"},
+        {"text": "写带宽 >= 30GB/s"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "我们需要建设一个对象存储系统，容量需求 500TB，主要用于存储训练数据集和模型文件。希望看看 XSKY XEOS 和 Vastdata S3 两个方案的对比，哪个更合适？",
+      "expected_output": "展示对象存储方案对比，并行调用 xsky-xeos-planner 和 vastdata-planner，汇总对比表格",
+      "files": [],
+      "assertions": [
+        {"text": "展示了对象存储方案对比表格"},
+        {"text": "同时调用了 xsky-xeos-planner 和 vastdata-planner"},
+        {"text": "输出包含两个方案的汇总对比表格"},
+        {"text": "XSKY XEOS 方案的详细规划完整呈现"},
+        {"text": "Vastdata 方案的详细规划完整呈现"},
+        {"text": "两个方案的容量都 >= 500TB"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "我们要建设一个多租户的高性能存储平台，需要 1PB 容量，支持 QoS，读带宽 150GB/s，写带宽 50GB/s。请帮我对比 Vastdata 和 Weka 两个方案。",
+      "expected_output": "展示文件系统方案对比，并行调用 vastdata-planner 和 weka-planner，汇总对比表格",
+      "files": [],
+      "assertions": [
+        {"text": "展示了文件系统方案对比表格"},
+        {"text": "识别出多租户和 QoS 需求"},
+        {"text": "同时调用了 vastdata-planner 和 weka-planner"},
+        {"text": "输出包含两个方案的汇总对比表格"},
+        {"text": "两个方案的容量都 >= 1PB"},
+        {"text": "两个方案的读带宽都 >= 150GB/s"},
+        {"text": "两个方案的写带宽都 >= 50GB/s"}
+      ]
+    }
+  ]
+}

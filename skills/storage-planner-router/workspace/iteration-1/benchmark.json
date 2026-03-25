@@ -1,0 +1,96 @@
+{
+  "skill_name": "storage-planner-router",
+  "iteration": 1,
+  "timestamp": "2026-03-25T03:09:00Z",
+  "configurations": [
+    {
+      "name": "with_skill",
+      "description": "使用 storage-planner-router 技能"
+    },
+    {
+      "name": "without_skill",
+      "description": "不使用任何技能（baseline）"
+    }
+  ],
+  "results": [
+    {
+      "eval_id": 1,
+      "eval_name": "ai-training-single-tenant",
+      "prompt": "我需要为 AI 训练集群规划存储，需要 2PB 可用容量，读带宽至少 100GB/s，写带宽至少 30GB/s。我们是单租户环境，预算有限，但对性能要求比较高。",
+      "configurations": {
+        "with_skill": {
+          "pass_rate": 0.875,
+          "passed": 7,
+          "total": 8,
+          "tokens": 19634,
+          "duration_s": 59.5
+        },
+        "without_skill": {
+          "pass_rate": null,
+          "passed": null,
+          "total": null,
+          "tokens": 18199,
+          "duration_s": 312.6
+        }
+      }
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "object-storage-comparison",
+      "prompt": "我们需要建设一个对象存储系统，容量需求 500TB，主要用于存储训练数据集和模型文件。希望看看 XSKY XEOS 和 Vastdata S3 两个方案的对比，哪个更合适？",
+      "configurations": {
+        "with_skill": {
+          "pass_rate": 1.0,
+          "passed": 6,
+          "total": 6,
+          "tokens": 21856,
+          "duration_s": 88.2
+        },
+        "without_skill": {
+          "pass_rate": null,
+          "passed": null,
+          "total": null,
+          "tokens": 16563,
+          "duration_s": 35.4
+        }
+      }
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "multi-tenant-high-performance",
+      "prompt": "我们要建设一个多租户的高性能存储平台，需要 1PB 容量，支持 QoS，读带宽 150GB/s，写带宽 50GB/s。请帮我对比 Vastdata 和 Weka 两个方案。",
+      "configurations": {
+        "with_skill": {
+          "pass_rate": 1.0,
+          "passed": 7,
+          "total": 7,
+          "tokens": 18015,
+          "duration_s": 108.1
+        },
+        "without_skill": {
+          "pass_rate": null,
+          "passed": null,
+          "total": null,
+          "tokens": 16885,
+          "duration_s": 58.9
+        }
+      }
+    }
+  ],
+  "summary": {
+    "with_skill": {
+      "avg_pass_rate": 0.958,
+      "total_passed": 20,
+      "total_assertions": 21,
+      "avg_tokens": 19835,
+      "avg_duration_s": 85.3
+    },
+    "without_skill": {
+      "avg_pass_rate": null,
+      "total_passed": null,
+      "total_assertions": null,
+      "avg_tokens": 17216,
+      "avg_duration_s": 135.6
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "eval_id": 1,
+  "eval_name": "ai-training-single-tenant",
+  "prompt": "我需要为 AI 训练集群规划存储，需要 2PB 可用容量，读带宽至少 100GB/s，写带宽至少 30GB/s。我们是单租户环境，预算有限，但对性能要求比较高。",
+  "expectations": [
+    {
+      "text": "展示了文件系统方案对比表格",
+      "passed": false,
+      "evidence": "输出中没有展示方案对比表格，直接推荐了 GPFS ECE"
+    },
+    {
+      "text": "识别出单租户和预算有限的需求特征",
+      "passed": true,
+      "evidence": "需求概述中明确提到'单租户环境，预算有限'，选择理由中也强调了这些特点"
+    },
+    {
+      "text": "推荐了 GPFS ECE 方案",
+      "passed": true,
+      "evidence": "方案选择部分明确推荐 GPFS ECE"
+    },
+    {
+      "text": "调用了 gpfs-ece-planner 子技能",
+      "passed": true,
+      "evidence": "输出包含完整的 GPFS ECE 规划方案，包括服务器配置、容量、性能等详细信息"
+    },
+    {
+      "text": "输出包含详细的硬件配置",
+      "passed": true,
+      "evidence": "包含处理器、内存、系统盘、网络、数据盘等完整配置"
+    },
+    {
+      "text": "可用容量 >= 2PB",
+      "passed": true,
+      "evidence": "可用容量: 2.12 PB"
+    },
+    {
+      "text": "读带宽 >= 100GB/s",
+      "passed": true,
+      "evidence": "读带宽: 399.93 GB/s"
+    },
+    {
+      "text": "写带宽 >= 30GB/s",
+      "passed": true,
+      "evidence": "写带宽: 178.59 GB/s"
+    }
+  ]
+}
