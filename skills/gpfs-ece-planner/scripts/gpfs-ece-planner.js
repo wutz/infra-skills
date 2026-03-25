@@ -359,10 +359,10 @@ function planGPFSECE(requirements) {
     const firstConfig = allConfigs[0];
     const ft2MinServers = 10;
 
-    // 尝试生成一个接近需求的 ft=2 方案（6-10台之间）
+    // 尝试生成一个接近需求的 ft=2 方案（必须 >= 10台）
     let bestFt2Config = null;
 
-    for (let servers = Math.max(6, firstConfig.serverCount); servers <= ft2MinServers; servers++) {
+    for (let servers = ft2MinServers; servers <= 200; servers++) {
       const ec = getECScheme(servers, 2);
       const actualCapacity = calculateCapacity(servers, firstConfig.ssdSize, ec.efficiency);
       const performance = calculatePerformance(servers, networkType, networkMultiplier, bandwidthRatio);
@@ -373,7 +373,7 @@ function planGPFSECE(requirements) {
           ssdSize: firstConfig.ssdSize,
           ecScheme: ec.scheme,
           ecEfficiency: ec.efficiency,
-          faultTolerance: 2,
+          faultTolerance: ec.tolerance,
           actualCapacity,
           performance
         };
