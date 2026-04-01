@@ -41,7 +41,8 @@ description: 存储规划路由器，根据用户需求（文件系统/对象存
 | 方案 | 优点 | 缺点 | 适用场景 |
 |------|------|------|----------|
 | **Vastdata Block** | 高性能，原厂技术支持 | 当前版本还未支持 QoS，软件存储一些 Bug | 高性能块存储需求，可接受新产品 |
-| **Ceph RBD** | 高性能，无软件授权费用，支持 QoS，稳定性还可以 | 缺乏技术支持 | 预算有限，有自维护能力 |
+
+**不推荐**：Ceph RBD 规划工具制作中，暂不可用
 
 ## 使用步骤
 
@@ -75,6 +76,8 @@ description: 存储规划路由器，根据用户需求（文件系统/对象存
 - **Weka** → `infra-skills:weka-planner`
 - **Vastdata**（文件/对象/块） → `infra-skills:vastdata-planner`
 - **XSKY XEOS** → `infra-skills:xsky-xeos-planner`
+
+**重要**：如果用户明确要求规划 Ceph RBD 或 Ceph RGW，直接拒绝并说明规划工具制作中暂不可用，推荐使用 Vastdata 替代方案。
 
 传递用户的容量和性能需求给子技能。
 
