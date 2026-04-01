@@ -16,7 +16,9 @@
       "skills": [
         "./skills/xsky-xeos-planner",
         "./skills/gpfs-ece-planner",
-        "./skills/vastdata-planner"
+        "./skills/vastdata-planner",
+        "./skills/weka-planner",
+        "./skills/storage-planner-router"
       ]
     }
   ]
