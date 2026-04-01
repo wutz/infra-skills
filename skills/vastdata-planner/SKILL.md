@@ -1,11 +1,22 @@
 ---
 name: vastdata-planner
-description: 规划 VastData 全闪存储的容量和性能。当用户提到 VastData、VAST、EBox、CNode、DBox、全闪存储、NVMe 对象存储、VAST Data、VastData 容量规划、VastData 性能规划时使用此 skill。即使用户没有明确说"规划"或"计算"，只要涉及 VastData 存储容量或性能相关的问题都应该触发此 skill。
+description: 规划 VastData 统一存储平台的容量和性能。VastData 是统一存储平台，同时支持文件系统（NFS/SMB）、对象存储（S3）和块存储（iSCSI/NVMe-oF）协议。当用户提到 VastData、VAST、EBox、CNode、DBox、全闪存储、NVMe 存储、高性能文件系统、对象存储、块存储、VAST Data、VastData 容量规划、VastData 性能规划时使用此 skill。即使用户没有明确说"规划"或"计算"，只要涉及 VastData 存储容量或性能相关的问题都应该触发此 skill。
 ---
 
-# VastData 全闪存储规划工具
+# VastData 统一存储平台规划工具
 
-帮助用户根据容量和性能需求，规划 VastData 全闪存储部署方案。VastData 有两条产品线：
+帮助用户根据容量和性能需求，规划 VastData 统一存储平台部署方案。
+
+## VastData 平台特性
+
+VastData 是**统一存储平台**，单一系统同时支持：
+- **文件存储**：NFS、SMB/CIFS、NFS over RDMA
+- **对象存储**：S3 协议（原生 S3 API）
+- **块存储**：iSCSI、NVMe-oF
+
+## 产品线
+
+VastData 有两条产品线：
 
 1. **EBox**（新款全闪）：纯 NVMe SSD，从 11-250 个 EBox 线性扩展
 2. **CNode + DBox**（算力+存储分离）：计算节点（CNode）+ 存储节点（DBox）预定义配置组合
@@ -127,6 +138,15 @@ node scripts/vastdata-planner.js --capacity "500TB" [--read-bw 200] [--write-bw 
 
 ## 重要说明
 
+### 协议支持
+
+VastData 统一存储平台在同一系统上同时支持：
+- **文件协议**：NFS v3/v4、SMB 2.x/3.x、NFS over RDMA（高性能场景）
+- **对象协议**：S3 API（原生支持，非网关转换）
+- **块协议**：iSCSI、NVMe-oF（NVMe over Fabrics）
+
+所有协议共享同一存储池，无需单独规划容量。
+
 ### EBox 硬件方案特点
 
 - **线性扩展**：从 11 到 250 个 EBox，容量和性能线性增长
@@ -134,13 +154,15 @@ node scripts/vastdata-planner.js --capacity "500TB" [--read-bw 200] [--write-bw 
 - **三种磁盘规格**：15.36TB、30.72TB、61.44TB，容量不同但性能相同
 - **最小配置**：11 个 EBox
 - **最大配置**：250 个 EBox
+- **统一协议**：同一集群同时提供文件、对象、块存储服务
 
 ### CNode+DBox 硬件方案特点
 
 - **预定义配置**：固定的 CNode 和 DBox 组合，不支持自定义
-- **算力存储分离**：CNode 负责计算，DBox 负责存储
+- **算力存储分离**：CNode 负责计算和协议处理，DBox 负责存储
 - **多种配置**：从小容量（245TB）到大容量（10PB+）
 - **灵活选择**：根据容量和性能需求选择最合适的预定义配置
+- **统一协议**：同一集群同时提供文件、对象、块存储服务
 
 ## 参考文档
 
