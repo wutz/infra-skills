@@ -103,12 +103,13 @@ function printEboxResults(requirements, diskFilter) {
     : EBOX_VARIANTS;
 
   console.log('\n## EBox 硬件方案（全闪 NVMe）\n');
-  console.log('最小 EBox 数：11，最大：250，性能线性扩展\n');
+  console.log('最小 EBox 数：11，性能线性扩展\n');
 
   const hasReqs = requirements.capacity || requirements.readBw || requirements.writeBw ||
     requirements.readIops || requirements.writeIops;
 
   if (hasReqs) {
+    const results = [];
     console.log('| 配置 | EBox数 | 可用容量 | 裸容量 | 读带宽 | 持续写带宽 | 峰值写带宽 | 读 IOPS | 写 IOPS |');
     console.log('|-----|-------|--------|-------|-------|---------|---------|--------|--------|');
     for (const variant of variants) {
@@ -117,10 +118,18 @@ function printEboxResults(requirements, diskFilter) {
         console.log(`| ${variant.label} | ❌ 超出 250 EBox | - | - | - | - | - | - | - |`);
       } else {
         const { entry, perf } = result;
+        results.push({ variant, entry, perf });
         console.log(`| ${variant.label} | ${entry.ebox_count} | ${formatCapacity(entry.usable_tb)} | ${formatCapacity(entry.ebox_count * entry.raw_per_ebox_tb)} | ${+perf.read_bw_gbs.toFixed(1)} GB/s | ${+perf.sustained_write_bw_gbs.toFixed(1)} GB/s | ${+perf.burst_write_bw_gbs.toFixed(1)} GB/s | ${perf.read_iops_k}K | ${perf.write_iops_k}K |`);
       }
     }
     console.log();
+
+    if (results.length > 0) {
+      const recommended = results.reduce((best, curr) =>
+        curr.entry.ebox_count < best.entry.ebox_count ? curr : best
+      );
+      console.log(`**推荐方案**：${recommended.variant.label}，${recommended.entry.ebox_count} 个 EBox（最小满足需求的配置）\n`);
+    }
   } else {
     // Show typical configs per variant as markdown tables
     const sample = [11, 22, 44, 88, 176, 250];
@@ -210,7 +219,18 @@ function printCboxResults(requirements, cnodeDiskKey) {
       return;
     }
     console.log('每种磁盘规格的最小满足需求配置：\n');
-    printCnodeTable([...diskGroups.values()]);
+    const selectedConfigs = [...diskGroups.values()];
+    printCnodeTable(selectedConfigs);
+
+    if (selectedConfigs.length > 0) {
+      const recommended = selectedConfigs.reduce((best, curr) => {
+        const bestTotal = best.cnode_count + best.dbox_count;
+        const currTotal = curr.cnode_count + curr.dbox_count;
+        return currTotal < bestTotal ? curr : best;
+      });
+      const label = `${recommended.cnode_count} CNode (${recommended.cnode_model}) + ${recommended.dbox_count} DBox (${recommended.dbox_model}, ${recommended.disk_tb}TB NVMe)`;
+      console.log(`**推荐方案**：${label}（最小硬件数量配置）\n`);
+    }
   } else {
     printCnodeTable(allConfigs);
   }

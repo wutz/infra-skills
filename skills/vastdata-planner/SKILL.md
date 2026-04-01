@@ -114,13 +114,15 @@ node scripts/vastdata-planner.js --capacity "500TB" [--read-bw 200] [--write-bw 
 
 ## EBox 硬件方案（全闪 NVMe）
 
-最小 EBox 数：11，最大：250，性能线性扩展
+最小 EBox 数：11，性能线性扩展
 
 | 配置 | EBox数 | 可用容量 | 裸容量 | 读带宽 | 持续写带宽 | 峰值写带宽 | 读 IOPS | 写 IOPS |
 |-----|-------|--------|-------|-------|---------|---------|--------|--------|
 | 15.36TB NVMe (2×800GB SCM + 8×15.36TB NVMe) | 11 | 982.67 TB | 1351.68 TB | 231 GB/s | 28.6 GB/s | 110 GB/s | 1980K | 261.25K |
 | 30.72TB NVMe (2×1.6TB SCM + 8×30.72TB NVMe) | 11 | 1965.34 TB | 2703.36 TB | 231 GB/s | 28.6 GB/s | 110 GB/s | 1980K | 261.25K |
 | 61.44TB NVMe (3×1.6TB SCM + 7×61.44TB NVMe) | 11 | 3439.35 TB | 4730.88 TB | 231 GB/s | 28.6 GB/s | 110 GB/s | 1980K | 261.25K |
+
+**推荐方案**：15.36TB NVMe (2×800GB SCM + 8×15.36TB NVMe)，11 个 EBox（最小满足需求的配置）
 
 
 ## CNode+DBox 硬件方案（算力+存储分离）
@@ -129,11 +131,13 @@ node scripts/vastdata-planner.js --capacity "500TB" [--read-bw 200] [--write-bw 
 
 每种磁盘规格的最小满足需求配置：
 
-| 配置 | 可用容量 | 裸容量 | 读带宽 | 持续写带宽 | 峰值写带宽 | 读 IOPS | 写 IOPS | 备注 |
-|-----|--------|-------|-------|---------|---------|--------|--------|-----|
-| 3 CNode (1U-1N-GEN5-2NIC) + 1 DBox (Ceres DF-3060-V2, 61.44TB盘) | 982.62 TB | 1351.68 TB | 58 GB/s | 8.5 GB/s | 20 GB/s | 585K | 100K | 使用 60TB 的硬盘，单 DBox 就可以达到 1 PB 的容量，具有极高的性价比 |
-| 4 CNode (1U-1N-GEN5-2NIC) + 2 DBox (Ceres DF-3015-V2, 15.36TB盘) | 552.73 TB | 675.84 TB | 116 GB/s | 14.8 GB/s | 40 GB/s | 780K | 180K |  |
-| 5 CNode (1U-1N-GEN6-2NIC) + 2 DBox (MLK DF-5630, 30.72TB盘) | 2340.00 TB | 2703.36 TB | 112 GB/s | 21.2 GB/s | 60 GB/s | 1100K | 200K | 2PB |
+| 配置 | 可用容量 | 裸容量 | 读带宽 | 持续写带宽 | 峰值写带宽 | 读 IOPS | 写 IOPS |
+|-----|--------|-------|-------|---------|---------|--------|--------|
+| 3 CNode (1U-1N-GEN5-2NIC) + 1 DBox (Ceres DF-3060-V2, 61.44TB NVMe) | 982.62 TB | 1351.68 TB | 58 GB/s | 8.5 GB/s | 20 GB/s | 585K | 100K |
+| 4 CNode (1U-1N-GEN5-2NIC) + 2 DBox (Ceres DF-3015-V2, 15.36TB NVMe) | 552.73 TB | 675.84 TB | 116 GB/s | 14.8 GB/s | 40 GB/s | 780K | 180K |
+| 5 CNode (1U-1N-GEN6-2NIC) + 2 DBox (MLK DF-5630, 30.72TB NVMe) | 2340.00 TB | 2703.36 TB | 112 GB/s | 21.2 GB/s | 60 GB/s | 1100K | 200K |
+
+**推荐方案**：3 CNode (1U-1N-GEN5-2NIC) + 1 DBox (Ceres DF-3060-V2, 61.44TB NVMe)（最小硬件数量配置）
 ```
 
 ## 重要说明
