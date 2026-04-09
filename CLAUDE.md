@@ -26,11 +26,15 @@ skills/<skill-name>/
 
 ### Available Skills
 
+#### Storage Planning (storage-skills)
 - **storage-planner-router**: Routes storage planning requests to appropriate sub-skills, provides solution comparison
 - **gpfs-ece-planner**: GPFS ECE high-performance file storage planning
 - **vastdata-planner**: VastData unified storage platform planning (file/object/block)
 - **weka-planner**: Weka high-performance file system planning
 - **xsky-xeos-planner**: XSKY XEOS object storage planning
+
+#### Kubernetes Operations (k8s-skills)
+- **metallb-ops**: MetalLB load balancer deployment, operations, and troubleshooting
 
 ### Skill Invocation Pattern
 
@@ -101,7 +105,7 @@ GPFS ECE uses different EC schemes based on server count and fault tolerance:
 
 This repository is published as a Claude Code plugin marketplace:
 - Marketplace name: `wutz/infra-skills`
-- Plugin name: `storage-skills`
+- Plugin groups: `storage-skills`, `k8s-skills`
 - Configuration: `.claude-plugin/marketplace.json`
 
 ## Important Conventions
