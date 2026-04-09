@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is an infrastructure planning skills repository for Claude Code, containing storage system capacity and performance planning tools. Each skill is a self-contained directory following the [agentskills.io](https://agentskills.io) specification.
+This is an infrastructure skills repository for Claude Code, containing storage planning tools and Kubernetes networking deployment/operations guides. Each skill is a self-contained directory following the [agentskills.io](https://agentskills.io) specification.
 
 ## Architecture
 
@@ -26,15 +26,15 @@ skills/<skill-name>/
 
 ### Available Skills
 
-#### Storage Planning (storage-skills)
+#### Storage Planning
 - **storage-planner-router**: Routes storage planning requests to appropriate sub-skills, provides solution comparison
 - **gpfs-ece-planner**: GPFS ECE high-performance file storage planning
 - **vastdata-planner**: VastData unified storage platform planning (file/object/block)
 - **weka-planner**: Weka high-performance file system planning
 - **xsky-xeos-planner**: XSKY XEOS object storage planning
 
-#### Kubernetes Operations (k8s-skills)
-- **metallb-ops**: MetalLB load balancer deployment, operations, and troubleshooting
+#### Kubernetes Networking
+- **spiderpool**: Spiderpool underlay/RDMA network deployment, operations and troubleshooting (IB/RoCE/RoCE-MIF)
 
 ### Skill Invocation Pattern
 
@@ -105,7 +105,9 @@ GPFS ECE uses different EC schemes based on server count and fault tolerance:
 
 This repository is published as a Claude Code plugin marketplace:
 - Marketplace name: `wutz/infra-skills`
-- Plugin groups: `storage-skills`, `k8s-skills`
+- Plugins:
+  - `storage-skills`: Storage planning and capacity calculation
+  - `k8s-networking`: Kubernetes networking deployment and operations
 - Configuration: `.claude-plugin/marketplace.json`
 
 ## Important Conventions

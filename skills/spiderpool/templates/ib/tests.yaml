@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: "tests-rdma-hca"
+spec:
+  selector:
+    matchLabels:
+      app: "tests-rdma-hca"
+  template:
+    metadata:
+      labels:
+        app: "tests-rdma-hca"
+    spec:
+      containers:
+        - name: tests-rdma-hca
+          image: "ccr.ccs.tencentyun.com/tke-eni-test/mofed-5.4-3.1.0.0:ubuntu20.04-amd64-test"
+          command:
+            - tail
+            - -f
+            - /dev/null
+          resources:
+            limits:
+              rdma/hca: 1
+          securityContext:
+            capabilities:
+              add: [ "IPC_LOCK" ]
+      tolerations:
+        - operator: "Exists"
+          effect: "NoSchedule"

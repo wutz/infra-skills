@@ -4,8 +4,8 @@
     "name": "wutz"
   },
   "metadata": {
-    "description": "Infrastructure skills for storage planning, Kubernetes operations, and troubleshooting",
-    "version": "1.0.0"
+    "description": "Infrastructure planning and operations skills for storage, networking and Kubernetes",
+    "version": "1.1.0"
   },
   "plugins": [
     {
@@ -22,11 +22,12 @@
       ]
     },
     {
-      "name": "k8s-skills",
-      "description": "Kubernetes infrastructure operations and troubleshooting tools",
+      "name": "k8s-networking",
+      "description": "Kubernetes networking deployment, operations and troubleshooting tools",
       "source": "./",
       "strict": false,
       "skills": [
+        "./skills/spiderpool",
         "./skills/metallb-ops"
       ]
     }
