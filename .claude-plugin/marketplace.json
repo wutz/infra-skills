@@ -27,7 +27,8 @@
       "source": "./",
       "strict": false,
       "skills": [
-        "./skills/spiderpool"
+        "./skills/spiderpool",
+        "./skills/metallb-ops"
       ]
     }
   ]
