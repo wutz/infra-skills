@@ -4,7 +4,7 @@
     "name": "wutz"
   },
   "metadata": {
-    "description": "Infrastructure planning skills for storage capacity and performance calculation",
+    "description": "Infrastructure skills for storage planning, Kubernetes operations, and troubleshooting",
     "version": "1.0.0"
   },
   "plugins": [
@@ -19,6 +19,15 @@
         "./skills/vastdata-planner",
         "./skills/weka-planner",
         "./skills/storage-planner-router"
+      ]
+    },
+    {
+      "name": "k8s-skills",
+      "description": "Kubernetes infrastructure operations and troubleshooting tools",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/metallb-ops"
       ]
     }
   ]
