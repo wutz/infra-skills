@@ -1,0 +1,12 @@
+registries:
+- host: ghcr.io
+
+releases:
+  - name: spiderpool
+    namespace: spiderpool
+    create_namespace: true
+    chart:
+      name: oci://ghcr.io/wutz/charts/spiderpool
+      version: 1.0.5
+    values:
+      - values.yml

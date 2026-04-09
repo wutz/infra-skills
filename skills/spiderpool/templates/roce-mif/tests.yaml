@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: "tests-rdma-hca"
+spec:
+  selector:
+    matchLabels:
+      app: "tests-rdma-hca"
+  template:
+    metadata:
+      labels:
+        app: "tests-rdma-hca"
+      annotations:
+        k8s.v1.cni.cncf.io/networks: |-
+          [{"name":"hca1","namespace":"spiderpool"},
+          {"name":"hca2","namespace":"spiderpool"},
+          {"name":"hca3","namespace":"spiderpool"},
+          {"name":"hca4","namespace":"spiderpool"},
+          {"name":"hca5","namespace":"spiderpool"},
+          {"name":"hca6","namespace":"spiderpool"},
+          {"name":"hca7","namespace":"spiderpool"},
+          {"name":"hca8","namespace":"spiderpool"}]
+    spec:
+      containers:
+        - name: tests-rdma-hca
+          image: "ccr.ccs.tencentyun.com/tke-eni-test/mofed-5.4-3.1.0.0:ubuntu20.04-amd64-test"
+          command:
+            - tail
+            - -f
+            - /dev/null
+          resources:
+            limits:
+              rdma/hca1: 1
+              rdma/hca2: 1
+              rdma/hca3: 1
+              rdma/hca4: 1
+              rdma/hca5: 1
+              rdma/hca6: 1
+              rdma/hca7: 1
+              rdma/hca8: 1
+          securityContext:
+            capabilities:
+              add: [ "IPC_LOCK" ]
+      tolerations:
+        - operator: "Exists"
+          effect: "NoSchedule"

@@ -1,0 +1,27 @@
+apiVersion: nfd.k8s-sigs.io/v1alpha1
+kind: NodeFeatureRule
+metadata:
+  name: superpod
+spec:
+  rules:
+    - name: "superpod-su1"
+      labels:
+        "nvidia.com/superpod-su": "su1"
+      matchFeatures:
+        - feature: system.name
+          matchExpressions:
+            nodename:
+              op: In
+              value:
+                - h200gpu56
+
+    - name: "superpod-su2"
+      labels:
+        "nvidia.com/superpod-su": "su2"
+      matchFeatures:
+        - feature: system.name
+          matchExpressions:
+            nodename:
+              op: In
+              value:
+                - h200gpu125

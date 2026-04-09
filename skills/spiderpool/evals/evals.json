@@ -1,0 +1,75 @@
+{
+  "skill_name": "spiderpool",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "我需要在 Kubernetes 集群部署 Spiderpool，节点上有 8 块 ConnectX-7 InfiniBand 网卡 (device ID: 1021) 和 2 块 ConnectX-6 以太网卡。请帮我生成部署配置。",
+      "expected_output": "识别为 IB 场景，生成 helmwave.yml、values.yml（deviceIDs 设为 1021）和 tests.yaml",
+      "files": [],
+      "assertions": [
+        {"text": "识别为 InfiniBand (IB) 部署场景"},
+        {"text": "生成了 helmwave.yml 配置"},
+        {"text": "生成了 values.yml，deviceIDs 包含 1021"},
+        {"text": "生成了 tests.yaml 测试 DaemonSet"},
+        {"text": "提到需要先安装 DOCA OFED"},
+        {"text": "提供了 helmwave up --build 部署命令"},
+        {"text": "提供了 RDMA 测试步骤（ib_send_bw）"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "我们的集群用的是 ConnectX-5 网卡做了 Bonding (bond0)，想配置 RoCE RDMA 网络，IP 网段是 10.0.0.0/16，可用 IP 范围 10.0.1.1-10.0.255.254。",
+      "expected_output": "识别为 RoCE 单网段场景，生成完整配置包括 hca.yaml 的 SpiderIPPool 和 SpiderMultusConfig",
+      "files": [],
+      "assertions": [
+        {"text": "识别为 RoCE 单网段部署场景"},
+        {"text": "生成了 values.yml，deviceIDs 包含 ConnectX-5 对应的 ID"},
+        {"text": "生成了 hca.yaml，包含 SpiderIPPool（subnet: 10.0.0.0/16）"},
+        {"text": "hca.yaml 中 SpiderMultusConfig 的 master 设为 bond0"},
+        {"text": "hca.yaml 中 IP 范围为 10.0.1.1-10.0.255.254"},
+        {"text": "提供了 kubectl apply -f hca.yaml 配置命令"},
+        {"text": "RoCE 测试使用 -x 7 参数（GID v2 索引）"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "我们有一个 SuperPod 环境，节点有 8 块 RDMA 网卡 (ens1130np0, ens1131np0, ens1032np0, ens1033np0, ens934np0, ens935np0, ens836np0, ens837np0)，分成两组交换机 SU，su1 有节点 gpu01 和 gpu02，su2 有节点 gpu03 和 gpu04。请帮我配置 Spiderpool。",
+      "expected_output": "识别为 RoCE 多网段场景，生成包含 NodeFeatureRule、多个 SpiderIPPool 和 SpiderMultusConfig 的完整配置",
+      "files": [],
+      "assertions": [
+        {"text": "识别为 RoCE 多网段 (Multiple Interface) 部署场景"},
+        {"text": "生成了 values.yml，包含 8 个 HCA 的 ifNames 配置"},
+        {"text": "生成了 nfr.yaml，包含 su1（gpu01, gpu02）和 su2（gpu03, gpu04）分组"},
+        {"text": "生成了 hca 配置文件，每个 HCA 有 su1 和 su2 两个 SpiderIPPool"},
+        {"text": "生成了 kustomization.yaml 聚合所有资源"},
+        {"text": "提到需确保所有节点网卡名称一致"},
+        {"text": "提供了 kubectl apply -k . 配置命令"},
+        {"text": "询问了每块网卡的 subnet、gateway 和 IP 范围信息"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Spiderpool 部署后 Pod 无法获取 RDMA 资源，怎么排查？",
+      "expected_output": "提供 RDMA 资源排查步骤，包括检查 node allocatable、device plugin 状态、DOCA OFED 等",
+      "files": [],
+      "assertions": [
+        {"text": "建议检查节点的 allocatable 资源中是否有 rdma/hca"},
+        {"text": "建议检查 RDMA Shared Device Plugin 是否正常运行"},
+        {"text": "建议检查 DOCA OFED 是否正确安装"},
+        {"text": "提供了具体的诊断命令"},
+        {"text": "建议检查 values.yml 中的 deviceIDs 或 ifNames 配置是否正确"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "如何卸载 Spiderpool？另外升级到新版本怎么操作？",
+      "expected_output": "提供卸载命令（helmwave down）和升级步骤（修改 chart version 后重新部署）",
+      "files": [],
+      "assertions": [
+        {"text": "提供了卸载命令 helmwave down"},
+        {"text": "说明升级需修改 helmwave.yml 中的 chart version"},
+        {"text": "说明升级后执行 helmwave up --build"}
+      ]
+    }
+  ]
+}

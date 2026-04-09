@@ -1,0 +1,43 @@
+apiVersion: spiderpool.spidernet.io/v2beta1
+kind: SpiderIPPool
+metadata:
+  name: hca1-su1
+spec:
+  subnet: 10.23.0.0/24
+  ips:
+    - 10.23.0.210-10.23.0.229
+  gateway: 10.23.0.254
+  nodeAffinity:
+    matchExpressions:
+      - key: nvidia.com/superpod-su
+        operator: In
+        values:
+        - su1
+---
+apiVersion: spiderpool.spidernet.io/v2beta1
+kind: SpiderIPPool
+metadata:
+  name: hca1-su2
+spec:
+  subnet: 10.23.8.0/24
+  ips:
+    - 10.23.8.210-10.23.8.229
+  gateway: 10.23.8.254
+  nodeAffinity:
+    matchExpressions:
+      - key: nvidia.com/superpod-su
+        operator: In
+        values:
+        - su2
+---
+apiVersion: spiderpool.spidernet.io/v2beta1
+kind: SpiderMultusConfig
+metadata:
+  name: hca1
+  namespace: spiderpool
+spec:
+  cniType: macvlan
+  macvlan:
+    master: ["ens1130np0"]
+    ippools:
+      ipv4: ["hca1-su1", "hca1-su2"]

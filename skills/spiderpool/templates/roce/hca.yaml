@@ -1,0 +1,20 @@
+apiVersion: spiderpool.spidernet.io/v2beta1
+kind: SpiderIPPool
+metadata:
+  name: hca
+spec:
+  subnet: 192.168.0.0/16
+  ips:
+  - 192.168.0.1-192.168.63.254
+---
+apiVersion: spiderpool.spidernet.io/v2beta1
+kind: SpiderMultusConfig
+metadata:
+  name: hca
+  namespace: spiderpool
+spec:
+  cniType: macvlan
+  macvlan:
+    master: ["bond0"]
+    ippools:
+      ipv4: ["hca"]

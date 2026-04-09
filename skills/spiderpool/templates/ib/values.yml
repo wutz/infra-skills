@@ -1,0 +1,25 @@
+rdma:
+  rdmaSharedDevicePlugin:
+    install: true
+    image:
+      tag: v1.5.3
+
+    deviceConfig:
+      configList:
+        [
+          {
+            "resourcePrefix": "rdma",
+            "resourceName": "hca",
+            "rdmaHcaMax": 100,
+            "selectors": { "deviceIDs": ["1021"] }
+          }
+        ]
+
+spiderpoolController:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: "node-role.kubernetes.io/control-plane"
+                operator: Exists

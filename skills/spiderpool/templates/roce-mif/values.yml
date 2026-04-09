@@ -1,0 +1,67 @@
+rdma:
+  rdmaSharedDevicePlugin:
+    install: true
+    image:
+      tag: v1.5.3
+
+    deviceConfig:
+      configList:
+        [
+          {
+            "resourcePrefix": "rdma",
+            "resourceName": "hca1",
+            "rdmaHcaMax": 100,
+            "selectors": { "ifNames": ["ens1130np0"] }
+          },
+          {
+            "resourcePrefix": "rdma",
+            "resourceName": "hca2",
+            "rdmaHcaMax": 100,
+            "selectors": { "ifNames": ["ens1131np0"] }
+          },
+          {
+            "resourcePrefix": "rdma",
+            "resourceName": "hca3",
+            "rdmaHcaMax": 100,
+            "selectors": { "ifNames": ["ens1032np0"] }
+          },
+          {
+            "resourcePrefix": "rdma",
+            "resourceName": "hca4",
+            "rdmaHcaMax": 100,
+            "selectors": { "ifNames": ["ens1033np0"] }
+          },
+          {
+            "resourcePrefix": "rdma",
+            "resourceName": "hca5",
+            "rdmaHcaMax": 100,
+            "selectors": { "ifNames": ["ens934np0"] }
+          },
+          {
+            "resourcePrefix": "rdma",
+            "resourceName": "hca6",
+            "rdmaHcaMax": 100,
+            "selectors": { "ifNames": ["ens935np0"] }
+          },
+          {
+            "resourcePrefix": "rdma",
+            "resourceName": "hca7",
+            "rdmaHcaMax": 100,
+            "selectors": { "ifNames": ["ens836np0"] }
+          },
+          {
+            "resourcePrefix": "rdma",
+            "resourceName": "hca8",
+            "rdmaHcaMax": 100,
+            "selectors": { "ifNames": ["ens837np0"] }
+          },
+        ]
+
+spiderpoolController:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: "node-role.kubernetes.io/control-plane"
+                operator: Exists
