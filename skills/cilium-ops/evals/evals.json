@@ -1,0 +1,96 @@
+{
+  "skill_name": "cilium-ops",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "我要在 Kubernetes 集群上部署 Cilium，替代 kube-proxy，API Server 地址是 10.0.0.10:6443，Pod CIDR 是 10.244.0.0/16，同时启用 Hubble UI",
+      "expected_output": "提供完整的 Cilium 高性能部署步骤，包含 Helm 或 Cilium CLI 安装命令，启用 kube-proxy 替代、native routing、Hubble",
+      "files": [],
+      "assertions": [
+        {"text": "包含 Cilium 安装命令（Helm 或 cilium install）"},
+        {"text": "设置 kubeProxyReplacement=true"},
+        {"text": "设置 k8sServiceHost=10.0.0.10 和 k8sServicePort=6443"},
+        {"text": "设置 ipv4NativeRoutingCIDR=10.244.0.0/16"},
+        {"text": "启用 Hubble Relay 和 UI"},
+        {"text": "包含移除 kube-proxy 的步骤"},
+        {"text": "包含等待就绪和验证步骤"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Pod 之间网络不通，怎么排查 Cilium 的问题？",
+      "expected_output": "提供系统化的排查流程，从 Cilium Agent 状态、Endpoint 状态、连通性测试、Hubble 流量观察到网络策略检查",
+      "files": [],
+      "assertions": [
+        {"text": "检查 cilium-agent Pod 是否正常运行"},
+        {"text": "检查 CiliumEndpoint 状态"},
+        {"text": "建议运行 cilium connectivity test"},
+        {"text": "使用 Hubble 查看被丢弃的流量"},
+        {"text": "检查 CiliumNetworkPolicy 是否误拦截"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "帮我检查一下集群的 Cilium 健康状态",
+      "expected_output": "运行诊断脚本并展示完整的健康检查报告",
+      "files": [],
+      "assertions": [
+        {"text": "调用了 cilium-diag.js 诊断脚本"},
+        {"text": "展示了 Agent 和 Operator Pod 状态"},
+        {"text": "展示了 CiliumNode 和 Endpoint 状态"},
+        {"text": "展示了 NetworkPolicy 配置情况"},
+        {"text": "展示了 Hubble 组件状态"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "我想用 Cilium 配置 BGP 路由通告，集群 ASN 64512，路由器 IP 10.0.0.1，路由器 ASN 64501，LoadBalancer IP 池 203.0.113.0/24",
+      "expected_output": "提供完整的 Cilium BGP Control Plane 配置，包含 CiliumBGPPeeringPolicy 和 CiliumLoadBalancerIPPool 的 YAML",
+      "files": [],
+      "assertions": [
+        {"text": "包含 CiliumBGPPeeringPolicy YAML，localASN=64512"},
+        {"text": "包含 neighbor 配置，peerAddress=10.0.0.1/32, peerASN=64501"},
+        {"text": "包含 CiliumLoadBalancerIPPool YAML，cidr=203.0.113.0/24"},
+        {"text": "包含节点 label 设置说明（nodeSelector）"},
+        {"text": "包含 Service 需要添加的 label 以触发 BGP 通告"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Cilium Agent Pod 一直 CrashLoopBackOff，怎么排查？",
+      "expected_output": "提供 cilium-agent CrashLoopBackOff 的排查流程，包括日志检查、内核版本、BPF 文件系统、资源限制等",
+      "files": [],
+      "assertions": [
+        {"text": "查看 Pod 日志（kubectl logs --previous）"},
+        {"text": "检查内核版本是否满足最低要求（>= 5.4）"},
+        {"text": "检查 BPF 文件系统是否正确挂载"},
+        {"text": "检查资源限制（内存/CPU）"},
+        {"text": "检查是否存在 kube-proxy 冲突"}
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "我需要配置 Cilium 的 L7 网络策略，只允许 frontend 访问 api-server 的 GET /api/v1/ 和 POST /api/v1/submit",
+      "expected_output": "提供 CiliumNetworkPolicy 的 L7 HTTP 策略 YAML 配置",
+      "files": [],
+      "assertions": [
+        {"text": "包含 CiliumNetworkPolicy YAML"},
+        {"text": "endpointSelector 选中 api-server"},
+        {"text": "ingress fromEndpoints 匹配 frontend"},
+        {"text": "包含 L7 HTTP rules 配置 GET 和 POST 方法"},
+        {"text": "path 正则正确匹配 /api/v1/ 路径"}
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "如何启用 Cilium 的 WireGuard 透明加密？",
+      "expected_output": "提供启用 WireGuard 加密的步骤和验证方法",
+      "files": [],
+      "assertions": [
+        {"text": "包含 helm upgrade 命令启用 encryption.enabled=true 和 encryption.type=wireguard"},
+        {"text": "提到内核需要支持 WireGuard 模块"},
+        {"text": "包含验证加密是否生效的方法"}
+      ]
+    }
+  ]
+}

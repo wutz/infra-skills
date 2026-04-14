@@ -28,7 +28,8 @@
       "strict": false,
       "skills": [
         "./skills/spiderpool",
-        "./skills/metallb-ops"
+        "./skills/metallb-ops",
+        "./skills/cilium-ops"
       ]
     }
   ]
