@@ -1,13 +1,13 @@
 {
-  "skill_name": "metallb-ops",
+  "skill_name": "metallb",
   "evals": [
     {
       "id": 1,
       "prompt": "我需要在裸金属 Kubernetes 集群上部署 MetalLB，使用 L2 模式，IP 范围是 192.168.1.240-192.168.1.250",
-      "expected_output": "提供完整的 L2 模式部署步骤，包含 Helm 或 Manifest 安装方法，以及 IPAddressPool 和 L2Advertisement 的 YAML 配置",
+      "expected_output": "提供完整的 L2 模式部署步骤，包含 Helmwave/Helm 安装方法，以及 IPAddressPool 和 L2Advertisement 的 YAML 配置",
       "files": [],
       "assertions": [
-        {"text": "包含 MetalLB 安装命令（Helm 或 kubectl apply）"},
+        {"text": "包含 MetalLB 安装命令（Helmwave、Helm 或 kubectl apply）"},
         {"text": "包含 IPAddressPool YAML 配置，地址范围为 192.168.1.240-192.168.1.250"},
         {"text": "包含 L2Advertisement YAML 配置并关联到 IP 池"},
         {"text": "所有资源都在 metallb-system namespace 中"},
@@ -24,7 +24,8 @@
         {"text": "检查 IPAddressPool 是否已配置"},
         {"text": "检查 L2Advertisement 或 BGPAdvertisement 是否已配置"},
         {"text": "检查 IP 池是否已耗尽"},
-        {"text": "提供查看 controller 日志的命令"}
+        {"text": "提供查看 controller 日志的命令"},
+        {"text": "提到检查 exclude-from-external-load-balancers 标签"}
       ]
     },
     {
@@ -60,10 +61,34 @@
       "files": [],
       "assertions": [
         {"text": "检查 speaker Pod 是否在所有节点运行"},
-        {"text": "检查 leader 节点信息（哪个节点负责 ARP 应答）"},
-        {"text": "提供 ARP 排查命令（清除缓存、查看 ARP 表）"},
+        {"text": "提供 arping 或 ARP 排查命令"},
+        {"text": "提到 externalTrafficPolicy: Local 的影响"},
         {"text": "检查 Service 的 Endpoints 是否存在"},
         {"text": "提到可能的交换机 ARP 过滤问题"}
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "如何用 helmwave 部署 MetalLB 到生产环境？需要跑在控制面节点上",
+      "expected_output": "提供 helmwave.yml 和 values.yml 配置，包含控制面节点调度和容忍设置",
+      "files": [],
+      "assertions": [
+        {"text": "包含 helmwave.yml 配置文件"},
+        {"text": "包含 values.yml 配置，controller 和 speaker 都调度到 control-plane 节点"},
+        {"text": "包含 tolerations 容忍 NoSchedule taint"},
+        {"text": "提到 speaker.ignoreExcludeLB 配置"},
+        {"text": "包含 helmwave up --build 部署命令"}
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "如何查询 MetalLB 的 VIP 分配在哪个节点上？",
+      "expected_output": "提供多种方法查询 VIP 所在节点，包括 servicel2statuses、arping、speaker 日志",
+      "files": [],
+      "assertions": [
+        {"text": "提供 kubectl get servicel2statuses 命令（新版本）"},
+        {"text": "提供 arping 方法查询 MAC 并反查节点"},
+        {"text": "提供通过 speaker 日志查询 serviceAnnounced 的方法"}
       ]
     }
   ]
