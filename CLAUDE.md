@@ -35,6 +35,10 @@ skills/<skill-name>/
 
 #### Kubernetes Networking
 - **spiderpool**: Spiderpool underlay/RDMA network deployment, operations and troubleshooting (IB/RoCE/RoCE-MIF)
+- **metallb-ops**: MetalLB load balancer operations and troubleshooting
+
+#### Infrastructure Operations
+- **troubleshoot-guide**: Infrastructure troubleshooting guide (K8s, network, storage, system, application)
 
 ### Skill Invocation Pattern
 

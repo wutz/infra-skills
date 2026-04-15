@@ -30,6 +30,15 @@
         "./skills/spiderpool",
         "./skills/metallb-ops"
       ]
+    },
+    {
+      "name": "infra-ops",
+      "description": "Infrastructure operations and troubleshooting tools",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/troubleshoot-guide"
+      ]
     }
   ]
 }

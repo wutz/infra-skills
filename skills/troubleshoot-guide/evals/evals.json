@@ -1,0 +1,75 @@
+{
+  "skill_name": "troubleshoot-guide",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "我的 K8s 集群中有个 Pod 一直处于 CrashLoopBackOff 状态，日志显示 OOMKilled，该怎么排查？",
+      "expected_output": "识别为 K8s Pod 异常，给出 OOMKilled 的排查步骤和解决方案",
+      "files": [],
+      "assertions": [
+        {"text": "识别为 Kubernetes 故障类别"},
+        {"text": "给出了 kubectl describe pod 命令查看 Pod 状态"},
+        {"text": "给出了 kubectl logs --previous 命令查看崩溃日志"},
+        {"text": "解释了 OOMKilled 表示内存超出限制"},
+        {"text": "建议增加 resources.limits.memory"},
+        {"text": "建议检查应用是否存在内存泄漏"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "K8s 集群中的服务之间无法通信，Pod A 无法访问 Service B，但 Pod 都是 Running 状态。",
+      "expected_output": "识别为 K8s 网络连通性问题，给出系统化的排查步骤",
+      "files": [],
+      "assertions": [
+        {"text": "识别为 Kubernetes 网络/Service 问题"},
+        {"text": "建议检查 Service 的 Endpoints 是否为空"},
+        {"text": "建议检查 Pod 标签与 Service selector 是否匹配"},
+        {"text": "给出了 DNS 解析测试命令"},
+        {"text": "建议检查 NetworkPolicy 是否阻断了通信"},
+        {"text": "给出了使用 netshoot 等工具进行调试的方法"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "服务器负载特别高，top 显示 CPU 使用率 100%，系统响应很慢，该怎么处理？",
+      "expected_output": "识别为系统 CPU 问题，给出负载排查步骤",
+      "files": [],
+      "assertions": [
+        {"text": "识别为系统级故障"},
+        {"text": "给出了查看系统负载的命令（uptime、top、vmstat）"},
+        {"text": "给出了找出 CPU 消耗最高进程的命令"},
+        {"text": "建议区分用户态和内核态 CPU 消耗"},
+        {"text": "给出了临时修复建议（如终止异常进程）"},
+        {"text": "给出了根因分析思路"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "K8s 节点变成 NotReady 状态了，怎么排查？",
+      "expected_output": "识别为 K8s 节点故障，给出系统化排查步骤",
+      "files": [],
+      "assertions": [
+        {"text": "识别为 Kubernetes 节点故障"},
+        {"text": "建议检查 kubelet 状态"},
+        {"text": "给出了查看节点条件的命令（kubectl describe node）"},
+        {"text": "建议检查磁盘压力、内存压力等条件"},
+        {"text": "建议检查容器运行时状态"},
+        {"text": "建议检查节点系统资源（磁盘、内存、CPU）"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "存储集群 IO 延迟突然变高，应用写入速度明显下降。",
+      "expected_output": "识别为存储 IO 性能问题，给出排查步骤",
+      "files": [],
+      "assertions": [
+        {"text": "识别为存储故障类别"},
+        {"text": "给出了 iostat 命令查看 IO 状态"},
+        {"text": "给出了 ioping 或类似工具测试 IO 延迟"},
+        {"text": "建议检查磁盘健康状态（smartctl）"},
+        {"text": "建议排查是否有 IO 密集型进程"},
+        {"text": "给出了临时修复和根因分析的思路"}
+      ]
+    }
+  ]
+}
