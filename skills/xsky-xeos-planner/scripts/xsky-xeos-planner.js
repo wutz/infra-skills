@@ -1,31 +1,26 @@
 #!/usr/bin/env node
 
-/**
- * XSKY XEOS 对象存储规划计算器
- * 根据容量和性能需求计算 XSKY XEOS 服务器配置方案
- */
-
-// 常量配置
 const CONSTANTS = {
   DISKS_PER_SERVER: 32,
-  SPACE_OVERHEAD: 0.81, // 空间保留和损耗（预留 19%）
-  EC8_2_EFFICIENCY: 0.8, // EC8+2 可用率
-  EC4_2_EFFICIENCY: 0.6667, // EC4+2 可用率
-  EC8_2_MIN_SERVERS: 5,
-  EC4_2_MIN_SERVERS: 3,
+  SPACE_OVERHEAD: 0.81,
+  EC8_2_EFFICIENCY: 0.8,
+  EC4_2_EFFICIENCY: 0.6667,
   TB_TO_TIB: 0.909,
-  // 单盘性能基准
-  UPLOAD_BW_PER_DISK: 30, // MiB/s
-  DOWNLOAD_BW_PER_DISK: 60, // MiB/s
-  UPLOAD_OPS_PER_DISK: 100, // IOPS (4K)
-  DOWNLOAD_OPS_PER_DISK: 300, // IOPS (4K)
-  // 可选磁盘大小（TB，从大到小排序）
-  DISK_SIZES: [24, 22, 20, 18, 16, 12, 10, 8]
+  UPLOAD_BW_PER_DISK: 30, // MiB/s (4MiB object)
+  DOWNLOAD_BW_PER_DISK: 60, // MiB/s (4MiB object)
+  UPLOAD_OPS_PER_DISK: 100, // OPS (4KiB object)
+  DOWNLOAD_OPS_PER_DISK: 300, // OPS (4KiB object)
+  DISK_SIZES: [24, 22, 20, 18, 16, 12, 10, 8],
+  MIBS_TO_MBPS: 8.388608 // 1 MiB/s = 8.388608 Mbps
 };
 
-/**
- * 解析容量输入，统一转换为 TiB，并返回原始单位信息
- */
+function getEcScheme(serverCount) {
+  if (serverCount <= 4) return { scheme: 'EC4+2:1', efficiency: CONSTANTS.EC4_2_EFFICIENCY, tolerance: 1 };
+  if (serverCount === 5) return { scheme: 'EC8+2:1', efficiency: CONSTANTS.EC8_2_EFFICIENCY, tolerance: 1 };
+  if (serverCount <= 9) return { scheme: 'EC4+2', efficiency: CONSTANTS.EC4_2_EFFICIENCY, tolerance: 2 };
+  return { scheme: 'EC8+2', efficiency: CONSTANTS.EC8_2_EFFICIENCY, tolerance: 2 };
+}
+
 function parseCapacity(input) {
   const match = input.match(/^([\d.]+)\s*(TB|PB|TiB|PiB)$/i);
   if (!match) {
@@ -57,50 +52,44 @@ function parseCapacity(input) {
   return { tib, unit, isBinary };
 }
 
-/**
- * 解析带宽输入，统一转换为 MiB/s，并返回原始单位信息
- */
 function parseBandwidth(input) {
-  const match = input.match(/^([\d.]+)\s*(MB\/s|GB\/s|MiB\/s|GiB\/s)$/i);
+  const match = input.match(/^([\d.]+)\s*(MB\/s|GB\/s|MiB\/s|GiB\/s|Mbps|Gbps)$/i);
   if (!match) {
-    throw new Error(`无效的带宽格式: ${input}，请使用格式如 "100MB/s" 或 "1GiB/s"`);
+    throw new Error(`无效的带宽格式: ${input}，请使用格式如 "100MB/s"、"1GiB/s"、"800Mbps" 或 "10Gbps"`);
   }
 
   const value = parseFloat(match[1]);
   const unit = match[2];
   const unitLower = unit.toLowerCase();
-  const isBinary = unitLower.includes('i');
 
   let mibps;
+  let unitType; // 'binary', 'decimal-byte', 'decimal-bit'
+
   if (unitLower === 'mb/s') {
-    mibps = value / 1.024; // MB to MiB
+    mibps = value / 1.024;
+    unitType = 'decimal-byte';
   } else if (unitLower === 'gb/s') {
-    mibps = value * 1000 / 1.024; // GB to MiB
+    mibps = value * 1000 / 1.024;
+    unitType = 'decimal-byte';
   } else if (unitLower === 'mib/s') {
     mibps = value;
+    unitType = 'binary';
   } else if (unitLower === 'gib/s') {
     mibps = value * 1024;
+    unitType = 'binary';
+  } else if (unitLower === 'mbps') {
+    mibps = value / CONSTANTS.MIBS_TO_MBPS;
+    unitType = 'decimal-bit';
+  } else if (unitLower === 'gbps') {
+    mibps = value * 1000 / CONSTANTS.MIBS_TO_MBPS;
+    unitType = 'decimal-bit';
   } else {
     throw new Error(`不支持的带宽单位: ${unit}`);
   }
 
-  return { mibps, unit, isBinary };
+  return { mibps, unit, unitType };
 }
 
-/**
- * 计算满足容量需求的服务器台数
- */
-function calculateServersForCapacity(capacityTiB, diskSizeTB, ecScheme) {
-  const diskSizeTiB = diskSizeTB * CONSTANTS.TB_TO_TIB;
-  const efficiency = ecScheme === 'EC8+2' ? CONSTANTS.EC8_2_EFFICIENCY : CONSTANTS.EC4_2_EFFICIENCY;
-
-  const servers = capacityTiB / diskSizeTiB / CONSTANTS.DISKS_PER_SERVER / CONSTANTS.SPACE_OVERHEAD / efficiency;
-  return Math.ceil(servers);
-}
-
-/**
- * 计算集群性能
- */
 function calculatePerformance(serverCount) {
   const totalDisks = serverCount * CONSTANTS.DISKS_PER_SERVER;
 
@@ -112,19 +101,11 @@ function calculatePerformance(serverCount) {
   };
 }
 
-/**
- * 计算实际可用容量
- */
-function calculateActualCapacity(serverCount, diskSizeTB, ecScheme) {
+function calculateActualCapacity(serverCount, diskSizeTB, efficiency) {
   const diskSizeTiB = diskSizeTB * CONSTANTS.TB_TO_TIB;
-  const efficiency = ecScheme === 'EC8+2' ? CONSTANTS.EC8_2_EFFICIENCY : CONSTANTS.EC4_2_EFFICIENCY;
-
   return serverCount * CONSTANTS.DISKS_PER_SERVER * diskSizeTiB * CONSTANTS.SPACE_OVERHEAD * efficiency;
 }
 
-/**
- * 检查性能是否满足需求
- */
 function checkPerformance(actual, required) {
   const checks = {
     uploadBandwidth: !required.uploadBandwidth || actual.uploadBandwidth >= required.uploadBandwidth,
@@ -139,18 +120,13 @@ function checkPerformance(actual, required) {
   };
 }
 
-/**
- * 格式化容量输出，根据用户输入单位选择输出格式
- */
 function formatCapacity(tib, preferBinary = true) {
   if (preferBinary) {
-    // 二进制单位优先
     if (tib >= 1024) {
       return `${(tib / 1024).toFixed(2)} PiB`;
     }
     return `${tib.toFixed(2)} TiB`;
   } else {
-    // 十进制单位优先
     const tb = tib / CONSTANTS.TB_TO_TIB;
     if (tb >= 1000) {
       return `${(tb / 1000).toFixed(2)} PB`;
@@ -159,29 +135,28 @@ function formatCapacity(tib, preferBinary = true) {
   }
 }
 
-/**
- * 格式化带宽输出，根据用户输入单位选择输出格式
- */
-function formatBandwidth(mibps, preferBinary = true) {
-  if (preferBinary) {
-    // 二进制单位优先
+function formatBandwidth(mibps, unitType = 'decimal-bit') {
+  if (unitType === 'binary') {
     if (mibps >= 1024) {
       return `${(mibps / 1024).toFixed(2)} GiB/s`;
     }
     return `${mibps.toFixed(2)} MiB/s`;
-  } else {
-    // 十进制单位优先
+  } else if (unitType === 'decimal-byte') {
     const mbs = mibps * 1.024;
     if (mbs >= 1000) {
       return `${(mbs / 1000).toFixed(2)} GB/s`;
     }
     return `${mbs.toFixed(2)} MB/s`;
+  } else {
+    // decimal-bit: Mbps/Gbps (default when no unit specified)
+    const mbps = mibps * CONSTANTS.MIBS_TO_MBPS;
+    if (mbps >= 1000) {
+      return `${(mbps / 1000).toFixed(2)} Gbps`;
+    }
+    return `${mbps.toFixed(2)} Mbps`;
   }
 }
 
-/**
- * 计算满足性能需求的最小服务器数
- */
 function calculateMinServersForPerf(perfRequirements) {
   if (Object.keys(perfRequirements).length === 0) return 0;
 
@@ -195,64 +170,22 @@ function calculateMinServersForPerf(perfRequirements) {
   return Math.ceil(Math.max(...needs) / CONSTANTS.DISKS_PER_SERVER);
 }
 
-/**
- * 评估配置优劣（返回分数，越小越好）
- *
- * 优先级规则：
- * 1. 必须满足容量和性能需求（不满足直接淘汰）
- * 2. 在满足台数需求情况下优先使用 EC8+2（需要 >= 5 台）
- * 3. 在满足性能情况下优先使用更大的单盘 HDD
- * 4. 在满足容量情况下优先使用更小的单盘 HDD（容量过配越少越好）
- */
-function scoreConfig(config, capacityTiB, hasPerformanceRequirement) {
-  // 不满足性能或容量：淘汰
-  if (!config.perfCheck.passed || config.actualCapacity < capacityTiB) {
-    return Infinity;
-  }
-
-  // 计算容量过配比例（越接近1越好）
-  const overProvisionRatio = config.actualCapacity / capacityTiB;
-
-  // 优先级1：EC 方案优先级（满足台数要求时 EC8+2 优先）
-  // EC8+2 需要 >= 5 台，EC4+2 需要 >= 3 台
-  let ecPriority;
-  if (config.serverCount >= 5) {
-    // 满足 EC8+2 台数要求：EC8+2 优先
-    ecPriority = config.ecScheme === 'EC8+2' ? 0 : 1;
-  } else {
-    // 不满足 EC8+2 台数要求：只能用 EC4+2
-    ecPriority = config.ecScheme === 'EC4+2' ? 0 : 999;
-  }
-
-  // 优先级2：磁盘大小优先级
-  // 无论有无性能需求，都优先使用容量过配最少的磁盘（即最接近实际需求的磁盘）
-  const diskPriority = overProvisionRatio;
-
-  // 组合评分：EC方案 > 服务器数量 > 磁盘选择
-  // 使用权重确保优先级顺序
-  return ecPriority * 10000 + config.serverCount * 100 + diskPriority * 0.01;
-}
-
-/**
- * 主规划函数
- */
 function planXEOS(requirements) {
   const capacityInfo = parseCapacity(requirements.capacity);
   const capacityTiB = capacityInfo.tib;
 
-  // 解析性能需求
   const perfRequirements = {};
-  let bandwidthUnitPreference = null;
+  let bandwidthUnitType = null;
 
   if (requirements.uploadBandwidth) {
     const bwInfo = parseBandwidth(requirements.uploadBandwidth);
     perfRequirements.uploadBandwidth = bwInfo.mibps;
-    bandwidthUnitPreference = bandwidthUnitPreference || bwInfo.isBinary;
+    bandwidthUnitType = bandwidthUnitType || bwInfo.unitType;
   }
   if (requirements.downloadBandwidth) {
     const bwInfo = parseBandwidth(requirements.downloadBandwidth);
     perfRequirements.downloadBandwidth = bwInfo.mibps;
-    bandwidthUnitPreference = bandwidthUnitPreference || bwInfo.isBinary;
+    bandwidthUnitType = bandwidthUnitType || bwInfo.unitType;
   }
   if (requirements.uploadOps) {
     perfRequirements.uploadOps = parseInt(requirements.uploadOps);
@@ -261,80 +194,82 @@ function planXEOS(requirements) {
     perfRequirements.downloadOps = parseInt(requirements.downloadOps);
   }
 
-  // 默认使用十进制单位
-  if (bandwidthUnitPreference === null) {
-    bandwidthUnitPreference = false;
+  // Default to decimal-bit (Mbps/Gbps) when no bandwidth unit specified
+  if (bandwidthUnitType === null) {
+    bandwidthUnitType = 'decimal-bit';
   }
 
-  // 计算性能需求的最小服务器数
   const minServersForPerf = calculateMinServersForPerf(perfRequirements);
-  const hasPerformanceRequirement = minServersForPerf > 0;
 
-  // 生成所有可能的配置
   const configs = [];
 
-  // 尝试所有磁盘规格（评分函数会根据是否有性能需求选择最优磁盘）
-  for (const ecScheme of ['EC8+2', 'EC4+2']) {
-    const minServers = ecScheme === 'EC8+2' ? CONSTANTS.EC8_2_MIN_SERVERS : CONSTANTS.EC4_2_MIN_SERVERS;
+  for (const diskSize of CONSTANTS.DISK_SIZES) {
+    // Find minimum servers needed by trying from 3 upward
+    for (let servers = 3; servers <= 50; servers++) {
+      const ec = getEcScheme(servers);
+      const actualCapacity = calculateActualCapacity(servers, diskSize, ec.efficiency);
 
-    for (const diskSize of CONSTANTS.DISK_SIZES) {
-      // 计算服务器数：取容量、性能、最小要求的最大值
-      const capacityServers = calculateServersForCapacity(capacityTiB, diskSize, ecScheme);
-      const serverCount = Math.max(capacityServers, minServersForPerf, minServers);
+      if (actualCapacity >= capacityTiB && servers >= minServersForPerf) {
+        const performance = calculatePerformance(servers);
+        const perfCheck = checkPerformance(performance, perfRequirements);
 
-      // 计算实际容量和性能
-      const actualCapacity = calculateActualCapacity(serverCount, diskSize, ecScheme);
-      const performance = calculatePerformance(serverCount);
-      const perfCheck = checkPerformance(performance, perfRequirements);
-
-      configs.push({
-        serverCount,
-        diskSize,
-        ecScheme,
-        actualCapacity,
-        performance,
-        perfCheck
-      });
+        if (perfCheck.passed) {
+          configs.push({
+            serverCount: servers,
+            diskSize,
+            ecScheme: ec.scheme,
+            ecEfficiency: ec.efficiency,
+            tolerance: ec.tolerance,
+            actualCapacity,
+            performance,
+            perfCheck
+          });
+          break; // Found minimum servers for this disk size
+        }
+      }
     }
   }
 
-  // 选择最优配置：评分最低的
-  const bestConfig = configs.reduce((best, current) => {
-    const currentScore = scoreConfig(current, capacityTiB, hasPerformanceRequirement);
-    const bestScore = scoreConfig(best, capacityTiB, hasPerformanceRequirement);
-    return currentScore < bestScore ? current : best;
-  });
-
-  // 检查是否找到有效配置
-  if (scoreConfig(bestConfig, capacityTiB, hasPerformanceRequirement) === Infinity) {
+  if (configs.length === 0) {
     throw new Error('无法找到满足所有需求的配置方案');
   }
+
+  // Score configs: prefer fewer servers, then less over-provisioning
+  const bestConfig = configs.reduce((best, current) => {
+    const currentScore = scoreConfig(current, capacityTiB);
+    const bestScore = scoreConfig(best, capacityTiB);
+    return currentScore < bestScore ? current : best;
+  });
 
   return {
     ...bestConfig,
     capacityUnitPreference: capacityInfo.isBinary,
-    bandwidthUnitPreference
+    bandwidthUnitType
   };
 }
 
-/**
- * 格式化输出结果
- */
+function scoreConfig(config, capacityTiB) {
+  const overProvisionRatio = config.actualCapacity / capacityTiB;
+  // Prefer: fewer servers > higher EC efficiency > less over-provisioning
+  return config.serverCount * 1000 + (1 - config.ecEfficiency) * 100 + overProvisionRatio;
+}
+
 function formatResult(config) {
   const result = {
     configuration: {
       serverCount: config.serverCount,
       ecScheme: config.ecScheme,
+      tolerance: `容忍 ${config.tolerance} 节点离线`,
       diskConfig: `每台服务器 ${CONSTANTS.DISKS_PER_SERVER} × ${config.diskSize}TB HDD`
     },
     capacity: {
       available: formatCapacity(config.actualCapacity, config.capacityUnitPreference)
     },
     performance: {
-      uploadBandwidth: formatBandwidth(config.performance.uploadBandwidth, config.bandwidthUnitPreference),
-      downloadBandwidth: formatBandwidth(config.performance.downloadBandwidth, config.bandwidthUnitPreference),
-      uploadOps: `${config.performance.uploadOps.toLocaleString()} IOPS`,
-      downloadOps: `${config.performance.downloadOps.toLocaleString()} IOPS`
+      uploadBandwidth: formatBandwidth(config.performance.uploadBandwidth, config.bandwidthUnitType) + ' (4MiB)',
+      downloadBandwidth: formatBandwidth(config.performance.downloadBandwidth, config.bandwidthUnitType) + ' (4MiB)',
+      uploadOps: `${config.performance.uploadOps.toLocaleString()} (4KiB)`,
+      downloadOps: `${config.performance.downloadOps.toLocaleString()} (4KiB)`
     }
   };
 
@@ -352,7 +287,7 @@ function formatResult(config) {
   return result;
 }
 
-// CLI 入口
+// CLI entry
 if (require.main === module) {
   const args = process.argv.slice(2);
 
@@ -367,21 +302,26 @@ XSKY XEOS 对象存储规划工具
   --capacity <容量>          容量需求，如 "500TB", "1.5PiB"
 
 可选参数:
-  --upload-bw <带宽>         上传带宽需求，如 "100MB/s", "1GiB/s"
-  --download-bw <带宽>       下载带宽需求，如 "200MB/s", "2GiB/s"
-  --upload-ops <IOPS>        上传 OPS 需求（4K 对象）
-  --download-ops <IOPS>      下载 OPS 需求（4K 对象）
+  --upload-bw <带宽>         上传带宽需求，如 "100MB/s", "1GiB/s", "10Gbps"
+  --download-bw <带宽>       下载带宽需求，如 "200MB/s", "2GiB/s", "20Gbps"
+  --upload-ops <OPS>         上传 OPS 需求（4KiB 对象）
+  --download-ops <OPS>       下载 OPS 需求（4KiB 对象）
   --json                     以 JSON 格式输出
+
+纠删码方案（根据节点数自动选择）:
+  3-4 节点: EC4+2:1  容忍 1 节点离线
+  5 节点:   EC8+2:1  容忍 1 节点离线
+  6-9 节点: EC4+2    容忍 2 节点离线
+  ≥10 节点: EC8+2    容忍 2 节点离线
 
 示例:
   node xsky-xeos-planner.js --capacity 500TiB
-  node xsky-xeos-planner.js --capacity 2PB --upload-bw 10GB/s --download-bw 20GB/s
+  node xsky-xeos-planner.js --capacity 2PB --upload-bw 10Gbps --download-bw 20Gbps
   node xsky-xeos-planner.js --capacity 1PiB --upload-ops 50000 --json
 `);
     process.exit(0);
   }
 
-  // 解析命令行参数
   const requirements = {};
   let jsonOutput = false;
 
@@ -423,7 +363,7 @@ XSKY XEOS 对象存储规划工具
       console.log('\n=== XSKY XEOS 对象存储规划方案 ===\n');
       console.log('配置方案:');
       console.log(`  服务器台数: ${result.configuration.serverCount} 台`);
-      console.log(`  纠删码方案: ${result.configuration.ecScheme}`);
+      console.log(`  纠删码方案: ${result.configuration.ecScheme}（${result.configuration.tolerance}）`);
       console.log(`  磁盘配置: ${result.configuration.diskConfig}`);
       console.log('\n容量:');
       console.log(`  可用容量: ${result.capacity.available}`);
@@ -445,10 +385,10 @@ XSKY XEOS 对象存储规划工具
   }
 }
 
-// 导出函数供其他模块使用
 module.exports = {
   planXEOS,
   formatResult,
   parseCapacity,
-  parseBandwidth
+  parseBandwidth,
+  getEcScheme
 };

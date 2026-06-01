@@ -27,13 +27,29 @@ description: 规划 XSKY XEOS 对象存储的容量和性能。当用户提到 X
 
 ### 2. 性能需求（可选）
 
-询问用户是否有性能需求，针对 4MB 大小对象的操作：
-- **上传带宽**：例如 100 MB/s、1 GB/s、100 MiB/s、1 GiB/s
-- **下载带宽**：例如 200 MB/s、2 GB/s、200 MiB/s、2 GiB/s
-- **上传 OPS**：例如 1000 IOPS（针对 4K 对象）
-- **下载 OPS**：例如 3000 IOPS（针对 4K 对象）
+询问用户是否有性能需求：
+- **上传带宽**：例如 10Gbps、100MB/s、1GiB/s（基于 4MiB 对象大小）
+- **下载带宽**：例如 20Gbps、200MB/s、2GiB/s（基于 4MiB 对象大小）
+- **上传 OPS**：例如 10000（基于 4KiB 对象大小）
+- **下载 OPS**：例如 30000（基于 4KiB 对象大小）
 
-带宽单位支持十进制（MB/s、GB/s）和二进制（MiB/s、GiB/s）。如果用户未提供性能需求，输出时优先使用十进制单位。
+带宽单位支持：
+- 十进制比特率（**默认推荐**）：Mbps、Gbps
+- 十进制字节率：MB/s、GB/s
+- 二进制字节率：MiB/s、GiB/s
+
+如果用户未指定带宽单位，输出时默认使用 10 进制比特率（Mbps/Gbps）。
+
+## 纠删码方案选择
+
+纠删码方案根据节点数量自动选择：
+
+| 节点数 | EC 方案 | 容忍离线 |
+|--------|---------|----------|
+| 3-4 台 | EC4+2:1 | 1 节点 |
+| 5 台 | EC8+2:1 | 1 节点 |
+| 6-9 台 | EC4+2 | 2 节点 |
+| ≥10 台 | EC8+2 | 2 节点 |
 
 ## 使用方法
 
@@ -42,8 +58,8 @@ description: 规划 XSKY XEOS 对象存储的容量和性能。当用户提到 X
 询问用户以下信息：
 1. **容量需求**（必填）：例如 "500TB"、"1.5PiB"
 2. **性能需求**（可选）：
-   - 上传带宽：例如 "1GB/s"、"100MiB/s"
-   - 下载带宽：例如 "2GB/s"、"200MiB/s"
+   - 上传带宽：例如 "10Gbps"、"1GiB/s"
+   - 下载带宽：例如 "20Gbps"、"2GiB/s"
    - 上传 OPS：例如 "50000"
    - 下载 OPS：例如 "150000"
 
@@ -53,23 +69,23 @@ description: 规划 XSKY XEOS 对象存储的容量和性能。当用户提到 X
 
 ```bash
 cd /Users/wutz/Projects/wutz/infra-skills/skills/xsky-xeos-planner
-node scripts/xsky-xeos-planner.js --capacity "500TiB" [--upload-bw "1GB/s"] [--download-bw "2GB/s"] [--upload-ops "50000"] [--download-ops "150000"] --json
+node scripts/xsky-xeos-planner.js --capacity "500TiB" [--upload-bw "10Gbps"] [--download-bw "20Gbps"] [--upload-ops "50000"] [--download-ops "150000"] --json
 ```
 
 参数说明：
 - `--capacity`：容量需求（必填）
-- `--upload-bw`：上传带宽需求（可选）
+- `--upload-bw`：上传带宽需求（可选），支持 Mbps/Gbps、MB/s/GB/s、MiB/s/GiB/s
 - `--download-bw`：下载带宽需求（可选）
-- `--upload-ops`：上传 OPS 需求（可选）
-- `--download-ops`：下载 OPS 需求（可选）
+- `--upload-ops`：上传 OPS 需求（可选，4KiB 对象）
+- `--download-ops`：下载 OPS 需求（可选，4KiB 对象）
 - `--json`：以 JSON 格式输出结果
 
 ### 步骤 3：解析并展示结果
 
 脚本会返回 JSON 格式的结果，包含：
-- `configuration`：配置方案（服务器台数、纠删码方案、磁盘配置）
+- `configuration`：配置方案（服务器台数、纠删码方案、容忍节点数、磁盘配置）
 - `capacity`：可用容量
-- `performance`：性能指标（上传/下载带宽和 OPS）
+- `performance`：性能指标（上传/下载带宽标注 4MiB，OPS 标注 4KiB）
 - `performanceStatus`：性能状态
 - `warning`：警告信息（如果有）
 
@@ -82,7 +98,7 @@ node scripts/xsky-xeos-planner.js --capacity "500TiB" [--upload-bw "1GB/s"] [--d
 
 配置方案:
   服务器台数: 3 台
-  纠删码方案: EC4+2
+  纠删码方案: EC4+2:1（容忍 1 节点离线）
 
 每台服务器配置:
   处理器: 2 颗 Intel Xeon 4134
@@ -96,10 +112,10 @@ node scripts/xsky-xeos-planner.js --capacity "500TiB" [--upload-bw "1GB/s"] [--d
   可用容量: 565.50 TiB
 
 性能:
-  上传带宽: 2.95 GB/s
-  下载带宽: 5.90 GB/s
-  上传 OPS: 9,600 IOPS
-  下载 OPS: 28,800 IOPS
+  上传带宽: 24.16 Gbps (4MiB)
+  下载带宽: 48.32 Gbps (4MiB)
+  上传 OPS: 9,600 (4KiB)
+  下载 OPS: 28,800 (4KiB)
 
 性能状态: 所有性能指标满足需求
 ```
@@ -108,10 +124,10 @@ node scripts/xsky-xeos-planner.js --capacity "500TiB" [--upload-bw "1GB/s"] [--d
 
 - 脚本支持 8TB、10TB、12TB、16TB、18TB、20TB、22TB、24TB 等多种 HDD 规格
 - 脚本会根据容量需求智能选择最优的磁盘规格，使配置更接近实际需求
-- 脚本会自动选择最优的纠删码方案（EC8+2 或 EC4+2）
-- 输出单位与用户输入单位保持一致（二进制或十进制）
+- 纠删码方案根据节点数自动选择，兼顾性能和容错能力
+- 输出单位与用户输入单位保持一致；未指定带宽单位时默认使用 Mbps/Gbps
+- 性能带宽基于 4MiB 对象大小，OPS 基于 4KiB 对象大小
 - 如果性能需求较高，脚本会自动选择更小的磁盘以增加服务器数量
-- EC8+2 需要至少 5 台服务器，EC4+2 需要至少 3 台服务器
 - 如果无法满足性能需求，脚本会返回警告信息
 
 ## 参考文档
