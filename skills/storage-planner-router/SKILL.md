@@ -26,6 +26,8 @@ description: 存储规划路由器，根据用户需求（文件系统/对象存
 | **Vastdata** | 支持多种存储协议可平替 Ceph，支持多租户，支持 QoS，支持去重建设成本低（平摊下软件授权费用），原厂技术支持 | 性能比 GPFS ECE 稍弱，采购周期较长 | 多租户场景，需要 QoS 和技术支持 |
 | **Weka** | 比 GPFS ECE 性能更高，支持多租户 | 软件授权费用高，缺少原厂技术支持 | 极致性能需求，预算充足 |
 
+**注意**：Weka 仅在用户明确要求时才提供详细规划方案，缺省规划不包含 Weka。
+
 **不推荐**：CephFS 不建议应用于 AI 场景
 
 ### 对象存储
@@ -40,7 +42,7 @@ description: 存储规划路由器，根据用户需求（文件系统/对象存
 
 | 方案 | 优点 | 缺点 | 适用场景 |
 |------|------|------|----------|
-| **Vastdata Block** | 高性能，原厂技术支持 | 当前版本还未支持 QoS，软件存储一些 Bug | 高性能块存储需求，可接受新产品 |
+| **Vastdata Block** | 高性能，原厂技术支持 | 当前版本还未支持 QoS | 高性能块存储需求，可接受新产品 |
 
 **不推荐**：Ceph RBD 规划工具制作中，暂不可用
 
@@ -73,11 +75,13 @@ description: 存储规划路由器，根据用户需求（文件系统/对象存
 根据用户选择的方案，使用 Skill 工具并行调用对应的子技能：
 
 - **GPFS ECE** → `infra-skills:gpfs-ece-planner`
-- **Weka** → `infra-skills:weka-planner`
+- **Weka** → `infra-skills:weka-planner`（仅在用户明确要求时调用）
 - **Vastdata**（文件/对象/块） → `infra-skills:vastdata-planner`
 - **XSKY XEOS** → `infra-skills:xsky-xeos-planner`
 
-**重要**：如果用户明确要求规划 Ceph RBD 或 Ceph RGW，直接拒绝并说明规划工具制作中暂不可用，推荐使用 Vastdata 替代方案。
+**重要**：
+- Weka 缺省不纳入规划，仅当用户明确要求 Weka 方案时才调用其子技能。
+- 如果用户明确要求规划 Ceph RBD 或 Ceph RGW，直接拒绝并说明规划工具制作中暂不可用，推荐使用 Vastdata 替代方案。
 
 传递用户的容量和性能需求给子技能。
 
